@@ -15,6 +15,10 @@ export const routes: Routes = [
     },
     children: [
       {
+        path: 'configuration',
+        loadChildren: () => import('./views/configuration/plantslist/routes').then((m) => m.routes)
+      },
+      {
         path: 'dashboard',
         loadChildren: () => import('./views/dashboard/routes').then((m) => m.routes)
       },
