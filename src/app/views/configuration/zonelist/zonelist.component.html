@@ -1,9 +1,7 @@
 <c-row class="g-4">
   <c-col sm="6" xl="3" *ngFor = "let zone of zonesList">
-      <a [routerLink]="['plants', zone.id]" style="text-decoration: none;">
-      <!-- <a [routerLink]="['form-control']" style="text-decoration: none;"> -->
-      <!-- <div > -->
-      <c-card style="background-color: pink;">
+      <!-- <a [routerLink]="['plants', plantId, 'zone', zone.id]" style="text-decoration: none;"> -->
+      <c-card style="background-color: pink;" (click)="onZoneSelect(zone.id)">
           <c-card-body>{{zone.name}}
                 <c-dropdown alignment="end" variant="btn-group">
                   <button [caret]="false" cButton cDropdownToggle class="p-0 text-white" color="transparent" aria-label="Open dropdown">
@@ -15,8 +13,7 @@
                 </c-dropdown>
           </c-card-body>
       </c-card>
-      </a>
-  <!-- </div> -->
+      <!-- </a> -->
   </c-col>
   <c-col sm="6" xl="3">
       <a href="your-link-here" style="text-decoration: none;">

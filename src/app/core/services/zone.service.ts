@@ -16,7 +16,11 @@ export class ZoneService {
 
   constructor() { }
 
-  getZoneByPlantId(plantId: number){
+  getZonesByPlantId(plantId: number){
     return of(this.dataZone.filter(item => item.plant_id === plantId));
+  }
+
+  getZoneInfo(zoneId: number){
+    return of(this.dataZone.find(item => item.id === zoneId));
   }
 }

@@ -1,6 +1,4 @@
 import { Routes } from '@angular/router';
-import { Page500Component } from '../pages/page500/page500.component';
-import { PlantslistComponent } from './plantslist/plantslist.component';
 
 export const routes: Routes = [
   {
@@ -13,9 +11,16 @@ export const routes: Routes = [
   ,
   {
     path: 'plants/:id',
-    loadComponent: () => import('./plantslist/zonelist/zonelist.component').then(m => m.ZonelistComponent),
+    loadComponent: () => import('./zonelist/zonelist.component').then(m => m.ZonelistComponent),
     data: {
       title: 'Plants'
+    }
+  },
+  {
+    path: 'plants/:plantId/zone/:zoneId',
+    loadComponent: () => import('./zone/zone.component').then(m => m.ZoneComponent),
+    data: {
+      title: 'Zone Details'
     }
   }
 ];
