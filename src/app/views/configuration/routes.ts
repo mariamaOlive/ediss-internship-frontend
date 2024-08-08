@@ -15,7 +15,7 @@ export const routes: Routes = [
     path: 'plants/:id',
     loadComponent: () => import('./plantslist/zonelist/zonelist.component').then(m => m.ZonelistComponent),
     data: {
-      title: 'User Detail'
+      title: 'Plants'
     }
   }
 ];
