@@ -1,9 +1,32 @@
-<div class =  "container">
-    <div 
-    class = "row"
-    *ngFor = "let plant of plantsList"
-    >
-        <h4>{{plant.name}}</h4>
-    </div>
-
-</div>
+<c-row class="g-4">
+        <c-col sm="6" xl="3" *ngFor = "let plant of plantsList">
+            <a [routerLink]="['plants', plant.id]" style="text-decoration: none;">
+            <!-- <a [routerLink]="['form-control']" style="text-decoration: none;"> -->
+            <!-- <div > -->
+            <c-card style="background-color: pink;">
+                <c-card-body>{{plant.name}}
+                      <c-dropdown alignment="end" variant="btn-group">
+                        <button [caret]="false" cButton cDropdownToggle class="p-0 text-white" color="transparent" aria-label="Open dropdown">
+                          <svg cIcon name="cilOptions"></svg>
+                        </button>
+                        <ul cDropdownMenu>
+                          <li><a [routerLink]="[]" cDropdownItem>Delete</a></li>
+                        </ul>
+                      </c-dropdown>
+                </c-card-body>
+            </c-card>
+            </a>
+        <!-- </div> -->
+        </c-col>
+        <c-col sm="6" xl="3">
+            <a href="your-link-here" style="text-decoration: none;">
+                <c-card style="background-color: pink; cursor: pointer;">
+                  <c-card-body>
+                    <i class="cil-plus"></i> Add plant
+                  </c-card-body>
+                </c-card>
+              </a>
+        </c-col>
+ </c-row>
+  
+ <router-outlet></router-outlet>

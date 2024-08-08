@@ -4,11 +4,14 @@ export const navItems: INavData[] = [
   {
     name: 'Configuration',
     url: '/configuration',
-    iconComponent: { name: 'cil-speedometer' },
-    badge: {
-      color: 'info',
-      text: 'NEW'
-    }
+    iconComponent: { name: 'cil-speedometer' }
+    // ,
+    // children: [
+    //   {
+    //     name: 'Teste',
+    //     url: '/configuration/form-control',
+    //     icon: 'nav-icon-bullet'
+    //   }]
   },
   {
     name: 'Dashboard',
