@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ZoneItem } from 'src/app/core/models/zone';
 import { ZoneService } from 'src/app/core/services/zone.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { ZoneService } from 'src/app/core/services/zone.service';
 })
 export class ZoneComponent {
 
-  zone: any = {};
+  zone: any = NaN;
   constructor(private zoneServ: ZoneService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -24,6 +25,8 @@ export class ZoneComponent {
     })
 
   }
+
+  
 
 
 }

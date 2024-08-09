@@ -22,6 +22,13 @@ export const routes: Routes = [
     data: {
       title: 'Zone Details'
     }
+  },
+  {
+    path: 'plants/:plantId/add-zone',
+    loadComponent: () => import('./add-zone/add-zone.component').then(m => m.AddZoneComponent),
+    data: {
+      title: 'Zone Details'
+    }
   }
 ];
 

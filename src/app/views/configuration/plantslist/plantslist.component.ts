@@ -7,6 +7,7 @@ import { RouterModule, Router, RouterLink,  NavigationStart, NavigationEnd, Navi
 import { IconDirective } from '@coreui/icons-angular';
 import { RowComponent, ColComponent, CardModule, DropdownDividerDirective, TemplateIdDirective, ThemeDirective, DropdownComponent, ButtonDirective, DropdownToggleDirective, DropdownMenuDirective, DropdownItemDirective } from '@coreui/angular';
 import { PlantService } from 'src/app/core/services/plant.service';
+import { ZoneItem } from 'src/app/core/models/zone';
 
 
 @Component({
@@ -17,22 +18,22 @@ import { PlantService } from 'src/app/core/services/plant.service';
   styleUrl: './plantslist.component.scss'
 })
 export class PlantslistComponent implements OnInit {
-  plantsList : any[] = []
+  plantsList : ZoneItem[] = []
 
     constructor(private plantsServ : PlantService, private router: Router){
 
-      this.router.events.subscribe(event => {
-        // debugger
-        if (event instanceof NavigationStart) {
-          console.log('NavigationStart:', event);
-        } else if (event instanceof NavigationEnd) {
-          console.log('NavigationEnd:', event);
-        } else if (event instanceof NavigationError) {
-          console.error('NavigationError:', event.error);
-        } else if (event instanceof NavigationCancel) {
-          console.warn('NavigationCancel:', event);
-        }
-      });
+      // this.router.events.subscribe(event => {
+      //   // debugger
+      //   if (event instanceof NavigationStart) {
+      //     console.log('NavigationStart:', event);
+      //   } else if (event instanceof NavigationEnd) {
+      //     console.log('NavigationEnd:', event);
+      //   } else if (event instanceof NavigationError) {
+      //     console.error('NavigationError:', event.error);
+      //   } else if (event instanceof NavigationCancel) {
+      //     console.warn('NavigationCancel:', event);
+      //   }
+      // });
     }
 
     ngOnInit():void {
@@ -41,9 +42,4 @@ export class PlantslistComponent implements OnInit {
       }
       );
     }
-
-    // onButtonClick(){
-    //   console.log("okye")
-    //   // this.router.navigate(['/form-control'], { relativeTo: this.route });
-    // }
 }

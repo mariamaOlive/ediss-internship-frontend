@@ -1,14 +1,19 @@
 <c-row class="g-4">
   <c-col sm="6" xl="3" *ngFor = "let zone of zonesList">
       <!-- <a [routerLink]="['plants', plantId, 'zone', zone.id]" style="text-decoration: none;"> -->
-      <c-card style="background-color: pink;" (click)="onZoneSelect(zone.id)">
+      <c-card style="background-color: pink;" (click)="navigateToZone(zone.id)">
           <c-card-body>{{zone.name}}
-                <c-dropdown alignment="end" variant="btn-group">
-                  <button [caret]="false" cButton cDropdownToggle class="p-0 text-white" color="transparent" aria-label="Open dropdown">
+                <c-dropdown  alignment="end" variant="btn-group" style="z-index: 1000;">
+                  <button [caret]="false" 
+                  cButton cDropdownToggle 
+                  class="p-0 text-white" 
+                  color="transparent" 
+                  aria-label="Open dropdown" 
+                  (click)="$event.stopPropagation()">
                     <svg cIcon name="cilOptions"></svg>
                   </button>
                   <ul cDropdownMenu>
-                    <li><a [routerLink]="[]" cDropdownItem>Delete</a></li>
+                    <li><a cDropdownItem (click)="deleteZone(zone.id); $event.stopPropagation()">Delete</a></li>
                   </ul>
                 </c-dropdown>
           </c-card-body>
@@ -16,12 +21,12 @@
       <!-- </a> -->
   </c-col>
   <c-col sm="6" xl="3">
-      <a href="your-link-here" style="text-decoration: none;">
-          <c-card style="background-color: pink; cursor: pointer;">
+      <!-- <a [routerLink]="['add-zone']" style="text-decoration: none;"> -->
+          <c-card style="background-color: pink; cursor: pointer;" (click)="navigateToAddZone()">
             <c-card-body>
-              <i class="cil-plus"></i> Add plant
+              <i class="cil-plus"></i> Add Zone
             </c-card-body>
           </c-card>
-        </a>
+        <!-- </a> -->
   </c-col>
 </c-row>
