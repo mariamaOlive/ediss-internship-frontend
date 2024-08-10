@@ -11,11 +11,11 @@ export class ZoneService {
   private cameras: CameraItem[] = [new CameraItem("Camera 1", 1, "187.20.135.197"), new CameraItem("Camera 2", 2, "187.20.135.199"), new CameraItem("Camera 3", 3, "187.20.135.200")]
 
   private dataZone : ZoneItem[] = [
-    new ZoneItem("Zone 1", 1, 1, "Luca Bianchi", ["Helmet", "Vest", "Hairnet", "Goggles", "Earplugs"], this.cameras),
-    new ZoneItem("Zone 2", 2, 1, "Mariama Oliveira", ["Helmet"], this.cameras, false),
-    new ZoneItem("Zone 3", 3, 1, "Minase Serafim", ["Vest", "Hairnet", "Goggles", "Earplugs"], this.cameras),
-    new ZoneItem("Zone 4", 4, 2, "Mariama Oliveira", ["Helmet", "Vest", "Hairnet", "Goggles", "Earplugs"], this.cameras),
-    new ZoneItem("Zone 5", 5, 2, "Luca Bianchi", ["Helmet", "Earplugs"], this.cameras)
+    new ZoneItem("Zone 1", 1, 1, "Luca Bianchi",0.5,true, ["Helmet", "Vest", "Hairnet", "Goggles", "Earplugs"], this.cameras),
+    new ZoneItem("Zone 2", 2, 1, "Mariama Oliveira",0.5,true, ["Helmet"], this.cameras, false),
+    new ZoneItem("Zone 3", 3, 1, "Minase Serafim",0.5,false, ["Vest", "Hairnet", "Goggles", "Earplugs"], this.cameras),
+    new ZoneItem("Zone 4", 4, 2, "Mariama Oliveira",0.5,false, ["Helmet", "Vest", "Hairnet", "Goggles", "Earplugs"], this.cameras),
+    new ZoneItem("Zone 5", 5, 2, "Luca Bianchi",0.5,true, ["Helmet", "Earplugs"], this.cameras)
   ]
 
   constructor() { }

@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, ParamMap, } from '@angular/router';
 import { ZoneService } from 'src/app/core/services/zone.service';
 import { CameraItem } from 'src/app/core/models/camera';
 import { ZoneItem } from 'src/app/core/models/zone';
-import { CardModule, ButtonModule, GridModule, BadgeModule, FormModule} from '@coreui/angular';
+import { CardModule, ButtonModule, GridModule, BadgeModule, FormModule } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; 
+import { FormsModule } from '@angular/forms';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { PlantService } from 'src/app/core/services/plant.service';
+import { AssigneeService } from 'src/app/core/services/assignee.service';
+import { PlantItem } from 'src/app/core/models/plant';
 
 
 @Component({
@@ -17,17 +20,45 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
   templateUrl: './add-zone.component.html',
   styleUrl: './add-zone.component.scss'
 })
-export class AddZoneComponent implements OnInit{
-  dropdownList:any[] = [];
-  selectedItems:any[] = [];
+export class AddZoneComponent implements OnInit {
+  plantId: any = NaN;
+  plant: PlantItem | null = null;
+  assignees: any;
+
+  //New Zone properties
+  zoneName: string = '';
+  selectedAssignee: number | null = null;
+  confidenceThreshold: number = 0; 
+
+
+  dropdownList: any[] = [];
+  selectedItems: any[] = [];
   dropdownSettings = {};
 
-  constructor(private router: Router, private route: ActivatedRoute, private zoneServ: ZoneService) {
+  constructor(private router: Router, private route: ActivatedRoute, private zoneServ: ZoneService, private plantServ: PlantService, private assigneeServ: AssigneeService) {
     //TODO: Get Plant Id
 
   }
 
   ngOnInit() {
+
+    //Get plant info by ID
+    this.getPlantInfo();
+    this.getAvailableAssigees();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     this.dropdownList = [
       { item_id: 1, item_text: 'Helmet' },
       { item_id: 2, item_text: 'Hair Net' },
@@ -59,7 +90,7 @@ export class AddZoneComponent implements OnInit{
   addNewZone(): void {
 
     const cameras: CameraItem[] = [new CameraItem("Camera 1", 1, "187.20.135.197"), new CameraItem("Camera 1", 1, "187.20.135.199"), new CameraItem("Camera 1", 1, "187.20.135.200")];
-    const newZone:ZoneItem = new ZoneItem("My Zone", Math.random(), 1,  "Minase Serafim", ["Vest", "Hairnet", "Goggles", "Earplugs"], cameras);
+    const newZone: ZoneItem = new ZoneItem("My Zone", Math.random(), 1, "Minase Serafim", .5, true, ["Vest", "Hairnet", "Goggles", "Earplugs"], cameras);
 
     this.zoneServ.addZone(newZone).subscribe({
       next: () => {
@@ -70,6 +101,39 @@ export class AddZoneComponent implements OnInit{
         console.error('Error deleting zone:', err);
       }
     });
+  }
+
+  private getPlantInfo(){
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      const id = params.get('plantId');
+      if (id) {
+        this.plantId = id;
+        this.plantServ.getPlantById(parseInt(id, 10)).subscribe({
+          next: plant => {
+            this.plant = plant;
+            this.confidenceThreshold = this.plant.confidenceThreshold;
+          },
+          error: err => {
+            console.error('Error fetching zones:', err);
+          }
+        });
+      }
+    });
+  }
+
+  private getAvailableAssigees(){
+    this.assigneeServ.getAllAssignees().subscribe({
+      next: assignees => {
+        this.assignees = assignees;
+      },
+      error: err => {
+        console.error('Error fetching assignees:', err);
+      }
+    });
+  }
+
+  updateConfidenceThreshold(value: number): void {
+    this.confidenceThreshold = value / 100;
   }
 
 }

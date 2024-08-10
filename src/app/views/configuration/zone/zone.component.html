@@ -31,30 +31,45 @@
     <!-- Card body -->
     <c-card-body>
         <!-- Card 1 -->
-        <c-card class="mb-3 mt-2">
+        <c-card class="mb-3 mt-2 pb-2">
             <c-card-body>
                 <c-container>
                     <c-row class="mt-3 small-card__title">
                         <h6>Assignee</h6>
                     </c-row>
                     <c-row class="mt-3 small-card__text">
-                        <p>{{zone?.assignee}}</p>
+                        <p class="mb-0">{{zone?.assignee}}</p>
                     </c-row>
                 </c-container>
             </c-card-body>
         </c-card>
 
         <!-- Card 2 -->
-        <c-card class="mb-3">
+        <c-card class="mb-3 pb-2">
             <c-card-body>
                 <c-container>
                     <c-row class="mt-3 small-card__title">
-                        <h6>Objects detected</h6>
+                        <h6>Harzad detection</h6>
                     </c-row>
-                    <c-row class="mt-4 mb-3">
+                    <c-row class="mt-4 mb-2">
+                       <p>Confidence Level: {{zone?.confidenceTheshold}} </p>
+                    </c-row>
+                    <c-row class="mb-4">
+                        <p class="mb-1">PPE Detection</p>
                         <div class="d-flex flex-wrap">
                             <c-badge *ngFor="let class of zone?.classesDetection" color="primary"
                                 class="me-2 small-card__badge">{{class}}</c-badge>
+                        </div>
+                    </c-row>
+                    <c-row>
+                        <p class="mb-1">Pallet Detection</p>
+                        <div class="d-flex flex-wrap">
+                            <c-badge  [ngClass]="{
+                                'bg-danger': !zone?.palletDetection, 
+                                'bg-success': zone?.palletDetection
+                              }" 
+                              class="me-2 small-card__badge">
+                              {{ zone?.palletDetection ? 'Activated' : 'Not Activated' }}</c-badge>
                         </div>
                     </c-row>
                 </c-container>
@@ -62,7 +77,7 @@
         </c-card>
 
         <!-- Card 3 -->
-        <c-card class = "mb-4">
+        <c-card class = "mb-4 pb-2">
             <c-card-body>
                 <c-container>
                     <c-row class="mt-3 small-card__title">
