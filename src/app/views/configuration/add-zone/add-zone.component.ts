@@ -1,98 +1,95 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, ParamMap, } from '@angular/router';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { ZoneService } from 'src/app/core/services/zone.service';
 import { CameraItem } from 'src/app/core/models/camera';
 import { ZoneItem } from 'src/app/core/models/zone';
 import { CardModule, ButtonModule, GridModule, BadgeModule, FormModule } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { PlantService } from 'src/app/core/services/plant.service';
 import { AssigneeService } from 'src/app/core/services/assignee.service';
+import { CameraService } from 'src/app/core/services/camera.service';
 import { PlantItem } from 'src/app/core/models/plant';
-
 
 @Component({
   selector: 'app-add-zone',
   standalone: true,
-  imports: [CardModule, ButtonModule, GridModule, CommonModule, BadgeModule, IconDirective, FormModule, NgMultiSelectDropDownModule, FormsModule],
+  imports: [
+    CardModule, 
+    ButtonModule, 
+    GridModule, 
+    CommonModule, 
+    BadgeModule, 
+    IconDirective, 
+    FormModule, 
+    NgMultiSelectDropDownModule, 
+    FormsModule
+  ],
   templateUrl: './add-zone.component.html',
   styleUrl: './add-zone.component.scss'
 })
 export class AddZoneComponent implements OnInit {
+  // Properties
   plantId: any = NaN;
   plant: PlantItem | null = null;
   assignees: any;
+  cameras: any;
 
   dropdownListObjects: any[] = [];
-  selectedItemsObjects: any[] = [];
   dropdownSettingsObjects = {};
 
   dropdownListCameras: any[] = [];
-  selectedItemsCameras: any[] = [];
   dropdownSettingsCameras = {};
 
-  //New Zone properties
+  // New Zone properties
   zoneName: string = '';
-  selectedAssignee: number | null = null;
-  confidenceThreshold: number = 0; 
+  selectedAssignee: string = "";
+  confidenceThreshold: number = 0;
   isPalletDetectionOn: boolean = false;
+  selectedItemsObjects: any[] = [];
+  selectedItemsCameras: any[] = [];
 
+  constructor(
+    private router: Router, 
+    private route: ActivatedRoute,
+    private location: Location,  
+    private zoneServ: ZoneService, 
+    private plantServ: PlantService, 
+    private assigneeServ: AssigneeService, 
+    private cameraServ: CameraService
+  ) {}
 
-
-  constructor(private router: Router, private route: ActivatedRoute, private zoneServ: ZoneService, private plantServ: PlantService, private assigneeServ: AssigneeService) {
-    //TODO: Get Plant Id
-
-  }
-
+  // Lifecycle Hook
   ngOnInit() {
-
-    //Get plant info by ID
     this.getPlantInfo();
-    this.getAvailableAssigees();
-    this.loadMultiSelectorObjectDetection()
-    this.loadMultiSelectorCamera()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    this.getAvailableAssignees();
+    this.getAvailableCameras();
+    this.loadMultiSelectorObjectDetection();
   }
 
+  // Service Calls
 
-  // Request from services functions
-
-  //Request Plant info
-  private getPlantInfo():void{
+  private getPlantInfo(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const id = params.get('plantId');
       if (id) {
-        this.plantId = id;
+        this.plantId = parseInt(id, 10);
         this.plantServ.getPlantById(parseInt(id, 10)).subscribe({
           next: plant => {
             this.plant = plant;
             this.confidenceThreshold = this.plant.confidenceThreshold;
           },
           error: err => {
-            console.error('Error fetching zones:', err);
+            console.error('Error fetching plant info:', err);
           }
         });
       }
     });
   }
 
-  //Request Assignee function
-  private getAvailableAssigees(){
+  private getAvailableAssignees(): void {
     this.assigneeServ.getAllAssignees().subscribe({
       next: assignees => {
         this.assignees = assignees;
@@ -103,27 +100,21 @@ export class AddZoneComponent implements OnInit {
     });
   }
 
-  // Add New Zone
-  addNewZone(): void {
-
-    const cameras: CameraItem[] = [new CameraItem("Camera 1", 1, "187.20.135.197"), new CameraItem("Camera 1", 1, "187.20.135.199"), new CameraItem("Camera 1", 1, "187.20.135.200")];
-    const newZone: ZoneItem = new ZoneItem("My Zone", Math.random(), 1, "Minase Serafim", .5, true, ["Vest", "Hairnet", "Goggles", "Earplugs"], cameras);
-
-    this.zoneServ.addZone(newZone).subscribe({
-      next: () => {
-        //TODO: Return to the previous page
-        console.log('ADDED:');
+  private getAvailableCameras(): void {
+    this.cameraServ.getAllCameras().subscribe({
+      next: cameras => {
+        this.cameras = cameras;
+        this.loadMultiSelectorCamera(this.cameras);
       },
       error: err => {
-        console.error('Error deleting zone:', err);
+        console.error('Error fetching cameras:', err);
       }
     });
   }
 
-  // MultiSelector Fucntions
-  
-  //Object detection
-  loadMultiSelectorObjectDetection():void{
+  // Multi-Selector Functions
+
+  private loadMultiSelectorObjectDetection(): void {
     this.dropdownListObjects = [
       { item_id: 1, item_text: 'Helmet' },
       { item_id: 2, item_text: 'Hair Net' },
@@ -131,10 +122,9 @@ export class AddZoneComponent implements OnInit {
       { item_id: 4, item_text: 'Vest' },
       { item_id: 5, item_text: 'Earplugs' }
     ];
-    this.selectedItemsObjects = [
-      // { item_id: 3, item_text: 'Pune' },
-      // { item_id: 4, item_text: 'Navsari' }
-    ];
+
+    this.selectedItemsObjects = [];
+
     this.dropdownSettingsObjects = {
       singleSelection: false,
       idField: 'item_id',
@@ -146,18 +136,13 @@ export class AddZoneComponent implements OnInit {
     };
   }
 
-  loadMultiSelectorCamera():void{
-    this.dropdownListCameras = [
-      { item_id: 1, item_text: 'Helmet' },
-      { item_id: 2, item_text: 'Hair Net' },
-      { item_id: 3, item_text: 'Goggles' },
-      { item_id: 4, item_text: 'Vest' },
-      { item_id: 5, item_text: 'Earplugs' }
-    ];
-    this.selectedItemsCameras = [
-      // { item_id: 3, item_text: 'Pune' },
-      // { item_id: 4, item_text: 'Navsari' }
-    ];
+  private loadMultiSelectorCamera(cameraList: any): void {
+    this.dropdownListCameras = cameraList.map((camera: { id: any; name: any; }) => {
+      return { item_id: camera.id, item_text: camera.name };
+    });
+
+    this.selectedItemsCameras = [];
+
     this.dropdownSettingsCameras = {
       singleSelection: false,
       idField: 'item_id',
@@ -169,15 +154,50 @@ export class AddZoneComponent implements OnInit {
     };
   }
 
-  onItemSelect(item: any) {
+  // Event Handlers
+
+  onItemSelect(item: any): void {
     console.log(item);
   }
-  onSelectAll(items: any) {
+
+  onSelectAll(items: any): void {
     console.log(items);
   }
 
+  // Zone Management
 
-  // Confidence Threshold Fucntions
+  addNewZone(): void {
+
+    //TODO: Remove part of this code when connected to the server
+    let mappedCameras = this.selectedItemsCameras.map(item => item.item_id);
+    let filteredCameras = this.cameras.filter((item: { id: any; }) => mappedCameras.includes(item.id));
+    let mappedObjects = this.selectedItemsObjects.map(item => item.item_text);
+
+    const newZone: ZoneItem = new ZoneItem(
+      this.zoneName, 
+      Math.floor(Math.random() * 100001), 
+      this.plantId,
+      this.selectedAssignee || "Not defined", 
+      this.confidenceThreshold,  
+      this.isPalletDetectionOn, 
+      mappedObjects,
+      filteredCameras,
+      true
+    );
+
+    this.zoneServ.addZone(newZone).subscribe({
+      next: () => {
+        console.log('Zone added successfully');
+        this.location.back();
+      },
+      error: err => {
+        console.error('Error adding zone:', err);
+      }
+    });
+  }
+
+  // Utility Functions
+
   updateConfidenceThreshold(value: number): void {
     this.confidenceThreshold = value / 100;
   }

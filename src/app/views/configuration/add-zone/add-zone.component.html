@@ -8,16 +8,6 @@
             <c-row class="mt-4 mb-3">
               <h4 class="header__title p-0 fw-bolder">Add New Zone</h4>
             </c-row>
-            <!-- <c-row class="mb-4 header_subtitle">
-                          <div class="d-flex align-items-center p-0">
-                              <span class="text-medium-emphasis">Status: </span>
-                              <span class="ms-2 align-middle status-bubble"
-                                  [ngClass]="{'bg-success': zone?.isRunning, 'bg-danger': !zone?.isRunning}"></span>
-                              
-                              <span class="ms-1 text-medium-emphasis">{{ zone?.isRunning ? 'Running' : 'Paused' }}</span>
-                          </div>
-                      </c-row> -->
-
           </c-container>
         </c-col>
 
@@ -64,7 +54,7 @@
               cSelect 
               [(ngModel)]="selectedAssignee">
               <option value=null disabled>Select an assignee</option>
-              <option *ngFor="let assignee of assignees" [value]="assignee.id">
+              <option *ngFor="let assignee of assignees" [value]="assignee.name">
                 {{ assignee.name }}
               </option>
             </select>
@@ -138,7 +128,7 @@
                   cFormCheckLabel 
                   for="palletDetectionCheckbox" 
                   [ngClass]="isPalletDetectionOn ? 'active-label' : 'inactive-label'">
-                  {{ isPalletDetectionOn ? 'Pallet detection activated' : 'Pallet detection not activated' }}
+                  {{ isPalletDetectionOn ? 'Activated' : 'Not activated' }}
                 </label>
               </c-form-check>
             </div>
@@ -170,7 +160,7 @@
     </c-card>
 
     <c-container class="d-flex justify-content-center align-items-center">
-      <button cButton color="info" variant="outline" class="btn-add">Add</button>
+      <button cButton color="info" variant="outline" class="btn-add" (click)="addNewZone()">Add</button>
     </c-container>
 
 
