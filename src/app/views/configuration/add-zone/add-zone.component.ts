@@ -199,7 +199,7 @@ export class AddZoneComponent implements OnInit {
   // Utility Functions
 
   updateConfidenceThreshold(value: number): void {
-    this.confidenceThreshold = value / 100;
+    this.confidenceThreshold = parseFloat((value / 100).toFixed(2));
   }
 
 }
