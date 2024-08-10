@@ -8,6 +8,7 @@ export class ZoneItem {
   public assignee: string;
   public classesDetection: string[];
   public listCameras: CameraItem[];
+  public isRunning: boolean;
 
   constructor(
     name: string, 
@@ -15,7 +16,8 @@ export class ZoneItem {
     plantId: number, 
     assignee: string, 
     classesDetection: string[] = [], 
-    listCameras: CameraItem[] = []
+    listCameras: CameraItem[] = [],
+    isRunning = true
   ) {
     this.name = name;
     this.id = id;
@@ -23,5 +25,6 @@ export class ZoneItem {
     this.assignee = assignee;
     this.classesDetection = classesDetection;
     this.listCameras = listCameras;
+    this.isRunning = isRunning;
   }
 }

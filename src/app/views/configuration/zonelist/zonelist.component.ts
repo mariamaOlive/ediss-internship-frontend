@@ -1,10 +1,22 @@
 // zonelist.component.ts
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap, RouterModule, RouterLink,  NavigationStart, NavigationEnd, NavigationError, NavigationCancel } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap, RouterModule, RouterLink, NavigationStart, NavigationEnd, NavigationError, NavigationCancel } from '@angular/router';
 import { ZoneService } from 'src/app/core/services/zone.service';
 import { CommonModule } from '@angular/common';
 import { IconDirective } from '@coreui/icons-angular';
-import { RowComponent, ColComponent, CardModule, DropdownDividerDirective, TemplateIdDirective, ThemeDirective, DropdownComponent, ButtonDirective, DropdownToggleDirective, DropdownMenuDirective, DropdownItemDirective } from '@coreui/angular';
+import {
+  GridModule,
+  CardModule,
+  DropdownDividerDirective,
+  TemplateIdDirective,
+  ThemeDirective,
+  DropdownComponent,
+  ButtonDirective,
+  DropdownToggleDirective,
+  DropdownMenuDirective,
+  DropdownItemDirective,
+  TooltipModule
+} from '@coreui/angular';
 import { ZoneItem } from 'src/app/core/models/zone';
 
 
@@ -13,13 +25,29 @@ import { ZoneItem } from 'src/app/core/models/zone';
   selector: 'app-zonelist',
   templateUrl: './zonelist.component.html',
   styleUrls: ['./zonelist.component.scss'],
-  imports : [ CommonModule, RouterModule ,RowComponent, ColComponent,CardModule, TemplateIdDirective, IconDirective, ThemeDirective, DropdownComponent, ButtonDirective, DropdownToggleDirective, DropdownMenuDirective, DropdownItemDirective, RouterLink, DropdownDividerDirective]
+  imports: [
+    CommonModule,
+    RouterModule,
+    GridModule, 
+    CardModule, 
+    TemplateIdDirective, 
+    IconDirective,
+    ThemeDirective,
+    DropdownComponent,
+    ButtonDirective,
+    DropdownToggleDirective,
+    DropdownMenuDirective,
+    DropdownItemDirective,
+    RouterLink,
+    DropdownDividerDirective,
+    TooltipModule]
 })
 
 export class ZonelistComponent implements OnInit {
 
   plantId: any = NaN;
   zonesList: ZoneItem[] = [];  // Assuming zones is an array. Adjust type accordingly.
+  tooltipText = 'Vivamus sagittis lacus vel augue laoreet rutrum faucibus.';
 
   constructor(private router: Router, private route: ActivatedRoute, private zoneServ: ZoneService) {
 
@@ -58,7 +86,7 @@ export class ZonelistComponent implements OnInit {
     this.router.navigate([`configuration/plants/${this.plantId}/zone/${zoneId}`]);
   }
 
-  navigateToAddZone(){
+  navigateToAddZone() {
     this.router.navigate([`configuration/plants/${this.plantId}/add-zone`]);
   }
 

@@ -1,0 +1,25 @@
+.small-card__title{
+    border-bottom: 1px solid #d8d9d9;
+}
+
+.small-card__text{
+    font-size: 20px;
+}
+
+.small-card__badge{
+    font-size: 15px;
+}
+
+.small-card__subtitle{
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.status-bubble{
+    padding: 0 !important;
+    width: 10px  !important ;
+    height: 10px  !important ; 
+    border-radius: 50%; 
+    display: inline-block;
+    margin: 0;
+}

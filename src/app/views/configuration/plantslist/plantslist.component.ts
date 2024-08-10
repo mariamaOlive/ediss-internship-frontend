@@ -5,20 +5,19 @@ import {
 } from '@angular/core';
 import { RouterModule, Router, RouterLink,  NavigationStart, NavigationEnd, NavigationError, NavigationCancel} from '@angular/router';
 import { IconDirective } from '@coreui/icons-angular';
-import { RowComponent, ColComponent, CardModule, DropdownDividerDirective, TemplateIdDirective, ThemeDirective, DropdownComponent, ButtonDirective, DropdownToggleDirective, DropdownMenuDirective, DropdownItemDirective } from '@coreui/angular';
+import { GridModule, CardModule, DropdownDividerDirective, TemplateIdDirective, ThemeDirective, DropdownComponent, ButtonDirective, DropdownToggleDirective, DropdownMenuDirective, DropdownItemDirective } from '@coreui/angular';
 import { PlantService } from 'src/app/core/services/plant.service';
-import { ZoneItem } from 'src/app/core/models/zone';
 
 
 @Component({
   selector: 'app-plantslist',
   standalone: true,
-  imports: [RouterModule, CommonModule,RowComponent, ColComponent,CardModule, TemplateIdDirective, IconDirective, ThemeDirective, DropdownComponent, ButtonDirective, DropdownToggleDirective, DropdownMenuDirective, DropdownItemDirective, RouterLink, DropdownDividerDirective],
+  imports: [RouterModule, CommonModule, GridModule,CardModule, TemplateIdDirective, IconDirective, ThemeDirective, DropdownComponent, ButtonDirective, DropdownToggleDirective, DropdownMenuDirective, DropdownItemDirective, RouterLink, DropdownDividerDirective],
   templateUrl: './plantslist.component.html',
   styleUrl: './plantslist.component.scss'
 })
 export class PlantslistComponent implements OnInit {
-  plantsList : ZoneItem[] = []
+  plantsList : any[] = []
 
     constructor(private plantsServ : PlantService, private router: Router){
 

@@ -1,32 +1,43 @@
-<c-row class="g-4">
-  <c-col sm="6" xl="3" *ngFor = "let zone of zonesList">
-      <!-- <a [routerLink]="['plants', plantId, 'zone', zone.id]" style="text-decoration: none;"> -->
-      <c-card style="background-color: pink;" (click)="navigateToZone(zone.id)">
-          <c-card-body>{{zone.name}}
-                <c-dropdown  alignment="end" variant="btn-group" style="z-index: 1000;">
-                  <button [caret]="false" 
-                  cButton cDropdownToggle 
-                  class="p-0 text-white" 
-                  color="transparent" 
-                  aria-label="Open dropdown" 
-                  (click)="$event.stopPropagation()">
-                    <svg cIcon name="cilOptions"></svg>
-                  </button>
-                  <ul cDropdownMenu>
-                    <li><a cDropdownItem (click)="deleteZone(zone.id); $event.stopPropagation()">Delete</a></li>
-                  </ul>
-                </c-dropdown>
+<c-container>
+  <c-row class="g-4">
+    <c-col sm="6" xl="3" *ngFor="let zone of zonesList">
+        <c-card class="mb-3 p-0 shadow-sm" style="width: 250px; height: 180px; overflow: hidden;" (click)="navigateToZone(zone.id)">
+          <div style="height: 100px; background-color: #d8d9d9; position: relative;">
+            <span class="ms-3 mt-3 align-middle status-bubble"
+              [ngClass]="{'bg-success': zone?.isRunning, 'bg-danger': !zone?.isRunning}"
+              [cTooltip]="zone?.isRunning ? 'Running' : 'Paused'" cTooltipPlacement="right">
+          </span>
+
+          <!-- DropDown -->
+            <c-dropdown alignment="end" variant="btn-group" class="position-absolute top-0 end-0 m-2">
+              <button [caret]="false" cButton cDropdownToggle class="p-0" color="transparent" aria-label="Open dropdown"
+              (click)="$event.stopPropagation()">
+                <svg cIcon name="cilOptions"></svg>
+              </button>
+              <ul cDropdownMenu class="shadow">
+                <li><a [routerLink]="[]" cDropdownItem (click)="deleteZone(zone.id); $event.stopPropagation()">Delete</a></li>
+              </ul>
+            </c-dropdown>
+          </div>
+
+          <!-- Card body -->
+          <c-card-body>
+            <h6 cCardTitle class="mb-0">{{zone.name}}</h6>
+            <p cCardText>
+              <small class="text-medium-emphasis">{{zone.listCameras.length}} cameras</small>
+            </p>
           </c-card-body>
-      </c-card>
-      <!-- </a> -->
-  </c-col>
-  <c-col sm="6" xl="3">
-      <!-- <a [routerLink]="['add-zone']" style="text-decoration: none;"> -->
-          <c-card style="background-color: pink; cursor: pointer;" (click)="navigateToAddZone()">
-            <c-card-body>
-              <i class="cil-plus"></i> Add Zone
-            </c-card-body>
-          </c-card>
-        <!-- </a> -->
-  </c-col>
-</c-row>
+        </c-card>
+    </c-col>
+  
+    <!-- Add new card -->
+    <c-col sm="6" xl="3">
+        <c-card class="mb-3 p-0 shadow-sm" style="width: 250px; height: 180px; background-color: #d8d9d9; border-width: 0;" (click)="navigateToAddZone()">
+          <c-card-body class="d-flex align-items-center justify-content-center text-medium-emphasis">
+            Add Zone
+          </c-card-body>
+        </c-card>
+    </c-col>
+  </c-row>
+</c-container>
+

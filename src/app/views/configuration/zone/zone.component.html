@@ -1,19 +1,97 @@
-<c-card>
+<c-card class="mb-4 shadow">
+    <!-- Header -->
     <c-card-header>
-      <h5>{{zone.name}}</h5>
+        <c-container>
+            <c-row>
+                <c-col class="ps-4" sm="10" xs="8">
+                    <c-container>
+                        <c-row class="mt-4">
+                            <h4 class="header__title p-0 fw-bolder">{{zone?.name}}</h4>
+                        </c-row>
+                        <c-row class="mb-4 header_subtitle">
+                            <div class="d-flex align-items-center p-0">
+                                <span class="text-medium-emphasis">Status: </span>
+                                <span class="ms-2 align-middle status-bubble"
+                                    [ngClass]="{'bg-success': zone?.isRunning, 'bg-danger': !zone?.isRunning}"></span>
+                                
+                                <span class="ms-1 text-medium-emphasis">{{ zone?.isRunning ? 'Running' : 'Paused' }}</span>
+                            </div>
+                        </c-row>
+                        
+                    </c-container>
+                </c-col>
+                <c-col sm="2" xs="4" class="d-flex justify-content-center align-items-center">
+                    <button cButton color="danger" variant="outline">Stop</button>
+                </c-col>
+            </c-row>
+
+        </c-container>
     </c-card-header>
+
+    <!-- Card body -->
     <c-card-body>
-        
-        <c-card class="mb-3">
-            <c-card-body>This is some text within a card body.</c-card-body>
+        <!-- Card 1 -->
+        <c-card class="mb-3 mt-2">
+            <c-card-body>
+                <c-container>
+                    <c-row class="mt-3 small-card__title">
+                        <h6>Assignee</h6>
+                    </c-row>
+                    <c-row class="mt-3 small-card__text">
+                        <p>{{zone?.assignee}}</p>
+                    </c-row>
+                </c-container>
+            </c-card-body>
         </c-card>
 
+        <!-- Card 2 -->
         <c-card class="mb-3">
-            <c-card-body>This is some text within a card body.</c-card-body>
+            <c-card-body>
+                <c-container>
+                    <c-row class="mt-3 small-card__title">
+                        <h6>Objects detected</h6>
+                    </c-row>
+                    <c-row class="mt-4 mb-3">
+                        <div class="d-flex flex-wrap">
+                            <c-badge *ngFor="let class of zone?.classesDetection" color="primary"
+                                class="me-2 small-card__badge">{{class}}</c-badge>
+                        </div>
+                    </c-row>
+                </c-container>
+            </c-card-body>
         </c-card>
 
-        <c-card>
-            <c-card-body>This is some text within a card body.</c-card-body>
+        <!-- Card 3 -->
+        <c-card class = "mb-4">
+            <c-card-body>
+                <c-container>
+                    <c-row class="mt-3 small-card__title">
+                        <h6>Cameras</h6>
+                    </c-row>
+                    <c-row>
+                        <c-container>
+                            <c-row class="mt-3 mb-2 small-card__subtitle">
+                                <c-col class="d-flex justify-content-center align-items-center">Name</c-col>
+                                <c-col class="d-flex justify-content-center align-items-center">IP Address</c-col>
+                                <c-col class="d-flex justify-content-center align-items-center">Status</c-col>
+                                <c-col class="d-flex justify-content-center align-items-center">Action</c-col>
+                                <c-col class="d-flex justify-content-center align-items-center"></c-col>
+                            </c-row>
+                        </c-container>
+                    </c-row>
+                    <c-row>
+                        <c-container>
+                            <c-row *ngFor="let camera of zone?.listCameras" class="align-items-center">
+                                <c-col class="d-flex justify-content-center align-items-center">{{camera.name}}</c-col>
+                                <c-col class="d-flex justify-content-center align-items-center">{{camera.ipAddress}}</c-col>
+                                <c-col class="d-flex justify-content-center align-items-center">Recording</c-col>
+                                <c-col class="d-flex justify-content-center align-items-center"><button cButton color="danger" variant="outline" class="btn-sm">Stop</button></c-col>
+                                <c-col class="d-flex justify-content-center align-items-center"><button cButton color="primary" variant="ghost">Remove</button></c-col>
+                            </c-row>
+                        </c-container>
+                    </c-row>
+                </c-container>
+            </c-card-body>
         </c-card>
     </c-card-body>
- </c-card>
+</c-card>

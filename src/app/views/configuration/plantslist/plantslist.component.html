@@ -1,31 +1,37 @@
-<c-row class="g-4">
-        <c-col sm="6" xl="3" *ngFor = "let plant of plantsList">
-            <a [routerLink]="['plants', plant.id]" style="text-decoration: none;">
-            <!-- <a [routerLink]="['form-control']" style="text-decoration: none;"> -->
-            <!-- <div > -->
-            <c-card style="background-color: pink;">
-                <c-card-body>{{plant.name}}
-                      <c-dropdown alignment="end" variant="btn-group">
-                        <button [caret]="false" cButton cDropdownToggle class="p-0 text-white" color="transparent" aria-label="Open dropdown">
-                          <svg cIcon name="cilOptions"></svg>
-                        </button>
-                        <ul cDropdownMenu>
-                          <li><a [routerLink]="[]" cDropdownItem>Delete</a></li>
-                        </ul>
-                      </c-dropdown>
-                </c-card-body>
-            </c-card>
-            </a>
-        <!-- </div> -->
-        </c-col>
-        <c-col sm="6" xl="3">
-            <a href="your-link-here" style="text-decoration: none;">
-                <c-card style="background-color: pink; cursor: pointer;">
-                  <c-card-body>
-                    <i class="cil-plus"></i> Add plant
-                  </c-card-body>
-                </c-card>
-              </a>
-        </c-col>
- </c-row>
+<c-container>
+  <c-row class="g-4">
+    <c-col sm="6" xl="3" *ngFor="let plant of plantsList">
+      <a [routerLink]="['plants', plant.id]" style="text-decoration: none;">
+        <c-card class="mb-3 p-0 shadow-sm" style="width: 250px; height: 180px; overflow: hidden;">
+          <div style="height: 100px; background-color: pink; position: relative;">
+            <c-dropdown alignment="end" variant="btn-group" class="position-absolute top-0 end-0 m-2">
+              <button [caret]="false" cButton cDropdownToggle class="p-0" color="transparent" aria-label="Open dropdown">
+                <svg cIcon name="cilOptions"></svg>
+              </button>
+              <ul cDropdownMenu class="shadow">
+                <li><a [routerLink]="[]" cDropdownItem>Delete</a></li>
+              </ul>
+            </c-dropdown>
+          </div>
+          <c-card-body>
+            <h6 cCardTitle class="mb-0">{{plant.name}}</h6>
+            <p cCardText>
+              <small class="text-medium-emphasis">{{plant.address}}</small>
+            </p>
+          </c-card-body>
+        </c-card>
+      </a>
+    </c-col>
   
+    <!-- Add new card -->
+    <c-col sm="6" xl="3">
+      <a [routerLink]="[]" style="text-decoration: none;">
+        <c-card class="mb-3 p-0 shadow-sm" style="width: 250px; height: 180px; background-color: pink; border-width: 0;">
+          <c-card-body class="d-flex align-items-center justify-content-center text-medium-emphasis">
+            Add Plant
+          </c-card-body>
+        </c-card>
+      </a>
+    </c-col>
+  </c-row>
+</c-container>

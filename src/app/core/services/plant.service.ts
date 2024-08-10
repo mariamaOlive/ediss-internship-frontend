@@ -7,9 +7,9 @@ import { of } from 'rxjs';
 export class PlantService {
 
   private dataPlant : any[] = [
-    {id: 1, name: "Plant 1"},
-    {id: 2, name: "Plant 2"},
-    {id: 3, name: "Plant 3"},
+    {id: 1, name: "Plant 1", address:"Italy"},
+    {id: 2, name: "Plant 2", address:"Italy"},
+    {id: 3, name: "Plant 3", address:"Italy"},
   ]
 
   constructor() { }
