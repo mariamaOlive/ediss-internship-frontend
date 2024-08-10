@@ -1,27 +1,37 @@
-.small-card__title{
+.small-card__title {
     border-bottom: 1px solid #d8d9d9;
 }
 
-.small-card__text{
+.small-card__text {
     font-size: 20px;
 }
 
-.small-card__badge{
+.small-card__badge {
     font-size: 15px;
 }
 
-.small-card__subtitle{
+.small-card__subtitle {
     font-weight: 600;
     font-size: 15px;
 }
 
-.container__multiselect{
+.container__multiselect {
     width: 100% !important;
     // border: #d8d9d9;
 }
 
-.btn-add{
+.btn-add {
     width: 150px;
+}
+
+.active-label {
+    color: blueviolet;
+    // font-weight: bold;
+}
+
+.inactive-label {
+    color: red;
+    // font-weight: bold;
 }
 
 

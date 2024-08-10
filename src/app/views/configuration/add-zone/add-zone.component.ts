@@ -25,15 +25,21 @@ export class AddZoneComponent implements OnInit {
   plant: PlantItem | null = null;
   assignees: any;
 
+  dropdownListObjects: any[] = [];
+  selectedItemsObjects: any[] = [];
+  dropdownSettingsObjects = {};
+
+  dropdownListCameras: any[] = [];
+  selectedItemsCameras: any[] = [];
+  dropdownSettingsCameras = {};
+
   //New Zone properties
   zoneName: string = '';
   selectedAssignee: number | null = null;
   confidenceThreshold: number = 0; 
+  isPalletDetectionOn: boolean = false;
 
 
-  dropdownList: any[] = [];
-  selectedItems: any[] = [];
-  dropdownSettings = {};
 
   constructor(private router: Router, private route: ActivatedRoute, private zoneServ: ZoneService, private plantServ: PlantService, private assigneeServ: AssigneeService) {
     //TODO: Get Plant Id
@@ -45,6 +51,8 @@ export class AddZoneComponent implements OnInit {
     //Get plant info by ID
     this.getPlantInfo();
     this.getAvailableAssigees();
+    this.loadMultiSelectorObjectDetection()
+    this.loadMultiSelectorCamera()
 
 
 
@@ -59,51 +67,13 @@ export class AddZoneComponent implements OnInit {
 
 
 
-    this.dropdownList = [
-      { item_id: 1, item_text: 'Helmet' },
-      { item_id: 2, item_text: 'Hair Net' },
-      { item_id: 3, item_text: 'Goggles' },
-      { item_id: 4, item_text: 'Vest' },
-      { item_id: 5, item_text: 'Earplugs' }
-    ];
-    this.selectedItems = [
-      // { item_id: 3, item_text: 'Pune' },
-      // { item_id: 4, item_text: 'Navsari' }
-    ];
-    this.dropdownSettings = {
-      singleSelection: false,
-      idField: 'item_id',
-      textField: 'item_text',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
-      itemsShowLimit: 5,
-      allowSearchFilter: false
-    };
-  }
-  onItemSelect(item: any) {
-    console.log(item);
-  }
-  onSelectAll(items: any) {
-    console.log(items);
   }
 
-  addNewZone(): void {
 
-    const cameras: CameraItem[] = [new CameraItem("Camera 1", 1, "187.20.135.197"), new CameraItem("Camera 1", 1, "187.20.135.199"), new CameraItem("Camera 1", 1, "187.20.135.200")];
-    const newZone: ZoneItem = new ZoneItem("My Zone", Math.random(), 1, "Minase Serafim", .5, true, ["Vest", "Hairnet", "Goggles", "Earplugs"], cameras);
+  // Request from services functions
 
-    this.zoneServ.addZone(newZone).subscribe({
-      next: () => {
-        //TODO: Return to the previous page
-        console.log('ADDED:');
-      },
-      error: err => {
-        console.error('Error deleting zone:', err);
-      }
-    });
-  }
-
-  private getPlantInfo(){
+  //Request Plant info
+  private getPlantInfo():void{
     this.route.paramMap.subscribe((params: ParamMap) => {
       const id = params.get('plantId');
       if (id) {
@@ -121,6 +91,7 @@ export class AddZoneComponent implements OnInit {
     });
   }
 
+  //Request Assignee function
   private getAvailableAssigees(){
     this.assigneeServ.getAllAssignees().subscribe({
       next: assignees => {
@@ -132,6 +103,81 @@ export class AddZoneComponent implements OnInit {
     });
   }
 
+  // Add New Zone
+  addNewZone(): void {
+
+    const cameras: CameraItem[] = [new CameraItem("Camera 1", 1, "187.20.135.197"), new CameraItem("Camera 1", 1, "187.20.135.199"), new CameraItem("Camera 1", 1, "187.20.135.200")];
+    const newZone: ZoneItem = new ZoneItem("My Zone", Math.random(), 1, "Minase Serafim", .5, true, ["Vest", "Hairnet", "Goggles", "Earplugs"], cameras);
+
+    this.zoneServ.addZone(newZone).subscribe({
+      next: () => {
+        //TODO: Return to the previous page
+        console.log('ADDED:');
+      },
+      error: err => {
+        console.error('Error deleting zone:', err);
+      }
+    });
+  }
+
+  // MultiSelector Fucntions
+  
+  //Object detection
+  loadMultiSelectorObjectDetection():void{
+    this.dropdownListObjects = [
+      { item_id: 1, item_text: 'Helmet' },
+      { item_id: 2, item_text: 'Hair Net' },
+      { item_id: 3, item_text: 'Goggles' },
+      { item_id: 4, item_text: 'Vest' },
+      { item_id: 5, item_text: 'Earplugs' }
+    ];
+    this.selectedItemsObjects = [
+      // { item_id: 3, item_text: 'Pune' },
+      // { item_id: 4, item_text: 'Navsari' }
+    ];
+    this.dropdownSettingsObjects = {
+      singleSelection: false,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 5,
+      allowSearchFilter: false
+    };
+  }
+
+  loadMultiSelectorCamera():void{
+    this.dropdownListCameras = [
+      { item_id: 1, item_text: 'Helmet' },
+      { item_id: 2, item_text: 'Hair Net' },
+      { item_id: 3, item_text: 'Goggles' },
+      { item_id: 4, item_text: 'Vest' },
+      { item_id: 5, item_text: 'Earplugs' }
+    ];
+    this.selectedItemsCameras = [
+      // { item_id: 3, item_text: 'Pune' },
+      // { item_id: 4, item_text: 'Navsari' }
+    ];
+    this.dropdownSettingsCameras = {
+      singleSelection: false,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 5,
+      allowSearchFilter: false
+    };
+  }
+
+  onItemSelect(item: any) {
+    console.log(item);
+  }
+  onSelectAll(items: any) {
+    console.log(items);
+  }
+
+
+  // Confidence Threshold Fucntions
   updateConfidenceThreshold(value: number): void {
     this.confidenceThreshold = value / 100;
   }

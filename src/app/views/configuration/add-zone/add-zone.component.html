@@ -117,7 +117,7 @@
             <div class="d-flex flex-wrap p-0">
               <div class="container__multiselect">
                 <ng-multiselect-dropdown class="multiselect-element" [placeholder]="'Select Objects'"
-                  [settings]="dropdownSettings" [data]="dropdownList" [(ngModel)]="selectedItems"
+                  [settings]="dropdownSettingsObjects" [data]="dropdownListObjects" [(ngModel)]="selectedItemsObjects"
                   (onSelect)="onItemSelect($event)" (onSelectAll)="onSelectAll($event)">
                 </ng-multiselect-dropdown>
               </div>
@@ -125,15 +125,25 @@
           </c-row>
 
            <!-- Form Pallet -->
-          <c-row>
+           <c-row>
             <p class="mb-1">Pallet Detection</p>
             <div class="d-flex flex-wrap">
               <c-form-check sizing="xl" switch>
-                <input cFormCheckInput checked type="checkbox" />
-                <label cFormCheckLabel>Extra large switch checkbox input</label>
+                <input 
+                  cFormCheckInput 
+                  type="checkbox" 
+                  [(ngModel)]="isPalletDetectionOn" 
+                  id="palletDetectionCheckbox"/>
+                <label 
+                  cFormCheckLabel 
+                  for="palletDetectionCheckbox" 
+                  [ngClass]="isPalletDetectionOn ? 'active-label' : 'inactive-label'">
+                  {{ isPalletDetectionOn ? 'Pallet detection activated' : 'Pallet detection not activated' }}
+                </label>
               </c-form-check>
             </div>
           </c-row>
+
         </c-container>
       </c-card-body>
     </c-card>
@@ -149,7 +159,7 @@
             <div class="d-flex flex-wrap p-0">
               <div class="container__multiselect">
                 <ng-multiselect-dropdown class="multiselect-element" [placeholder]="'Select Objects'"
-                  [settings]="dropdownSettings" [data]="dropdownList" [(ngModel)]="selectedItems"
+                  [settings]="dropdownSettingsCameras" [data]="dropdownListCameras" [(ngModel)]="selectedItemsCameras"
                   (onSelect)="onItemSelect($event)" (onSelectAll)="onSelectAll($event)">
                 </ng-multiselect-dropdown>
               </div>
