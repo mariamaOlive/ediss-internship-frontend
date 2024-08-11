@@ -2,8 +2,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap, RouterModule, RouterLink, NavigationStart, NavigationEnd, NavigationError, NavigationCancel } from '@angular/router';
 import { ZoneService } from 'src/app/core/services/zone.service';
-import { CommonModule } from '@angular/common';
-import { IconDirective } from '@coreui/icons-angular';
+import { CommonModule, Location } from '@angular/common';
+import { IconSetService, IconModule } from '@coreui/icons-angular';
+import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft, cilOptions } from '@coreui/icons';
+
 import {
   GridModule,
   CardModule,
@@ -25,13 +27,13 @@ import { ZoneItem } from 'src/app/core/models/zone';
   selector: 'app-zonelist',
   templateUrl: './zonelist.component.html',
   styleUrls: ['./zonelist.component.scss'],
+  providers: [IconSetService],
   imports: [
     CommonModule,
     RouterModule,
     GridModule, 
     CardModule, 
     TemplateIdDirective, 
-    IconDirective,
     ThemeDirective,
     DropdownComponent,
     ButtonDirective,
@@ -40,7 +42,9 @@ import { ZoneItem } from 'src/app/core/models/zone';
     DropdownItemDirective,
     RouterLink,
     DropdownDividerDirective,
-    TooltipModule]
+    TooltipModule, 
+    IconModule
+  ]
 })
 
 export class ZonelistComponent implements OnInit {
@@ -49,8 +53,8 @@ export class ZonelistComponent implements OnInit {
   zonesList: ZoneItem[] = [];  // Assuming zones is an array. Adjust type accordingly.
   tooltipText = 'Vivamus sagittis lacus vel augue laoreet rutrum faucibus.';
 
-  constructor(private router: Router, private route: ActivatedRoute, private zoneServ: ZoneService) {
-
+  constructor(private router: Router, private route: ActivatedRoute, private zoneServ: ZoneService, private location: Location, public iconSet: IconSetService) {
+    iconSet.icons = {cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft, cilOptions};
     // this.router.events.subscribe(event => {
     //   // debugger
     //   if (event instanceof NavigationStart) {
@@ -101,6 +105,11 @@ export class ZonelistComponent implements OnInit {
         console.error('Error deleting zone:', err);
       }
     });
+  }
+
+
+  navigateBack(){
+    this.location.back();
   }
 
 

@@ -12,10 +12,14 @@ import { PlantService } from 'src/app/core/services/plant.service';
 import { AssigneeService } from 'src/app/core/services/assignee.service';
 import { CameraService } from 'src/app/core/services/camera.service';
 import { PlantItem } from 'src/app/core/models/plant';
+import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft } from '@coreui/icons';
+import { IconSetService, IconModule } from '@coreui/icons-angular';
+
 
 @Component({
   selector: 'app-add-zone',
   standalone: true,
+  providers: [IconSetService],
   imports: [
     CardModule, 
     ButtonModule, 
@@ -25,7 +29,8 @@ import { PlantItem } from 'src/app/core/models/plant';
     IconDirective, 
     FormModule, 
     NgMultiSelectDropDownModule, 
-    FormsModule
+    FormsModule,
+    IconModule
   ],
   templateUrl: './add-zone.component.html',
   styleUrl: './add-zone.component.scss'
@@ -58,8 +63,11 @@ export class AddZoneComponent implements OnInit {
     private zoneServ: ZoneService, 
     private plantServ: PlantService, 
     private assigneeServ: AssigneeService, 
-    private cameraServ: CameraService
-  ) {}
+    private cameraServ: CameraService,
+    public iconSet: IconSetService, 
+  ) {
+    iconSet.icons = {cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft};
+  }
 
   // Lifecycle Hook
   ngOnInit() {
@@ -202,4 +210,10 @@ export class AddZoneComponent implements OnInit {
     this.confidenceThreshold = parseFloat((value / 100).toFixed(2));
   }
 
+  navigateBack(){
+    this.location.back();
+  }
+
 }
+
+

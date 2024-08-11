@@ -1,3 +1,10 @@
+<div class="ms-3 mb-3 d-flex justify-content-start align-items-center">
+  <a (click)="navigateBack()" class="icon-back">
+      <svg cIcon class="my-1 text-secondary" name="cilArrowCircleLeft" width="40"></svg>
+  </a>
+  <span class="text-secondary fs-3 ms-3">List of Zones</span>
+</div>
+
 <c-container>
   <c-row class="g-4">
     <c-col sm="6" xl="3" *ngFor="let zone of zonesList">

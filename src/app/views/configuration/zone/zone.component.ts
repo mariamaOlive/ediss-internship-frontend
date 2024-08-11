@@ -3,20 +3,27 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { ZoneItem } from 'src/app/core/models/zone';
 import { ZoneService } from 'src/app/core/services/zone.service';
 import { CardModule, ButtonModule, GridModule, BadgeModule} from '@coreui/angular';
-import { IconDirective } from '@coreui/icons-angular';
-import { CommonModule } from '@angular/common';
+import { IconSetService, IconModule } from '@coreui/icons-angular';
+import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft } from '@coreui/icons';
+import { CommonModule, Location } from '@angular/common';
 
 @Component({
   selector: 'app-zone',
   standalone: true,
-  imports: [CardModule, ButtonModule, GridModule, CommonModule, BadgeModule, IconDirective],
+  providers: [IconSetService],
+  imports: [CardModule, ButtonModule, GridModule, CommonModule, BadgeModule, IconModule],
   templateUrl: './zone.component.html',
   styleUrl: './zone.component.scss'
 })
 export class ZoneComponent {
 
   zone: ZoneItem | null = null;
-  constructor(private zoneServ: ZoneService, private route: ActivatedRoute) { }
+
+
+  constructor(private zoneServ: ZoneService, private route: ActivatedRoute, public iconSet: IconSetService, private location: Location) { 
+    iconSet.icons = {cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft};
+  }
+  
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -27,6 +34,11 @@ export class ZoneComponent {
       }
     })
 
+  }
+
+
+  navigateBack(): void {
+    this.location.back();
   }
 
   

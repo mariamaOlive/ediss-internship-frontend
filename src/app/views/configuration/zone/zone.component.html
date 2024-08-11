@@ -1,4 +1,11 @@
-<c-card class="mb-4 shadow">
+<div class="mb-3 d-flex justify-content-start align-items-center">
+    <a (click)="navigateBack()" class="icon-back">
+        <svg cIcon class="my-1 text-secondary" name="cilArrowCircleLeft" width="40"></svg>
+    </a>
+    <span class="text-secondary fs-3 ms-3">Zone Details</span>
+</div>
+
+<c-card class="mb-5 shadow">
     <!-- Header -->
     <c-card-header>
         <c-container>
@@ -90,7 +97,7 @@
                                 <c-col class="d-flex justify-content-center align-items-center">IP Address</c-col>
                                 <c-col class="d-flex justify-content-center align-items-center">Status</c-col>
                                 <c-col class="d-flex justify-content-center align-items-center">Action</c-col>
-                                <c-col class="d-flex justify-content-center align-items-center"></c-col>
+                                <!-- <c-col class="d-flex justify-content-center align-items-center"></c-col> -->
                             </c-row>
                         </c-container>
                     </c-row>
@@ -100,8 +107,8 @@
                                 <c-col class="d-flex justify-content-center align-items-center">{{camera.name}}</c-col>
                                 <c-col class="d-flex justify-content-center align-items-center">{{camera.ipAddress}}</c-col>
                                 <c-col class="d-flex justify-content-center align-items-center">Recording</c-col>
-                                <c-col class="d-flex justify-content-center align-items-center"><button cButton color="danger" variant="outline" class="btn-sm">Stop</button></c-col>
-                                <c-col class="d-flex justify-content-center align-items-center"><button cButton color="primary" variant="ghost">Remove</button></c-col>
+                                <c-col class="d-flex justify-content-center align-items-center"><button cButton color="danger" variant="ghost" class="btn-sm">Stop</button></c-col>
+                                <!-- <c-col class="d-flex justify-content-center align-items-center"><button cButton color="primary" variant="ghost">Remove</button></c-col> -->
                             </c-row>
                         </c-container>
                     </c-row>

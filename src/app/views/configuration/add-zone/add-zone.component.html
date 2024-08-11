@@ -1,4 +1,11 @@
-<c-card class="mb-4 shadow">
+<div class="ms-3 mb-3 d-flex justify-content-start align-items-center">
+  <a (click)="navigateBack()" class="icon-back">
+      <svg cIcon class="my-1 text-secondary" name="cilArrowCircleLeft" width="40"></svg>
+  </a>
+  <span class="text-secondary fs-3 ms-3">Add New Zone</span>
+</div>
+
+<c-card class="mb-5 shadow">
   <!-- Header -->
   <c-card-header>
     <c-container>
@@ -6,7 +13,7 @@
         <c-col class="ps-4" sm="10" xs="8">
           <c-container>
             <c-row class="mt-4 mb-3">
-              <h4 class="header__title p-0 fw-bolder">Add New Zone</h4>
+              <h4 class="header__title p-0 fw-bolder">Add zone information</h4>
             </c-row>
           </c-container>
         </c-col>
