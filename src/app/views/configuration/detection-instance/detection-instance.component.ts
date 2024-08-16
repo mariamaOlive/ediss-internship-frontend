@@ -1,36 +1,36 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { ZoneItem } from 'src/app/core/models/zone';
-import { ZoneService } from 'src/app/core/services/zone.service';
+import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
+import { DetectionInstanceService } from 'src/app/core/services/detection-instance.service';
 import { CardModule, ButtonModule, GridModule, BadgeModule} from '@coreui/angular';
 import { IconSetService, IconModule } from '@coreui/icons-angular';
 import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft } from '@coreui/icons';
 import { CommonModule, Location } from '@angular/common';
 
 @Component({
-  selector: 'app-zone',
+  selector: 'app-detection-instance',
   standalone: true,
   providers: [IconSetService],
   imports: [CardModule, ButtonModule, GridModule, CommonModule, BadgeModule, IconModule],
-  templateUrl: './zone.component.html',
-  styleUrl: './zone.component.scss'
+  templateUrl: './detection-instance.component.html',
+  styleUrl: './detection-instance.component.scss'
 })
-export class ZoneComponent {
+export class DetectionInstanceComponent {
 
-  zone: ZoneItem | null = null;
+  detectionInstance: DetectionInstanceItem | null = null;
 
 
-  constructor(private zoneServ: ZoneService, private route: ActivatedRoute, public iconSet: IconSetService, private location: Location) { 
+  constructor(private detectionServ: DetectionInstanceService, private route: ActivatedRoute, public iconSet: IconSetService, private location: Location) { 
     iconSet.icons = {cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft};
   }
   
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
-      let id = params.get('zoneId');
+      let id = params.get('detectionId');
 
       if (id) {
-        this.zoneServ.getZoneInfo(parseInt(id, 10)).subscribe(zone => this.zone = zone);
+        this.detectionServ.getZoneInfo(parseInt(id, 10)).subscribe(zone => this.detectionInstance = zone);
       }
     })
 

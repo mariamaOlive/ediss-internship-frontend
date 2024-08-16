@@ -7,12 +7,12 @@
   
   <c-container>
     <c-row class="g-4">
-      <c-col sm="6" xl="3" *ngFor="let zone of zonesList">
-          <c-card class="mb-3 p-0 shadow-sm" style="width: 250px; height: 180px; overflow: hidden;" (click)="navigateToZone(zone.id)">
+      <c-col sm="6" xl="3" *ngFor="let detectionInstance of detectionInstanceList">
+          <c-card class="mb-3 p-0 shadow-sm" style="width: 250px; height: 180px; overflow: hidden;" (click)="navigateToDetectionInstance(detectionInstance.id)">
             <div style="height: 100px; background-color: #d8d9d9; position: relative;">
               <span class="ms-3 mt-3 align-middle status-bubble"
-                [ngClass]="{'bg-success': zone?.isRunning, 'bg-danger': !zone?.isRunning}"
-                [cTooltip]="zone?.isRunning ? 'Running' : 'Paused'" cTooltipPlacement="right">
+                [ngClass]="{'bg-success': detectionInstance?.isRunning, 'bg-danger': !detectionInstance?.isRunning}"
+                [cTooltip]="detectionInstance?.isRunning ? 'Running' : 'Paused'" cTooltipPlacement="right">
             </span>
   
             <!-- DropDown -->
@@ -22,16 +22,16 @@
                   <svg cIcon name="cilOptions"></svg>
                 </button>
                 <ul cDropdownMenu class="shadow">
-                  <li><a [routerLink]="[]" cDropdownItem (click)="deleteZone(zone.id); $event.stopPropagation()">Delete</a></li>
+                  <li><a [routerLink]="[]" cDropdownItem (click)="deleteDetectionInstance(detectionInstance.id); $event.stopPropagation()">Delete</a></li>
                 </ul>
               </c-dropdown>
             </div>
   
             <!-- Card body -->
             <c-card-body>
-              <h6 cCardTitle class="mb-0">{{zone.name}}</h6>
+              <h6 cCardTitle class="mb-0">{{detectionInstance.name}}</h6>
               <p cCardText>
-                <small class="text-medium-emphasis">{{zone.listCameras.length}} cameras</small>
+                <small class="text-medium-emphasis">{{detectionInstance.listCameras.length}} cameras</small>
               </p>
             </c-card-body>
           </c-card>
@@ -39,7 +39,7 @@
     
       <!-- Add new card -->
       <c-col sm="6" xl="3">
-          <c-card class="mb-3 p-0 shadow-sm" style="width: 250px; height: 180px; background-color: #d8d9d9; border-width: 0;" (click)="navigateToAddZone()">
+          <c-card class="mb-3 p-0 shadow-sm" style="width: 250px; height: 180px; background-color: #d8d9d9; border-width: 0;" (click)="navigateToAddDetectionInstance()">
             <c-card-body class="d-flex align-items-center justify-content-center text-medium-emphasis">
               Add Zone
             </c-card-body>

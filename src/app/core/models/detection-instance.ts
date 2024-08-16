@@ -1,6 +1,6 @@
 import { CameraItem } from "./camera";
 
-export class ZoneItem {
+export class DetectionInstanceItem {
   
   // Properties
   public name: string;

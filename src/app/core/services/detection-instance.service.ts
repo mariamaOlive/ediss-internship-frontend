@@ -1,30 +1,30 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ZoneItem } from '../models/zone';
+import { DetectionInstanceItem } from '../models/detection-instance';
 import { CameraItem } from '../models/camera';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ZoneService {
+export class DetectionInstanceService {
 
   private cameras: CameraItem[] = [new CameraItem("Camera 1", 1, "187.20.135.197"), new CameraItem("Camera 2", 2, "187.20.135.199"), new CameraItem("Camera 3", 3, "187.20.135.200")]
 
-  private dataZone : ZoneItem[] = [
-    new ZoneItem("Zone 1", 1, 1, "Luca Bianchi",0.5,true, ["Helmet", "Vest", "Hairnet", "Goggles", "Earplugs"], this.cameras),
-    new ZoneItem("Zone 2", 2, 1, "Mariama Oliveira",0.5,true, ["Helmet"], this.cameras, false),
-    new ZoneItem("Zone 3", 3, 1, "Minase Serafim",0.5,false, ["Vest", "Hairnet", "Goggles", "Earplugs"], this.cameras),
-    new ZoneItem("Zone 4", 4, 2, "Mariama Oliveira",0.5,false, ["Helmet", "Vest", "Hairnet", "Goggles", "Earplugs"], this.cameras),
-    new ZoneItem("Zone 5", 5, 2, "Luca Bianchi",0.5,true, ["Helmet", "Earplugs"], this.cameras)
+  private dataZone : DetectionInstanceItem[] = [
+    new DetectionInstanceItem("Zone 1", 1, 1, "Luca Bianchi",0.5,true, ["Helmet", "Vest", "Hairnet", "Goggles", "Earplugs"], this.cameras),
+    new DetectionInstanceItem("Zone 2", 2, 1, "Mariama Oliveira",0.5,true, ["Helmet"], this.cameras, false),
+    new DetectionInstanceItem("Zone 3", 3, 1, "Minase Serafim",0.5,false, ["Vest", "Hairnet", "Goggles", "Earplugs"], this.cameras),
+    new DetectionInstanceItem("Zone 4", 4, 2, "Mariama Oliveira",0.5,false, ["Helmet", "Vest", "Hairnet", "Goggles", "Earplugs"], this.cameras),
+    new DetectionInstanceItem("Zone 5", 5, 2, "Luca Bianchi",0.5,true, ["Helmet", "Earplugs"], this.cameras)
   ]
 
   constructor() { }
 
-  getZonesByPlantId(plantId: number):Observable<ZoneItem[]>{
+  getZonesByPlantId(plantId: number):Observable<DetectionInstanceItem[]>{
     return of(this.dataZone.filter(item => item.plantId === plantId));
   }
 
-  getZoneInfo(zoneId: number): Observable<ZoneItem> {
+  getZoneInfo(zoneId: number): Observable<DetectionInstanceItem> {
     const zone = this.dataZone.find(item => item.id === zoneId);
     if (!zone) {
       throw new Error(`Zone with ID ${zoneId} not found`);
@@ -32,7 +32,7 @@ export class ZoneService {
     return of(zone);
   }
 
-  addZone(newZone: ZoneItem): Observable<boolean> {
+  addZone(newZone: DetectionInstanceItem): Observable<boolean> {
     const existingZone = this.dataZone.find(zone => zone.id === newZone.id);
     if (existingZone) {
       console.error(`Zone with ID ${newZone.id} already exists.`);

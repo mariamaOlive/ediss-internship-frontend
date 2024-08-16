@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap, RouterModule, RouterLink, NavigationStart, NavigationEnd, NavigationError, NavigationCancel } from '@angular/router';
-import { ZoneService } from 'src/app/core/services/zone.service';
+import { DetectionInstanceService } from 'src/app/core/services/detection-instance.service';
 import { CommonModule, Location } from '@angular/common';
 import { IconSetService, IconModule } from '@coreui/icons-angular';
 import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft, cilOptions } from '@coreui/icons';
@@ -18,7 +18,7 @@ import {
   DropdownItemDirective,
   TooltipModule
 } from '@coreui/angular';
-import { ZoneItem } from 'src/app/core/models/zone';
+import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
 
 
 @Component({
@@ -48,10 +48,10 @@ import { ZoneItem } from 'src/app/core/models/zone';
 export class DetectionInstanceListComponent implements OnInit {
 
   plantId: any = NaN;
-  zonesList: ZoneItem[] = [];  // Assuming zones is an array. Adjust type accordingly.
+  detectionInstanceList: DetectionInstanceItem[] = [];  // Assuming zones is an array. Adjust type accordingly.
   tooltipText = 'Vivamus sagittis lacus vel augue laoreet rutrum faucibus.';
 
-  constructor(private router: Router, private route: ActivatedRoute, private zoneServ: ZoneService, private location: Location, public iconSet: IconSetService) {
+  constructor(private router: Router, private route: ActivatedRoute, private detectionServ: DetectionInstanceService, private location: Location, public iconSet: IconSetService) {
     iconSet.icons = {cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft, cilOptions};
     // this.router.events.subscribe(event => {
     //   // debugger
@@ -72,35 +72,35 @@ export class DetectionInstanceListComponent implements OnInit {
       const id = params.get('id');
       if (id) {
         this.plantId = id;
-        this.zoneServ.getZonesByPlantId(parseInt(id, 10)).subscribe({
-          next: zones => {
-            this.zonesList = zones;
+        this.detectionServ.getZonesByPlantId(parseInt(id, 10)).subscribe({
+          next: detectionInstances => {
+            this.detectionInstanceList = detectionInstances;
           },
           error: err => {
-            console.error('Error fetching zones:', err);
+            console.error('Error fetching detections instance:', err);
           }
         });
       }
     });
   }
 
-  navigateToZone(zoneId: number) {
-    this.router.navigate([`configuration/plants/${this.plantId}/zone/${zoneId}`]);
+  navigateToDetectionInstance(detectionInstanceId: number) {
+    this.router.navigate([`configuration/plants/${this.plantId}/detection-instance/${detectionInstanceId}`]);
   }
 
-  navigateToAddZone() {
-    this.router.navigate([`configuration/plants/${this.plantId}/add-zone`]);
+  navigateToAddDetectionInstance() {
+    this.router.navigate([`configuration/plants/${this.plantId}/add-detection-instance`]);
   }
 
 
-  deleteZone(zoneId: number): void {
-    this.zoneServ.deleteZone(zoneId).subscribe({
+  deleteDetectionInstance(detectionInstanceId: number): void {
+    this.detectionServ.deleteZone(detectionInstanceId).subscribe({
       next: () => {
         //TODO: Change logic when connect to server
-        this.zonesList = this.zonesList.filter(zone => zone.id !== zoneId);
+        this.detectionInstanceList = this.detectionInstanceList.filter(instance => instance.id !== detectionInstanceId);
       },
       error: err => {
-        console.error('Error deleting zone:', err);
+        console.error('Error deleting detection instance:', err);
       }
     });
   }

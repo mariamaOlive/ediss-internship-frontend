@@ -17,17 +17,17 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'plants/:plantId/zone/:zoneId',
-    loadComponent: () => import('./zone/zone.component').then(m => m.ZoneComponent),
+    path: 'plants/:plantId/detection-instance/:detectionId',
+    loadComponent: () => import('./detection-instance/detection-instance.component').then(m => m.DetectionInstanceComponent),
     data: {
-      title: 'Zone Details'
+      title: 'Detection Instance Details'
     }
   },
   {
-    path: 'plants/:plantId/add-zone',
-    loadComponent: () => import('./add-zone/add-zone.component').then(m => m.AddZoneComponent),
+    path: 'plants/:plantId/add-detection-instance',
+    loadComponent: () => import('./add-detection-instance/add-zone.component').then(m => m.AddZoneComponent),
     data: {
-      title: 'Zone Details'
+      title: 'Add Detection Instance'
     }
   }
 ];

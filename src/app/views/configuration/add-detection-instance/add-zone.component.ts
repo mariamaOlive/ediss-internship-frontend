@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
-import { ZoneService } from 'src/app/core/services/zone.service';
+import { DetectionInstanceService } from 'src/app/core/services/detection-instance.service';
 import { CameraItem } from 'src/app/core/models/camera';
-import { ZoneItem } from 'src/app/core/models/zone';
+import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
 import { CardModule, ButtonModule, GridModule, BadgeModule, FormModule } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 import { CommonModule, Location } from '@angular/common';
@@ -60,7 +60,7 @@ export class AddZoneComponent implements OnInit {
     private router: Router, 
     private route: ActivatedRoute,
     private location: Location,  
-    private zoneServ: ZoneService, 
+    private detectionServ: DetectionInstanceService, 
     private plantServ: PlantService, 
     private assigneeServ: AssigneeService, 
     private cameraServ: CameraService,
@@ -181,7 +181,7 @@ export class AddZoneComponent implements OnInit {
     let filteredCameras = this.cameras.filter((item: { id: any; }) => mappedCameras.includes(item.id));
     let mappedObjects = this.selectedItemsObjects.map(item => item.item_text);
 
-    const newZone: ZoneItem = new ZoneItem(
+    const newZone: DetectionInstanceItem = new DetectionInstanceItem(
       this.zoneName, 
       Math.floor(Math.random() * 100001), 
       this.plantId,
@@ -193,7 +193,7 @@ export class AddZoneComponent implements OnInit {
       true
     );
 
-    this.zoneServ.addZone(newZone).subscribe({
+    this.detectionServ.addZone(newZone).subscribe({
       next: () => {
         console.log('Zone added successfully');
         this.location.back();
