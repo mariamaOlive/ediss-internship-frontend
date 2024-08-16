@@ -10,7 +10,7 @@ import { PlantService } from 'src/app/core/services/plant.service';
 
 
 @Component({
-  selector: 'app-plantslist',
+  selector: 'app-dashboard-list',
   standalone: true,
   imports: [
     RouterModule,
@@ -26,32 +26,33 @@ import { PlantService } from 'src/app/core/services/plant.service';
     DropdownItemDirective,
     RouterLink,
     DropdownDividerDirective],
-  templateUrl: './plantslist.component.html',
-  styleUrl: './plantslist.component.scss'
+  templateUrl: './dashboard-list.component.html',
+  styleUrl: './dashboard-list.component.scss'
 })
-export class PlantslistComponent implements OnInit {
+
+export class DashboardListComponent implements OnInit {
   plantsList : any[] = []
 
-    constructor(private plantsServ : PlantService, private router: Router){
+  constructor(private plantsServ : PlantService, private router: Router){
 
-      // this.router.events.subscribe(event => {
-      //   // debugger
-      //   if (event instanceof NavigationStart) {
-      //     console.log('NavigationStart:', event);
-      //   } else if (event instanceof NavigationEnd) {
-      //     console.log('NavigationEnd:', event);
-      //   } else if (event instanceof NavigationError) {
-      //     console.error('NavigationError:', event.error);
-      //   } else if (event instanceof NavigationCancel) {
-      //     console.warn('NavigationCancel:', event);
-      //   }
-      // });
-    }
+    // this.router.events.subscribe(event => {
+    //   // debugger
+    //   if (event instanceof NavigationStart) {
+    //     console.log('NavigationStart:', event);
+    //   } else if (event instanceof NavigationEnd) {
+    //     console.log('NavigationEnd:', event);
+    //   } else if (event instanceof NavigationError) {
+    //     console.error('NavigationError:', event.error);
+    //   } else if (event instanceof NavigationCancel) {
+    //     console.warn('NavigationCancel:', event);
+    //   }
+    // });
+  }
 
-    ngOnInit():void {
-      this.plantsServ.getAllPlants().subscribe(plants=>{
-        this.plantsList = plants;
-      }
-      );
+  ngOnInit():void {
+    this.plantsServ.getAllPlants().subscribe(plants=>{
+      this.plantsList = plants;
     }
+    );
+  }
 }

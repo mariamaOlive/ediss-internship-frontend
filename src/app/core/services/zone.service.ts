@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ZoneItem } from '../models/zone';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +17,16 @@ export class ZoneService {
 
   constructor() { }
 
+
+  getZoneById(plantId: number): Observable<ZoneItem> {
+    const zoneItem = this.dataZone.find(item => item.id === plantId);
+    if (zoneItem) {
+      return of(zoneItem);
+    } else {
+      return throwError(() => new Error('Zone not found'));
+    }
+  }
+  
 
   getZoneByPlantId(plantId:number):Observable<ZoneItem[]>{
     return of(this.dataZone.filter(item => item.plantId === plantId));

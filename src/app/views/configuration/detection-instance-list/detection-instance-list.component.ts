@@ -5,6 +5,7 @@ import { CommonModule, Location } from '@angular/common';
 import { IconSetService, IconModule } from '@coreui/icons-angular';
 import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft, cilOptions } from '@coreui/icons';
 
+
 import {
   GridModule,
   CardModule,
@@ -51,7 +52,13 @@ export class DetectionInstanceListComponent implements OnInit {
   detectionInstanceList: DetectionInstanceItem[] = [];  // Assuming zones is an array. Adjust type accordingly.
   tooltipText = 'Vivamus sagittis lacus vel augue laoreet rutrum faucibus.';
 
-  constructor(private router: Router, private route: ActivatedRoute, private detectionServ: DetectionInstanceService, private location: Location, public iconSet: IconSetService) {
+  constructor(
+    private router: Router, 
+    private route: ActivatedRoute, 
+    private detectionServ: DetectionInstanceService,  
+    private location: Location, 
+    public iconSet: IconSetService) {
+
     iconSet.icons = {cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft, cilOptions};
     // this.router.events.subscribe(event => {
     //   // debugger
@@ -84,9 +91,11 @@ export class DetectionInstanceListComponent implements OnInit {
     });
   }
 
+  
   navigateToDetectionInstance(detectionInstanceId: number) {
     this.router.navigate([`configuration/plants/${this.plantId}/detection-instance/${detectionInstanceId}`]);
   }
+
 
   navigateToAddDetectionInstance() {
     this.router.navigate([`configuration/plants/${this.plantId}/add-detection-instance`]);

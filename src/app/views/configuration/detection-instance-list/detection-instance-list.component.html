@@ -31,7 +31,7 @@
             <c-card-body>
               <h6 cCardTitle class="mb-0">{{detectionInstance.name}}</h6>
               <p cCardText>
-                <small class="text-medium-emphasis">{{detectionInstance.listCameras.length}} cameras</small>
+                <small class="text-medium-emphasis">{{detectionInstance.detectionType === 1 ? 'PPE Detection' : 'Pallet Detection'}}</small>
               </p>
             </c-card-body>
           </c-card>

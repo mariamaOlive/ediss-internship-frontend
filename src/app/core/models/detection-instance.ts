@@ -13,6 +13,7 @@ export class DetectionInstanceItem {
   public listCameras: CameraItem[];
   public isRunning: boolean;
   public confidenceTheshold: number;
+  public timeElapsed:number;
 
   constructor(
     name: string, 
@@ -25,6 +26,7 @@ export class DetectionInstanceItem {
     classesDetection: string[] = [], 
     listCameras: CameraItem[] = [],
     isRunning = true,
+    timeElapsed:number = 0
   ) {
     this.name = name;
     this.id = id;
@@ -36,5 +38,6 @@ export class DetectionInstanceItem {
     this.classesDetection = classesDetection;
     this.listCameras = listCameras;
     this.isRunning = isRunning;
+    this.timeElapsed = timeElapsed;
   }
 }

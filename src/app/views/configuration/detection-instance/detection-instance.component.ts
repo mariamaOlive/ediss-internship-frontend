@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
+import { ZoneItem } from 'src/app/core/models/zone';
 import { DetectionInstanceService } from 'src/app/core/services/detection-instance.service';
+import { ZoneService } from 'src/app/core/services/zone.service';
 import { CardModule, ButtonModule, GridModule, BadgeModule} from '@coreui/angular';
 import { IconSetService, IconModule } from '@coreui/icons-angular';
 import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft } from '@coreui/icons';
@@ -18,9 +20,16 @@ import { CommonModule, Location } from '@angular/common';
 export class DetectionInstanceComponent {
 
   detectionInstance: DetectionInstanceItem | null = null;
+  zone:ZoneItem | null = null;
 
 
-  constructor(private detectionServ: DetectionInstanceService, private route: ActivatedRoute, public iconSet: IconSetService, private location: Location) { 
+  constructor(
+    private detectionServ: DetectionInstanceService, 
+    private zoneServ: ZoneService, 
+    private route: ActivatedRoute, 
+    public iconSet: IconSetService, 
+    private location: Location) { 
+
     iconSet.icons = {cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft};
   }
   
@@ -30,7 +39,15 @@ export class DetectionInstanceComponent {
       let id = params.get('detectionId');
 
       if (id) {
-        this.detectionServ.getDetectionInstanceInfo(parseInt(id, 10)).subscribe(detectionInstance => this.detectionInstance = detectionInstance);
+        this.detectionServ.getDetectionInstanceInfo(parseInt(id, 10)).subscribe(detectionInstance => {
+          this.detectionInstance = detectionInstance;
+          
+          if (this.detectionInstance?.zoneId) {
+            this.zoneServ.getZoneById(this.detectionInstance.zoneId).subscribe(zone => {
+              this.zone = zone;
+            });
+          }
+        });
       }
     })
 
