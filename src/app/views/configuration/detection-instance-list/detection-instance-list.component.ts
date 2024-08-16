@@ -1,4 +1,3 @@
-// zonelist.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap, RouterModule, RouterLink, NavigationStart, NavigationEnd, NavigationError, NavigationCancel } from '@angular/router';
 import { ZoneService } from 'src/app/core/services/zone.service';
@@ -23,10 +22,8 @@ import { ZoneItem } from 'src/app/core/models/zone';
 
 
 @Component({
+  selector: 'app-detection-instance-list',
   standalone: true,
-  selector: 'app-zonelist',
-  templateUrl: './zonelist.component.html',
-  styleUrls: ['./zonelist.component.scss'],
   providers: [IconSetService],
   imports: [
     CommonModule,
@@ -44,10 +41,11 @@ import { ZoneItem } from 'src/app/core/models/zone';
     DropdownDividerDirective,
     TooltipModule, 
     IconModule
-  ]
+  ],
+  templateUrl: './detection-instance-list.component.html',
+  styleUrl: './detection-instance-list.component.scss'
 })
-
-export class ZonelistComponent implements OnInit {
+export class DetectionInstanceListComponent implements OnInit {
 
   plantId: any = NaN;
   zonesList: ZoneItem[] = [];  // Assuming zones is an array. Adjust type accordingly.
@@ -111,6 +109,5 @@ export class ZonelistComponent implements OnInit {
   navigateBack(){
     this.location.back();
   }
-
 
 }
