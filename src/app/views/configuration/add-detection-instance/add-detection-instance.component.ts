@@ -9,11 +9,13 @@ import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { PlantService } from 'src/app/core/services/plant.service';
+import { ZoneService } from 'src/app/core/services/zone.service';
 import { AssigneeService } from 'src/app/core/services/assignee.service';
 import { CameraService } from 'src/app/core/services/camera.service';
 import { PlantItem } from 'src/app/core/models/plant';
 import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft } from '@coreui/icons';
 import { IconSetService, IconModule } from '@coreui/icons-angular';
+import { ZoneItem } from 'src/app/core/models/zone';
 
 
 @Component({
@@ -40,6 +42,7 @@ export class AddDetectionInstanceComponent implements OnInit {
   plantId: any = NaN;
   plant: PlantItem | null = null;
   assignees: any;
+  zones: any;
   cameras: any;
 
   dropdownListObjects: any[] = [];
@@ -49,10 +52,11 @@ export class AddDetectionInstanceComponent implements OnInit {
   dropdownSettingsCameras = {};
 
   // New Zone properties
-  zoneName: string = '';
+  detectionInstanceName: string = '';
   selectedAssignee: string = "";
+  selectedZone:string="";
   confidenceThreshold: number = 0;
-  isPalletDetectionOn: boolean = false;
+  selectedDetectionType: string = "1";
   selectedItemsObjects: any[] = [];
   selectedItemsCameras: any[] = [];
 
@@ -61,6 +65,7 @@ export class AddDetectionInstanceComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,  
     private detectionServ: DetectionInstanceService, 
+    private zoneServ: ZoneService, 
     private plantServ: PlantService, 
     private assigneeServ: AssigneeService, 
     private cameraServ: CameraService,
@@ -88,11 +93,23 @@ export class AddDetectionInstanceComponent implements OnInit {
           next: plant => {
             this.plant = plant;
             this.confidenceThreshold = this.plant.confidenceThreshold;
+            this.getZonesByPlant(parseInt(id, 10));
           },
           error: err => {
             console.error('Error fetching plant info:', err);
           }
         });
+      }
+    });
+  }
+
+  private getZonesByPlant(plantId: number): void {
+    this.zoneServ.getZoneByPlantId(plantId).subscribe({
+      next: zones => {
+        this.zones = zones;
+      },
+      error: err => {
+        console.error('Error fetching zones:', err);
       }
     });
   }
@@ -182,12 +199,13 @@ export class AddDetectionInstanceComponent implements OnInit {
     let mappedObjects = this.selectedItemsObjects.map(item => item.item_text);
 
     const newZone: DetectionInstanceItem = new DetectionInstanceItem(
-      this.zoneName, 
+      this.detectionInstanceName, 
       Math.floor(Math.random() * 100001), 
       this.plantId,
+      parseInt(this.selectedZone),
       this.selectedAssignee || "Not defined", 
       this.confidenceThreshold,  
-      this.isPalletDetectionOn, 
+      parseInt(this.selectedDetectionType), 
       mappedObjects,
       filteredCameras,
       true

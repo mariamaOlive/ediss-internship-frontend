@@ -6,8 +6,9 @@ export class DetectionInstanceItem {
   public name: string;
   public id: number;
   public plantId: number;
+  public zoneId: number;
   public assignee: string;
-  public palletDetection: boolean;
+  public detectionType: number;
   public classesDetection: string[];
   public listCameras: CameraItem[];
   public isRunning: boolean;
@@ -16,10 +17,11 @@ export class DetectionInstanceItem {
   constructor(
     name: string, 
     id: number, 
-    plantId: number, 
+    plantId: number,
+    zoneId: number, 
     assignee: string, 
     confidenceTheshold : number,
-    palletDetection: boolean,
+    detectionType: number,
     classesDetection: string[] = [], 
     listCameras: CameraItem[] = [],
     isRunning = true,
@@ -27,9 +29,10 @@ export class DetectionInstanceItem {
     this.name = name;
     this.id = id;
     this.plantId = plantId;
+    this.zoneId = zoneId;
     this.assignee = assignee;
     this.confidenceTheshold = confidenceTheshold;
-    this.palletDetection = palletDetection;
+    this.detectionType = detectionType;
     this.classesDetection = classesDetection;
     this.listCameras = listCameras;
     this.isRunning = isRunning;

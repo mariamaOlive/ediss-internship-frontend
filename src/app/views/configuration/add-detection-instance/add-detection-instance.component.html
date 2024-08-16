@@ -1,6 +1,6 @@
 <div class="ms-3 mb-3 d-flex justify-content-start align-items-center">
   <a (click)="navigateBack()" class="icon-back">
-      <svg cIcon class="my-1 text-secondary" name="cilArrowCircleLeft" width="40"></svg>
+    <svg cIcon class="my-1 text-secondary" name="cilArrowCircleLeft" width="40"></svg>
   </a>
   <span class="text-secondary fs-3 ms-3">Add New Detection Instance</span>
 </div>
@@ -30,17 +30,12 @@
       <c-card-body>
         <c-container>
           <c-row class="mt-3 small-card__title">
-            <h6>Zone name</h6>
+            <h6>Detection Instance name</h6>
           </c-row>
           <c-row class="mt-3  small-card__text">
             <form cForm class="p-0">
               <div class="mb-3">
-                <input 
-                cFormControl 
-                id="inputZoneName" 
-                type="text" 
-                [(ngModel)]="zoneName" 
-                name="zoneName">
+                <input cFormControl id="inputZoneName" type="text" [(ngModel)]="detectionInstanceName" name="zoneName">
               </div>
             </form>
           </c-row>
@@ -53,13 +48,29 @@
       <c-card-body>
         <c-container>
           <c-row class="mt-3 small-card__title">
+            <h6>Zone</h6>
+          </c-row>
+          <c-row class="mt-3 small-card__text">
+            <select aria-label="Select an assignee" cSelect [(ngModel)]="selectedZone">
+              <option value=null disabled>Select a zone</option>
+              <option *ngFor="let zone of zones" [value]="zone.id">
+                {{ zone.name }}
+              </option>
+            </select>
+          </c-row>
+        </c-container>
+      </c-card-body>
+    </c-card>
+
+    <!-- Card 3 -->
+    <c-card class="mb-3 mt-2">
+      <c-card-body>
+        <c-container>
+          <c-row class="mt-3 small-card__title">
             <h6>Assignee</h6>
           </c-row>
           <c-row class="mt-3 small-card__text">
-            <select 
-              aria-label="Select an assignee"
-              cSelect 
-              [(ngModel)]="selectedAssignee">
+            <select aria-label="Select an assignee" cSelect [(ngModel)]="selectedAssignee">
               <option value=null disabled>Select an assignee</option>
               <option *ngFor="let assignee of assignees" [value]="assignee.name">
                 {{ assignee.name }}
@@ -69,8 +80,6 @@
         </c-container>
       </c-card-body>
     </c-card>
-    
-    
 
     <!-- Card 4 -->
     <c-card class="mb-3 pb-2">
@@ -87,15 +96,8 @@
                 <div class="mb-3">
                   <label for="numberInput" class="form-label">Confidence Level</label>
                   <div class="input-group" style="width: 150px;">
-                    <input 
-                      id="numberInput" 
-                      type="number" 
-                      min="0" 
-                      max="100" 
-                      [ngModel]="confidenceThreshold * 100" 
-                      (ngModelChange)="updateConfidenceThreshold($event)"  
-                      name="numberInput"
-                      required 
+                    <input id="numberInput" type="number" min="0" max="100" [ngModel]="confidenceThreshold * 100"
+                      (ngModelChange)="updateConfidenceThreshold($event)" name="numberInput" required
                       class="form-control form-control-sm">
                     <span class="input-group-text">%</span>
                   </div>
@@ -108,8 +110,20 @@
             </div>
           </c-row>
 
-          <!-- Form PPE -->
           <c-row class="mb-4">
+            <p>Detection type</p>
+            <c-form-check>
+              <input cFormCheckInput type="radio" value="1" name="flexRadioDefault" [(ngModel)]="selectedDetectionType" />
+              <label cFormCheckLabel>PPE Detection</label>
+            </c-form-check>
+            <c-form-check>
+              <input cFormCheckInput type="radio" value="2" name="flexRadioDefault" [(ngModel)]="selectedDetectionType"/>
+              <label cFormCheckLabel>Pallet Detection</label>
+            </c-form-check>
+          </c-row>
+
+          <!-- Form PPE -->
+          <c-row class="mb-4" *ngIf="selectedDetectionType === '1'">
             <p class="mb-1">PPE Detection</p>
             <div class="d-flex flex-wrap p-0">
               <div class="container__multiselect">
@@ -121,31 +135,25 @@
             </div>
           </c-row>
 
-           <!-- Form Pallet -->
-           <c-row>
+          <!-- Form Pallet -->
+          <!-- <c-row>
             <p class="mb-1">Pallet Detection</p>
             <div class="d-flex flex-wrap">
               <c-form-check sizing="xl" switch>
-                <input 
-                  cFormCheckInput 
-                  type="checkbox" 
-                  [(ngModel)]="isPalletDetectionOn" 
-                  id="palletDetectionCheckbox"/>
-                <label 
-                  cFormCheckLabel 
-                  for="palletDetectionCheckbox" 
+                <input cFormCheckInput type="checkbox" [(ngModel)]="isPalletDetectionOn" id="palletDetectionCheckbox" />
+                <label cFormCheckLabel for="palletDetectionCheckbox"
                   [ngClass]="isPalletDetectionOn ? 'active-label' : 'inactive-label'">
                   {{ isPalletDetectionOn ? 'Activated' : 'Not activated' }}
                 </label>
               </c-form-check>
             </div>
-          </c-row>
+          </c-row> -->
 
         </c-container>
       </c-card-body>
     </c-card>
 
-    <!-- Card 4 -->
+    <!-- Card 5 -->
     <c-card class="mb-4">
       <c-card-body>
         <c-container>
