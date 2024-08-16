@@ -174,7 +174,7 @@ export class AddDetectionInstanceComponent implements OnInit {
 
   // Zone Management
 
-  addNewZone(): void {
+  addNewDetectionInstance(): void {
 
     //TODO: Remove part of this code when connected to the server
     let mappedCameras = this.selectedItemsCameras.map(item => item.item_id);
@@ -193,7 +193,7 @@ export class AddDetectionInstanceComponent implements OnInit {
       true
     );
 
-    this.detectionServ.addZone(newZone).subscribe({
+    this.detectionServ.addDetectionInstance(newZone).subscribe({
       next: () => {
         console.log('Zone added successfully');
         this.location.back();

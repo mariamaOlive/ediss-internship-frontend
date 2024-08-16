@@ -20,11 +20,11 @@ export class DetectionInstanceService {
 
   constructor() { }
 
-  getZonesByPlantId(plantId: number):Observable<DetectionInstanceItem[]>{
+  getDetectionInstanceByPlantId(plantId: number):Observable<DetectionInstanceItem[]>{
     return of(this.dataZone.filter(item => item.plantId === plantId));
   }
 
-  getZoneInfo(zoneId: number): Observable<DetectionInstanceItem> {
+  getDetectionInstanceInfo(zoneId: number): Observable<DetectionInstanceItem> {
     const zone = this.dataZone.find(item => item.id === zoneId);
     if (!zone) {
       throw new Error(`Zone with ID ${zoneId} not found`);
@@ -32,19 +32,19 @@ export class DetectionInstanceService {
     return of(zone);
   }
 
-  addZone(newZone: DetectionInstanceItem): Observable<boolean> {
-    const existingZone = this.dataZone.find(zone => zone.id === newZone.id);
+  addDetectionInstance(newDetectionInstance: DetectionInstanceItem): Observable<boolean> {
+    const existingZone = this.dataZone.find(zone => zone.id === newDetectionInstance.id);
     if (existingZone) {
-      console.error(`Zone with ID ${newZone.id} already exists.`);
+      console.error(`Zone with ID ${newDetectionInstance.id} already exists.`);
       return of(false); // Return false indicating failure to add
     } else {
-      this.dataZone.push(newZone);
-      console.log(`Zone with ID ${newZone.id} added.`);
+      this.dataZone.push(newDetectionInstance);
+      console.log(`Zone with ID ${newDetectionInstance.id} added.`);
       return of(true); // Return true indicating success
     }
   }
 
-  deleteZone(zoneId: number): Observable<boolean> {
+  deleteDetectionInstance(zoneId: number): Observable<boolean> {
     const index = this.dataZone.findIndex(zone => zone.id === zoneId);
 
     if (index !== -1) {

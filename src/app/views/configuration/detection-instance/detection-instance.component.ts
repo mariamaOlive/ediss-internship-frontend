@@ -30,7 +30,7 @@ export class DetectionInstanceComponent {
       let id = params.get('detectionId');
 
       if (id) {
-        this.detectionServ.getZoneInfo(parseInt(id, 10)).subscribe(zone => this.detectionInstance = zone);
+        this.detectionServ.getDetectionInstanceInfo(parseInt(id, 10)).subscribe(detectionInstance => this.detectionInstance = detectionInstance);
       }
     })
 

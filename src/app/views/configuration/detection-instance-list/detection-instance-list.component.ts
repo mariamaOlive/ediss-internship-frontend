@@ -72,7 +72,7 @@ export class DetectionInstanceListComponent implements OnInit {
       const id = params.get('id');
       if (id) {
         this.plantId = id;
-        this.detectionServ.getZonesByPlantId(parseInt(id, 10)).subscribe({
+        this.detectionServ.getDetectionInstanceByPlantId(parseInt(id, 10)).subscribe({
           next: detectionInstances => {
             this.detectionInstanceList = detectionInstances;
           },
@@ -94,7 +94,7 @@ export class DetectionInstanceListComponent implements OnInit {
 
 
   deleteDetectionInstance(detectionInstanceId: number): void {
-    this.detectionServ.deleteZone(detectionInstanceId).subscribe({
+    this.detectionServ.deleteDetectionInstance(detectionInstanceId).subscribe({
       next: () => {
         //TODO: Change logic when connect to server
         this.detectionInstanceList = this.detectionInstanceList.filter(instance => instance.id !== detectionInstanceId);
