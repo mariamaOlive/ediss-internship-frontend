@@ -25,7 +25,7 @@ export const routes: Routes = [
   },
   {
     path: 'plants/:plantId/add-detection-instance',
-    loadComponent: () => import('./add-detection-instance/add-zone.component').then(m => m.AddZoneComponent),
+    loadComponent: () => import('./add-detection-instance/add-detection-instance.component').then(m => m.AddDetectionInstanceComponent),
     data: {
       title: 'Add Detection Instance'
     }

@@ -17,7 +17,7 @@ import { IconSetService, IconModule } from '@coreui/icons-angular';
 
 
 @Component({
-  selector: 'app-add-zone',
+  selector: 'app-add-detection-instance',
   standalone: true,
   providers: [IconSetService],
   imports: [
@@ -32,10 +32,10 @@ import { IconSetService, IconModule } from '@coreui/icons-angular';
     FormsModule,
     IconModule
   ],
-  templateUrl: './add-zone.component.html',
-  styleUrl: './add-zone.component.scss'
+  templateUrl: './add-detection-instance.component.html',
+  styleUrl: './add-detection-instance.component.scss'
 })
-export class AddZoneComponent implements OnInit {
+export class AddDetectionInstanceComponent implements OnInit {
   // Properties
   plantId: any = NaN;
   plant: PlantItem | null = null;

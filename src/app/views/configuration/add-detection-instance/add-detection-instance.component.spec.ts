@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddZoneComponent } from './add-zone.component';
+import { AddDetectionInstanceComponent } from './add-detection-instance.component';
 
 describe('AddZoneComponent', () => {
-  let component: AddZoneComponent;
-  let fixture: ComponentFixture<AddZoneComponent>;
+  let component: AddDetectionInstanceComponent;
+  let fixture: ComponentFixture<AddDetectionInstanceComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddZoneComponent]
+      imports: [AddDetectionInstanceComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AddZoneComponent);
+    fixture = TestBed.createComponent(AddDetectionInstanceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
