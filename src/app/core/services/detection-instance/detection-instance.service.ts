@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { DetectionInstanceItem } from '../models/detection-instance';
-import { CameraItem } from '../models/camera';
+import { DetectionInstanceItem } from '../../models/detection-instance';
+import { CameraItem } from '../../models/camera';
 
 @Injectable({
   providedIn: 'root'

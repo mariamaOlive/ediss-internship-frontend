@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap, RouterModule, RouterLink, NavigationStart, NavigationEnd, NavigationError, NavigationCancel } from '@angular/router';
-import { DetectionInstanceService } from 'src/app/core/services/detection-instance.service';
+import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
 import { CommonModule, Location } from '@angular/common';
 import { IconSetService, IconModule } from '@coreui/icons-angular';
 import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft, cilOptions } from '@coreui/icons';

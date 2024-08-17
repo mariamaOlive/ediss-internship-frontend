@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ZoneItem } from '../models/zone';
+import { ZoneItem } from '../../models/zone';
 import { Observable, of, throwError } from 'rxjs';
 
 @Injectable({

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CameraItem } from '../models/camera';
+import { CameraItem } from '../../models/camera';
 import { of } from 'rxjs';
 
 
