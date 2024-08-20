@@ -5,7 +5,21 @@ import {
 } from '@angular/core';
 import { RouterModule, Router, RouterLink,  NavigationStart, NavigationEnd, NavigationError, NavigationCancel} from '@angular/router';
 import { IconDirective } from '@coreui/icons-angular';
-import { GridModule, CardModule, DropdownDividerDirective, TemplateIdDirective, ThemeDirective, DropdownComponent, ButtonDirective, DropdownToggleDirective, DropdownMenuDirective, DropdownItemDirective } from '@coreui/angular';
+import { 
+  GridModule,
+  CardModule,
+  DropdownDividerDirective,
+  TemplateIdDirective,
+  ThemeDirective,
+  DropdownComponent,
+  ButtonDirective,
+  DropdownToggleDirective,
+  DropdownMenuDirective,
+  DropdownItemDirective,
+  ModalModule,
+  ButtonCloseDirective,
+  FormModule } from '@coreui/angular';
+import { FormsModule } from '@angular/forms';
 import { PlantService } from 'src/app/core/services/plant/plant.service';
 
 
@@ -25,12 +39,18 @@ import { PlantService } from 'src/app/core/services/plant/plant.service';
     DropdownMenuDirective,
     DropdownItemDirective,
     RouterLink,
-    DropdownDividerDirective],
+    DropdownDividerDirective, 
+    ModalModule,
+    ButtonCloseDirective,
+    FormModule,
+    FormsModule],
   templateUrl: './plantslist.component.html',
   styleUrl: './plantslist.component.scss'
 })
 export class PlantslistComponent implements OnInit {
-  plantsList : any[] = []
+  plantsList : any[] = [];
+  selectedPlant: string = "";
+  confidenceThreshold: number = 0;
 
     constructor(private plantsServ : PlantService, private router: Router){
 
@@ -53,5 +73,9 @@ export class PlantslistComponent implements OnInit {
         this.plantsList = plants;
       }
       );
+    }
+
+    updateConfidenceThreshold(value: number): void {
+      this.confidenceThreshold = parseFloat((value / 100).toFixed(2));
     }
 }

@@ -33,13 +33,72 @@
   
     <!-- Add new card -->
     <c-col sm="6" xl="3">
-      <a [routerLink]="[]" style="text-decoration: none;">
-        <c-card class="mb-3 p-0 shadow-sm" style="width: 250px; height: 180px; background-color: #c1e899; border-width: 0;">
-          <c-card-body class="d-flex align-items-center justify-content-center text-medium-emphasis">
-            Add Plant
-          </c-card-body>
-        </c-card>
-      </a>
+      <button type="button" [cModalToggle]="fullScreenMd.id"  style="text-decoration: none; width: 250px; height: 180px; background-color: #c1e899; border: none;" class="mb-3 p-0 shadow-sm">
+        <c-card-body class="d-flex align-items-center justify-content-center text-medium-emphasis">
+          Add Plant
+        </c-card-body>
+      </button>
     </c-col>
   </c-row>
 </c-container>
+
+<!-- Modal Add Plant -->
+<c-modal #fullScreenMd fullscreen="md" id="fullScreenMd">
+  <c-modal-header>
+    <h5 cModalTitle>Add new plant</h5>
+    <button [cModalToggle]="fullScreenMd.id" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <c-card>
+    <c-card-body>
+      <c-container>
+        <c-row class="mt-3 small-card__title">
+          <h6>Available Plants</h6>
+        </c-row>
+        <c-row class="mt-3 small-card__text">
+          <select aria-label="Select a plant" cSelect [(ngModel)]="selectedPlant">
+            <option value=null disabled>Select a plant</option>
+            <option *ngFor="let plant of plantsList" [value]="plant.id">
+              {{ plant.name }}
+            </option>
+          </select>
+        </c-row>
+      </c-container>
+    </c-card-body>
+  </c-card>
+
+<c-card class="mt-3">
+  <c-container>
+    <c-row class="mt-3 small-card__title">
+      <h6>Confidence Level</h6>
+    </c-row>
+    <c-row class="mt-3 small-card__text">
+      <div>
+        <form #numberForm="ngForm">
+          <div class="mb-3">
+            <!-- <label for="numberInput" class="form-label">Confidence Level</label> -->
+            <div class="input-group" style="width: 150px;">
+              <input id="numberInput" type="number" min="0" max="100" [ngModel]="confidenceThreshold * 100"
+                (ngModelChange)="updateConfidenceThreshold($event)" name="numberInput" required
+                class="form-control form-control-sm">
+              <span class="input-group-text">%</span>
+            </div>
+            <div
+              *ngIf="numberForm.controls['numberInput']?.invalid && numberForm.controls['numberInput']?.touched">
+              <small class="text-danger">Please enter a valid number between 0 and 100.</small>
+            </div>
+          </div>
+        </form>
+      </div>
+    </c-row>
+  </c-container>
+</c-card>
+
+  </c-modal-body>
+  <c-modal-footer>
+    <button [cModalToggle]="fullScreenMd.id" cButton color="secondary">
+      Close
+    </button>
+    <button cButton color="primary">Add</button>
+  </c-modal-footer>
+</c-modal>
