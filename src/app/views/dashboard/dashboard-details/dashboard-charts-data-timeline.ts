@@ -57,36 +57,10 @@ export class DashboardChartsDataTimeLine {
     this.highestScaleY = this.getHighestValue(this.data1, this.data2, this.data3);
 
 
-    let labels: string[] = [];
-    if (period === 'Month') {
-      labels = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December'
-      ];
-    } else {
-      /* tslint:disable:max-line-length */
-      const week = [
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-        'Sunday'
-      ];
-      // labels = week.concat(week);
-      labels = week;
-    }
+    let labels: string[] = this.generateXLabels();
+
+    
+    
 
     const colors = [
       {
@@ -244,6 +218,22 @@ export class DashboardChartsDataTimeLine {
     const highestValue = Math.max(...combinedArray);
     console.log(highestValue)
     return highestValue;
+  }
+
+  generateXLabels():string[]{
+    const week = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', ];
+
+      // Get today's date
+      const today = new Date();
+      const todayIndex = today.getDay(); // Sunday - Saturday : 0 - 6
+
+      // Generate labels for today and the last 6 days
+      const labels = [];
+      for (let i = 0; i < 7; i++) {
+        const dayIndex = (todayIndex - i + 7) % 7;
+        labels.unshift(week[dayIndex]);
+      }
+      return labels;
   }
   
 }
