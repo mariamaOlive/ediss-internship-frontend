@@ -1,10 +1,10 @@
-import { Component, OnInit, inject, WritableSignal, signal, effect} from '@angular/core';
-import { Router, ActivatedRoute, ParamMap} from '@angular/router';
+import { Component, OnInit, inject, WritableSignal, signal, effect, HostListener } from '@angular/core';
+import { Router, ActivatedRoute, ParamMap, RouterLink} from '@angular/router';
 import { IncidentService } from 'src/app/core/services/incident/incident.service';
 import { CommonModule, Location  } from '@angular/common';
 import { PlantService } from 'src/app/core/services/plant/plant.service';
 import { PlantItem } from 'src/app/core/models/plant';
-import { CardModule, ButtonModule, GridModule, BadgeModule, FormModule} from '@coreui/angular';
+import { CardModule, ButtonModule, GridModule, BadgeModule, FormModule, PageItemDirective, PageLinkDirective, PaginationComponent } from '@coreui/angular';
 import { IconSetService, IconModule } from '@coreui/icons-angular';
 import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft } from '@coreui/icons';
 import { FormsModule } from '@angular/forms';  // Import FormsModule
@@ -18,7 +18,7 @@ import { IncidentItem } from 'src/app/core/models/incident';
 @Component({
   selector: 'app-dashboard-details',
   standalone: true,
-  imports: [CardModule, GridModule, CommonModule, IconModule, FormsModule, FormModule, ChartjsComponent],
+  imports: [CardModule, GridModule, CommonModule, IconModule, FormsModule, FormModule, ChartjsComponent, PageItemDirective, PageLinkDirective, PaginationComponent, RouterLink],
   templateUrl: './dashboard-details.component.html',
   styleUrl: './dashboard-details.component.scss'
 })
@@ -31,7 +31,10 @@ export class DashboardDetailsComponent implements OnInit {
   plant: PlantItem | null = null;
 
   selectedInstanceId :string="";
-  
+
+  paginatedIncidents:any = [];
+  itemsPerPage = 10; // Number of items to load each time
+  currentPage = 1;
 
   constructor(
     private router: Router, 
@@ -41,6 +44,7 @@ export class DashboardDetailsComponent implements OnInit {
     private location: Location,
     public iconSet: IconSetService){
       iconSet.icons = {cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft};
+      this.loadMoreIncidents(); // Initial load
     }
 
 
@@ -128,8 +132,41 @@ export class DashboardDetailsComponent implements OnInit {
     }
   }
 
-
   navigateBack(): void {
     this.location.back();
+  }
+
+
+  // get paginatedIncidents() {
+  //   const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+  //   const endIndex = startIndex + this.itemsPerPage;
+  //   return this.incidentsList.slice(startIndex, endIndex);
+  // }
+
+  // get totalPages() {
+  //   return Math.ceil(this.incidentsList.length / this.itemsPerPage);
+  // }
+
+  // setPage(page: number) {
+  //   if (page >= 1 && page <= this.totalPages) {
+  //     this.currentPage = page;
+  //   }
+  // }
+
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event: any): void {
+    const pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
+    const max = document.documentElement.scrollHeight;
+
+    if (pos >= max) {
+      this.loadMoreIncidents();
+    }
+  }
+
+  loadMoreIncidents() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const newIncidents = this.incidentsList.slice(startIndex, startIndex + this.itemsPerPage);
+    this.paginatedIncidents = [...this.paginatedIncidents, ...newIncidents];
+    this.currentPage++;
   }
 }
