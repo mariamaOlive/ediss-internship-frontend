@@ -1,25 +1,13 @@
-<div class="ms-3 mb-3 d-flex justify-content-start align-items-center" style="height: 52px;">
-    <!-- <a (click)="navigateBack()" class="icon-back">
-        <svg cIcon class="my-1 text-secondary" name="cilArrowCircleLeft" width="40"></svg>
-    </a> -->
+<div class="ms-3 mb-3 d-flex justify-content-start align-items-center view-title">
     <span class="text-secondary fs-3">Dashboard</span>
   </div>
   
   <c-container>
     <c-row class="g-4">
       <c-col sm="6" xl="3" *ngFor="let plant of plantsList">
-        <a [routerLink]="['plants', plant.id]" style="text-decoration: none;">
-          <c-card class="mb-3 p-0 shadow-sm" style="width: 250px; height: 180px; overflow: hidden;">
-            <div style="height: 100px; background-color: lightblue; position: relative;">
-              <!-- <c-dropdown alignment="end" variant="btn-group" class="position-absolute top-0 end-0 m-2">
-                <button [caret]="false" cButton cDropdownToggle class="p-0" color="transparent" aria-label="Open dropdown"
-                (click)="$event.stopPropagation()">
-                  <svg cIcon name="cilOptions"></svg>
-                </button>
-                <ul cDropdownMenu class="shadow">
-                  <li><a [routerLink]="[]" cDropdownItem>Delete</a></li>
-                </ul>
-              </c-dropdown> -->
+        <a [routerLink]="['plants', plant.id]" class="card-link">
+          <c-card class="mb-3 p-0 shadow-sm card-container">
+            <div class="card-container-top">
             </div>
             <c-card-body>
               <h6 cCardTitle class="mb-0">{{plant.name}}</h6>
