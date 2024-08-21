@@ -1,8 +1,23 @@
 .status-bubble{
-    // padding: 0 !important;
     width: 15px  !important ;
     height: 15px  !important ; 
     border-radius: 50%; 
     display: inline-block;
-    // margin: 5px 0 0 5px;
+}
+
+.card-container{
+    width: 250px; 
+    height: 180px; 
+    overflow: hidden;
+}
+
+.card-container-top{
+    height: 100px; 
+    background-color: #d8d9d9; 
+    position: relative;
+}
+
+.card-container-full{
+    background-color: #d8d9d9; 
+    border-width: 0;
 }
