@@ -64,11 +64,11 @@ export class AddDetectionInstanceComponent implements OnInit {
     private router: Router, 
     private route: ActivatedRoute,
     private location: Location,  
-    private detectionServ: DetectionInstanceService, 
-    private zoneServ: ZoneService, 
-    private plantServ: PlantService, 
-    private assigneeServ: AssigneeService, 
-    private cameraServ: CameraService,
+    private detectionService: DetectionInstanceService, 
+    private zoneService: ZoneService, 
+    private plantService: PlantService, 
+    private assigneeService: AssigneeService, 
+    private cameraService: CameraService,
     public iconSet: IconSetService, 
   ) {
     iconSet.icons = {cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft};
@@ -89,7 +89,7 @@ export class AddDetectionInstanceComponent implements OnInit {
       const id = params.get('plantId');
       if (id) {
         this.plantId = parseInt(id, 10);
-        this.plantServ.getPlantById(parseInt(id, 10)).subscribe({
+        this.plantService.getPlantById(parseInt(id, 10)).subscribe({
           next: plant => {
             this.plant = plant;
             this.confidenceThreshold = this.plant.confidenceThreshold;
@@ -104,7 +104,7 @@ export class AddDetectionInstanceComponent implements OnInit {
   }
 
   private getZonesByPlant(plantId: number): void {
-    this.zoneServ.getZoneByPlantId(plantId).subscribe({
+    this.zoneService.getZoneByPlantId(plantId).subscribe({
       next: zones => {
         this.zones = zones;
       },
@@ -115,7 +115,7 @@ export class AddDetectionInstanceComponent implements OnInit {
   }
 
   private getAvailableAssignees(): void {
-    this.assigneeServ.getAllAssignees().subscribe({
+    this.assigneeService.getAllAssignees().subscribe({
       next: assignees => {
         this.assignees = assignees;
       },
@@ -126,7 +126,7 @@ export class AddDetectionInstanceComponent implements OnInit {
   }
 
   private getAvailableCameras(): void {
-    this.cameraServ.getAllCameras().subscribe({
+    this.cameraService.getAllCameras().subscribe({
       next: cameras => {
         this.cameras = cameras;
         this.loadMultiSelectorCamera(this.cameras);
@@ -138,7 +138,7 @@ export class AddDetectionInstanceComponent implements OnInit {
   }
 
   // Multi-Selector Functions
-
+  
   private loadMultiSelectorObjectDetection(): void {
     this.dropdownListObjects = [
       { item_id: 1, item_text: 'Helmet' },
@@ -211,7 +211,7 @@ export class AddDetectionInstanceComponent implements OnInit {
       true
     );
 
-    this.detectionServ.addDetectionInstance(newZone).subscribe({
+    this.detectionService.addDetectionInstance(newZone).subscribe({
       next: () => {
         console.log('Zone added successfully');
         this.location.back();

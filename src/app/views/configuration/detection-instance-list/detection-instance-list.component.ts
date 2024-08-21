@@ -55,23 +55,11 @@ export class DetectionInstanceListComponent implements OnInit {
   constructor(
     private router: Router, 
     private route: ActivatedRoute, 
-    private detectionServ: DetectionInstanceService,  
+    private detectionService: DetectionInstanceService,  
     private location: Location, 
     public iconSet: IconSetService) {
 
     iconSet.icons = {cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft, cilOptions};
-    // this.router.events.subscribe(event => {
-    //   // debugger
-    //   if (event instanceof NavigationStart) {
-    //     console.log('NavigationStart:', event);
-    //   } else if (event instanceof NavigationEnd) {
-    //     console.log('NavigationEnd:', event);
-    //   } else if (event instanceof NavigationError) {
-    //     console.error('NavigationError:', event.error);
-    //   } else if (event instanceof NavigationCancel) {
-    //     console.warn('NavigationCancel:', event);
-    //   }
-    // });
   }
 
   ngOnInit(): void {
@@ -79,7 +67,7 @@ export class DetectionInstanceListComponent implements OnInit {
       const id = params.get('id');
       if (id) {
         this.plantId = id;
-        this.detectionServ.getDetectionInstanceByPlantId(parseInt(id, 10)).subscribe({
+        this.detectionService.getDetectionInstanceByPlantId(parseInt(id, 10)).subscribe({
           next: detectionInstances => {
             this.detectionInstanceList = detectionInstances;
           },
@@ -103,7 +91,7 @@ export class DetectionInstanceListComponent implements OnInit {
 
 
   deleteDetectionInstance(detectionInstanceId: number): void {
-    this.detectionServ.deleteDetectionInstance(detectionInstanceId).subscribe({
+    this.detectionService.deleteDetectionInstance(detectionInstanceId).subscribe({
       next: () => {
         //TODO: Change logic when connect to server
         this.detectionInstanceList = this.detectionInstanceList.filter(instance => instance.id !== detectionInstanceId);

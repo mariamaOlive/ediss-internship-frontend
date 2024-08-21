@@ -24,8 +24,8 @@ export class DetectionInstanceComponent {
 
 
   constructor(
-    private detectionServ: DetectionInstanceService, 
-    private zoneServ: ZoneService, 
+    private detectionService: DetectionInstanceService, 
+    private zoneService: ZoneService, 
     private route: ActivatedRoute, 
     public iconSet: IconSetService, 
     private location: Location) { 
@@ -39,11 +39,11 @@ export class DetectionInstanceComponent {
       let id = params.get('detectionId');
 
       if (id) {
-        this.detectionServ.getDetectionInstanceInfo(parseInt(id, 10)).subscribe(detectionInstance => {
+        this.detectionService.getDetectionInstanceInfo(parseInt(id, 10)).subscribe(detectionInstance => {
           this.detectionInstance = detectionInstance;
           
           if (this.detectionInstance?.zoneId) {
-            this.zoneServ.getZoneById(this.detectionInstance.zoneId).subscribe(zone => {
+            this.zoneService.getZoneById(this.detectionInstance.zoneId).subscribe(zone => {
               this.zone = zone;
             });
           }

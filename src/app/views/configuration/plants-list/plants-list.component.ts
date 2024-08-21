@@ -52,24 +52,10 @@ export class PlantsListComponent implements OnInit {
   selectedPlant: string = "";
   confidenceThreshold: number = 0;
 
-    constructor(private plantsServ : PlantService, private router: Router){
-
-      // this.router.events.subscribe(event => {
-      //   // debugger
-      //   if (event instanceof NavigationStart) {
-      //     console.log('NavigationStart:', event);
-      //   } else if (event instanceof NavigationEnd) {
-      //     console.log('NavigationEnd:', event);
-      //   } else if (event instanceof NavigationError) {
-      //     console.error('NavigationError:', event.error);
-      //   } else if (event instanceof NavigationCancel) {
-      //     console.warn('NavigationCancel:', event);
-      //   }
-      // });
-    }
+    constructor(private plantsService : PlantService, private router: Router){}
 
     ngOnInit():void {
-      this.plantsServ.getAllPlants().subscribe(plants=>{
+      this.plantsService.getAllPlants().subscribe(plants=>{
         this.plantsList = plants;
       }
       );

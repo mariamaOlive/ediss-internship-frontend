@@ -39,7 +39,7 @@ export class DashboardDetailsComponent implements OnInit {
   constructor(
     private router: Router, 
     private route: ActivatedRoute,  
-    private incidentServ: IncidentService,
+    private incidentService: IncidentService,
     private plantService: PlantService,
     private location: Location,
     public iconSet: IconSetService){
@@ -85,21 +85,15 @@ export class DashboardDetailsComponent implements OnInit {
     }
   }
 
-  // initCharts(): void {
-  //   this.mainChart = this.#chartsData.mainChart;
-  // }
 
   ngOnInit():void {
     
     this.route.paramMap.subscribe((params: ParamMap) => {
       const id = params.get('id');
       if (id) {
-        // this.plantId = id;
-        this.incidentServ.getIncidentsByPlantId(parseInt(id, 10)).subscribe({
+        this.incidentService.getIncidentsByPlantId(parseInt(id, 10)).subscribe({
           next: incidents => {
             this.incidentsList = incidents;
-            // console.log(this.incidentsList);
-            // this.mainChart.incidentsList = this.incidentsList;
             this.chartsData = new DashboardChartsDataTimeLine(this.incidentsList);
             this.chartsDataDonut = new DashboardChartsDataDonut(this.incidentsList);
 
@@ -136,22 +130,6 @@ export class DashboardDetailsComponent implements OnInit {
     this.location.back();
   }
 
-
-  // get paginatedIncidents() {
-  //   const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-  //   const endIndex = startIndex + this.itemsPerPage;
-  //   return this.incidentsList.slice(startIndex, endIndex);
-  // }
-
-  // get totalPages() {
-  //   return Math.ceil(this.incidentsList.length / this.itemsPerPage);
-  // }
-
-  // setPage(page: number) {
-  //   if (page >= 1 && page <= this.totalPages) {
-  //     this.currentPage = page;
-  //   }
-  // }
 
   @HostListener('window:scroll', ['$event'])
   onScroll(event: any): void {
