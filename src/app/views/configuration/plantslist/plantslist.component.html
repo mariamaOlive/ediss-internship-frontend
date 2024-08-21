@@ -9,8 +9,8 @@
   <c-row class="g-4">
     <c-col sm="6" xl="3" *ngFor="let plant of plantsList">
       <a [routerLink]="['plants', plant.id]" style="text-decoration: none;">
-        <c-card class="mb-3 p-0 shadow-sm" style="width: 250px; height: 180px; overflow: hidden;">
-          <div style="height: 100px; background-color: #c1e899; position: relative;">
+        <c-card class="mb-3 p-0 shadow-sm card-container">
+          <div class="card-container-top">
             <c-dropdown alignment="end" variant="btn-group" class="position-absolute top-0 end-0 m-2">
               <button [caret]="false" cButton cDropdownToggle class="p-0" color="transparent" aria-label="Open dropdown"
               (click)="$event.stopPropagation()">
@@ -33,11 +33,11 @@
   
     <!-- Add new card -->
     <c-col sm="6" xl="3">
-      <button type="button" [cModalToggle]="fullScreenMd.id"  style="text-decoration: none; width: 250px; height: 180px; background-color: #c1e899; border: none;" class="mb-3 p-0 shadow-sm">
+      <c-card type="button" [cModalToggle]="fullScreenMd.id"  class="mb-3 p-0 shadow-sm card-container card-container-full">
         <c-card-body class="d-flex align-items-center justify-content-center text-medium-emphasis">
           Add Plant
         </c-card-body>
-      </button>
+      </c-card>
     </c-col>
   </c-row>
 </c-container>
@@ -76,8 +76,7 @@
       <div>
         <form #numberForm="ngForm">
           <div class="mb-3">
-            <!-- <label for="numberInput" class="form-label">Confidence Level</label> -->
-            <div class="input-group" style="width: 150px;">
+            <div class="input-group confidence-input">
               <input id="numberInput" type="number" min="0" max="100" [ngModel]="confidenceThreshold * 100"
                 (ngModelChange)="updateConfidenceThreshold($event)" name="numberInput" required
                 class="form-control form-control-sm">

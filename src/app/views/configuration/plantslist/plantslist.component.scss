@@ -1,4 +1,20 @@
-// .card-body {
-//     border: 1px solid #dee2e6; /* Bootstrap default border color */
-//     border-radius: 0.3rem; /* Bootstrap default border radius */
-// }
+.card-container{
+    width: 250px; 
+    height: 180px; 
+    overflow: hidden;
+}
+
+.card-container-top{
+    height: 100px; 
+    background-color: #c1e899; 
+    position: relative;
+}
+
+.card-container-full{
+    background-color: #c1e899; 
+    border-width: 0;
+}
+
+.confidence-input{
+    width: 150px;
+}
