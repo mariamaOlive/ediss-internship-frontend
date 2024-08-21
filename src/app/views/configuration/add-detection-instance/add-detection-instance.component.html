@@ -95,7 +95,7 @@
               <form #numberForm="ngForm">
                 <div class="mb-3">
                   <label for="numberInput" class="form-label">Confidence Level</label>
-                  <div class="input-group" style="width: 150px;">
+                  <div class="input-group confidence-input">
                     <input id="numberInput" type="number" min="0" max="100" [ngModel]="confidenceThreshold * 100"
                       (ngModelChange)="updateConfidenceThreshold($event)" name="numberInput" required
                       class="form-control form-control-sm">
@@ -134,20 +134,6 @@
               </div>
             </div>
           </c-row>
-
-          <!-- Form Pallet -->
-          <!-- <c-row>
-            <p class="mb-1">Pallet Detection</p>
-            <div class="d-flex flex-wrap">
-              <c-form-check sizing="xl" switch>
-                <input cFormCheckInput type="checkbox" [(ngModel)]="isPalletDetectionOn" id="palletDetectionCheckbox" />
-                <label cFormCheckLabel for="palletDetectionCheckbox"
-                  [ngClass]="isPalletDetectionOn ? 'active-label' : 'inactive-label'">
-                  {{ isPalletDetectionOn ? 'Activated' : 'Not activated' }}
-                </label>
-              </c-form-check>
-            </div>
-          </c-row> -->
 
         </c-container>
       </c-card-body>
