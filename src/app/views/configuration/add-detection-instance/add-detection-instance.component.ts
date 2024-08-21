@@ -211,6 +211,10 @@ export class AddDetectionInstanceComponent implements OnInit {
       true
     );
 
+
+
+
+
     this.detectionService.addDetectionInstance(newZone).subscribe({
       next: () => {
         console.log('Zone added successfully');

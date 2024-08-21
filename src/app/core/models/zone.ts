@@ -1,5 +1,12 @@
-export class ZoneItem{
-    constructor(public name : string, public id: number, public plantId:number){
-    } 
-}
+export class ZoneItem {
+    public readonly name: string;
+    public readonly id: number;
+    public readonly plantId: number;
 
+    constructor(name: string, id: number, plantId: number) {
+        this.name = name;
+        this.id = id;
+        this.plantId = plantId;
+    }
+
+}
