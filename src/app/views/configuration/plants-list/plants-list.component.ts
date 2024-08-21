@@ -44,10 +44,10 @@ import { PlantService } from 'src/app/core/services/plant/plant.service';
     ButtonCloseDirective,
     FormModule,
     FormsModule],
-  templateUrl: './plantslist.component.html',
-  styleUrl: './plantslist.component.scss'
+  templateUrl: './plants-list.component.html',
+  styleUrl: './plants-list.component.scss'
 })
-export class PlantslistComponent implements OnInit {
+export class PlantsListComponent implements OnInit {
   plantsList : any[] = [];
   selectedPlant: string = "";
   confidenceThreshold: number = 0;
