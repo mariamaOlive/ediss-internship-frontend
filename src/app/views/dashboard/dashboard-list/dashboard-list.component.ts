@@ -1,12 +1,22 @@
-import { CommonModule  } from '@angular/common';
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
-import { RouterModule, Router, RouterLink,  NavigationStart, NavigationEnd, NavigationError, NavigationCancel} from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { RouterModule, RouterLink } from '@angular/router';
 import { IconDirective } from '@coreui/icons-angular';
-import { GridModule, CardModule, DropdownDividerDirective, TemplateIdDirective, ThemeDirective, DropdownComponent, ButtonDirective, DropdownToggleDirective, DropdownMenuDirective, DropdownItemDirective } from '@coreui/angular';
+import {
+  GridModule,
+  CardModule,
+  DropdownDividerDirective,
+  TemplateIdDirective,
+  ThemeDirective,
+  DropdownComponent,
+  ButtonDirective,
+  DropdownToggleDirective,
+  DropdownMenuDirective,
+  DropdownItemDirective
+} from '@coreui/angular';
+
 import { PlantService } from 'src/app/core/services/plant/plant.service';
+import { PlantItem } from 'src/app/core/models/plant';
 
 
 @Component({
@@ -15,7 +25,7 @@ import { PlantService } from 'src/app/core/services/plant/plant.service';
   imports: [
     RouterModule,
     CommonModule,
-    GridModule,CardModule,
+    GridModule, CardModule,
     TemplateIdDirective,
     IconDirective,
     ThemeDirective,
@@ -31,14 +41,17 @@ import { PlantService } from 'src/app/core/services/plant/plant.service';
 })
 
 export class DashboardListComponent implements OnInit {
-  plantsList : any[] = []
+  plantsList: PlantItem[] = [];
 
-  constructor(private plantsService : PlantService, private router: Router){}
+  constructor(private plantsService: PlantService) { }
 
-  ngOnInit():void {
-    this.plantsService.getAllPlants().subscribe(plants=>{
+  ngOnInit(): void {
+    this.loadPlants();
+  }
+
+  loadPlants(): void {
+    this.plantsService.getAllPlants().subscribe(plants => {
       this.plantsList = plants;
-    }
-    );
+    });
   }
 }

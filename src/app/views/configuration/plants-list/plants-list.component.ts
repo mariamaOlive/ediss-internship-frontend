@@ -1,11 +1,9 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
-import { RouterModule, Router, RouterLink,  NavigationStart, NavigationEnd, NavigationError, NavigationCancel} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { RouterModule, Router, RouterLink } from '@angular/router';
 import { IconDirective } from '@coreui/icons-angular';
-import { 
+import { FormsModule } from '@angular/forms';
+import {
   GridModule,
   CardModule,
   DropdownDividerDirective,
@@ -18,9 +16,11 @@ import {
   DropdownItemDirective,
   ModalModule,
   ButtonCloseDirective,
-  FormModule } from '@coreui/angular';
-import { FormsModule } from '@angular/forms';
+  FormModule
+} from '@coreui/angular';
+
 import { PlantService } from 'src/app/core/services/plant/plant.service';
+import { PlantItem } from 'src/app/core/models/plant';
 
 
 @Component({
@@ -29,7 +29,7 @@ import { PlantService } from 'src/app/core/services/plant/plant.service';
   imports: [
     RouterModule,
     CommonModule,
-    GridModule,CardModule,
+    GridModule, CardModule,
     TemplateIdDirective,
     IconDirective,
     ThemeDirective,
@@ -39,7 +39,7 @@ import { PlantService } from 'src/app/core/services/plant/plant.service';
     DropdownMenuDirective,
     DropdownItemDirective,
     RouterLink,
-    DropdownDividerDirective, 
+    DropdownDividerDirective,
     ModalModule,
     ButtonCloseDirective,
     FormModule,
@@ -48,20 +48,23 @@ import { PlantService } from 'src/app/core/services/plant/plant.service';
   styleUrl: './plants-list.component.scss'
 })
 export class PlantsListComponent implements OnInit {
-  plantsList : any[] = [];
+  plantsList: PlantItem[] = [];
   selectedPlant: string = "";
   confidenceThreshold: number = 0;
 
-    constructor(private plantsService : PlantService, private router: Router){}
+  constructor(private plantsService: PlantService) { }
 
-    ngOnInit():void {
-      this.plantsService.getAllPlants().subscribe(plants=>{
-        this.plantsList = plants;
-      }
-      );
-    }
+  ngOnInit(): void {
+    this.loadPlants();
+  }
 
-    updateConfidenceThreshold(value: number): void {
-      this.confidenceThreshold = parseFloat((value / 100).toFixed(2));
-    }
+  loadPlants(): void {
+    this.plantsService.getAllPlants().subscribe(plants => {
+      this.plantsList = plants;
+    });
+  }
+
+  setConfidenceThreshold(value: number): void {
+    this.confidenceThreshold = parseFloat((value / 100).toFixed(2));
+  }
 }
