@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 
 import { ZoneItem } from '../../models/zone';
 import { mockZones } from '../../mock-data/mock-data';
+import { environment } from '../../config/environment';
+import { API_ENDPOINTS } from '../../config/api-endpoints';
 
 @Injectable({
   providedIn: 'root'

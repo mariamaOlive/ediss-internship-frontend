@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
+import { environment } from '../../config/environment';
+import { API_ENDPOINTS } from '../../config/api-endpoints';
+
 import { IncidentItem } from '../../models/incident';
 @Injectable({
   providedIn: 'root'
