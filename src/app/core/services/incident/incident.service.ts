@@ -33,7 +33,17 @@ export class IncidentService {
       const randomDate = generateRandomDate(twoWeeksAgo, now);
       const randomClassName = classNames[Math.floor(Math.random() * classNames.length)];
       const detectionInstanceId = this.getRandomInt(1, 3); 
-      incidents.push(new IncidentItem(i, i, detectionInstanceId, 1, randomDate, randomClassName));
+      const incident: IncidentItem = {
+        id: i,
+        recordingId: i,
+        detectionInstanceId: detectionInstanceId,
+        plantId: 1,
+        timestamp: randomDate,
+        className: randomClassName
+    };
+    
+    incidents.push(incident);
+    
     }
   
     return incidents;

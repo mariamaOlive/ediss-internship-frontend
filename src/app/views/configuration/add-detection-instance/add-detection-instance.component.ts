@@ -198,24 +198,22 @@ export class AddDetectionInstanceComponent implements OnInit {
     let filteredCameras = this.cameras.filter((item: { id: any; }) => mappedCameras.includes(item.id));
     let mappedObjects = this.selectedItemsObjects.map(item => item.item_text);
 
-    const newZone: DetectionInstanceItem = new DetectionInstanceItem(
-      this.detectionInstanceName, 
-      Math.floor(Math.random() * 100001), 
-      this.plantId,
-      parseInt(this.selectedZone),
-      this.selectedAssignee || "Not defined", 
-      this.confidenceThreshold,  
-      parseInt(this.selectedDetectionType), 
-      mappedObjects,
-      filteredCameras,
-      true
-    );
+    const newDetectionInstance: DetectionInstanceItem = {
+      name: this.detectionInstanceName,
+      id: Math.floor(Math.random() * 100001),
+      plantId: this.plantId,
+      zoneId: parseInt(this.selectedZone),
+      assignee: this.selectedAssignee || "Not defined",
+      confidenceTheshold: this.confidenceThreshold,
+      detectionType: parseInt(this.selectedDetectionType),
+      classesDetection: mappedObjects,
+      listCameras: filteredCameras,
+      isRunning: true,
+      timeElapsed: 0
+    };
+    
 
-
-
-
-
-    this.detectionService.addDetectionInstance(newZone).subscribe({
+    this.detectionService.addDetectionInstance(newDetectionInstance).subscribe({
       next: () => {
         console.log('Zone added successfully');
         this.location.back();

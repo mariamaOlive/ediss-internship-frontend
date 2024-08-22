@@ -9,9 +9,10 @@ import { of } from 'rxjs';
 export class CameraService {
 
   private dataCameras: CameraItem[] = [
-    new CameraItem("Camera 1", 1, "187.20.135.197"),
-    new CameraItem("Camera 2", 2, "187.20.135.199"),
-    new CameraItem("Camera 3", 3, "187.20.135.200")]
+    { name: "Camera 1", id: 1, ipAddress: "187.20.135.197" },
+    { name: "Camera 2", id: 2, ipAddress: "187.20.135.199" },
+    { name: "Camera 3", id: 3, ipAddress: "187.20.135.200" }
+  ];
 
 
   constructor() {}

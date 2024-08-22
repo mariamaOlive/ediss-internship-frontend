@@ -8,15 +8,79 @@ import { CameraItem } from '../../models/camera';
 })
 export class DetectionInstanceService {
 
-  private cameras: CameraItem[] = [new CameraItem("Camera 1", 1, "187.20.135.197"), new CameraItem("Camera 2", 2, "187.20.135.199"), new CameraItem("Camera 3", 3, "187.20.135.200")]
-
-  private dataDetection : DetectionInstanceItem[] = [
-    new DetectionInstanceItem("Detection Instance 1", 1, 1, 1, "Luca Bianchi",0.5,1, ["Helmet", "Vest", "Hairnet", "Goggles", "Earplugs"], this.cameras),
-    new DetectionInstanceItem("Detection Instance 2", 2, 1, 2, "Mariama Oliveira",0.5,2, ["Helmet"], this.cameras, false),
-    new DetectionInstanceItem("Detection Instance 3", 3, 1, 1, "Minase Serafim",0.5,1, ["Vest", "Hairnet", "Goggles", "Earplugs"], this.cameras),
-    new DetectionInstanceItem("Detection Instance 4", 4, 2, 1, "Mariama Oliveira",0.5,2, ["Helmet", "Vest", "Hairnet", "Goggles", "Earplugs"], this.cameras),
-    new DetectionInstanceItem("Detection Instance 5", 5, 2, 1, "Luca Bianchi",0.5,1, ["Helmet", "Earplugs"], this.cameras)
-  ]
+  private cameras: CameraItem[] = [
+    { name: "Camera 1", id: 1, ipAddress: "187.20.135.197" },
+    { name: "Camera 2", id: 2, ipAddress: "187.20.135.199" },
+    { name: "Camera 3", id: 3, ipAddress: "187.20.135.200" }
+  ];
+  
+  private dataDetection: DetectionInstanceItem[] = [
+    {
+      name: "Detection Instance 1",
+      id: 1,
+      plantId: 1,
+      zoneId: 1,
+      assignee: "Luca Bianchi",
+      confidenceTheshold: 0.5,
+      detectionType: 1,
+      classesDetection: ["Helmet", "Vest", "Hairnet", "Goggles", "Earplugs"],
+      listCameras: this.cameras,
+      isRunning: true,
+      timeElapsed: 0
+    },
+    {
+      name: "Detection Instance 2",
+      id: 2,
+      plantId: 1,
+      zoneId: 2,
+      assignee: "Mariama Oliveira",
+      confidenceTheshold: 0.5,
+      detectionType: 2,
+      classesDetection: ["Helmet"],
+      listCameras: this.cameras,
+      isRunning: false,
+      timeElapsed: 0
+    },
+    {
+      name: "Detection Instance 3",
+      id: 3,
+      plantId: 1,
+      zoneId: 1,
+      assignee: "Minase Serafim",
+      confidenceTheshold: 0.5,
+      detectionType: 1,
+      classesDetection: ["Vest", "Hairnet", "Goggles", "Earplugs"],
+      listCameras: this.cameras,
+      isRunning: true,
+      timeElapsed: 0
+    },
+    {
+      name: "Detection Instance 4",
+      id: 4,
+      plantId: 2,
+      zoneId: 1,
+      assignee: "Mariama Oliveira",
+      confidenceTheshold: 0.5,
+      detectionType: 2,
+      classesDetection: ["Helmet", "Vest", "Hairnet", "Goggles", "Earplugs"],
+      listCameras: this.cameras,
+      isRunning: true,
+      timeElapsed: 0
+    },
+    {
+      name: "Detection Instance 5",
+      id: 5,
+      plantId: 2,
+      zoneId: 1,
+      assignee: "Luca Bianchi",
+      confidenceTheshold: 0.5,
+      detectionType: 1,
+      classesDetection: ["Helmet", "Earplugs"],
+      listCameras: this.cameras,
+      isRunning: true,
+      timeElapsed: 0
+    }
+  ];
 
   constructor() { }
 

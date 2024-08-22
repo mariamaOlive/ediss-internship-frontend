@@ -10,11 +10,30 @@ import { DetectionInstanceService } from '../detection-instance/detection-instan
 })
 export class PlantService {
 
-  private dataPlant : PlantItem[] = [
-    new PlantItem("Plant 1", 1, "Italy", 0.5),
-    new PlantItem("Plant 2", 2, "Italy", 0.6),
-    new PlantItem("Plant 3", 3, "Italy", 0.7),
-  ]
+  private dataPlant: PlantItem[] = [
+    {
+      name: "Plant 1",
+      id: 1,
+      address: "Italy",
+      confidenceThreshold: 0.5,
+      detectionInstances: [] // Initialize with an empty array or populate as needed
+    },
+    {
+      name: "Plant 2",
+      id: 2,
+      address: "Italy",
+      confidenceThreshold: 0.6,
+      detectionInstances: [] // Initialize with an empty array or populate as needed
+    },
+    {
+      name: "Plant 3",
+      id: 3,
+      address: "Italy",
+      confidenceThreshold: 0.7,
+      detectionInstances: [] // Initialize with an empty array or populate as needed
+    }
+  ];
+  
 
   constructor(private detectionService: DetectionInstanceService) { }
 
