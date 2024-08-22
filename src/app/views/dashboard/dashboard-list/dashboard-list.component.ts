@@ -41,13 +41,23 @@ import { PlantItem } from 'src/app/core/models/plant';
 })
 
 export class DashboardListComponent implements OnInit {
+  
   plantsList: PlantItem[] = [];
 
   constructor(private plantsService: PlantService) { }
 
+  // ========================
+  // Life Cycle Hooks
+  // ========================
+
   ngOnInit(): void {
     this.loadPlants();
   }
+
+
+  // ========================
+  // Service Calls
+  // ========================
 
   loadPlants(): void {
     this.plantsService.getAllPlants().subscribe(plants => {

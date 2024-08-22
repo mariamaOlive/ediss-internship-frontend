@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap, RouterModule, RouterLink, NavigationStart, NavigationEnd, NavigationError, NavigationCancel } from '@angular/router';
-import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
+import { Router, ActivatedRoute, ParamMap, RouterModule, RouterLink } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { IconSetService, IconModule } from '@coreui/icons-angular';
 import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft, cilOptions } from '@coreui/icons';
-
-
 import {
   GridModule,
   CardModule,
@@ -19,6 +16,8 @@ import {
   DropdownItemDirective,
   TooltipModule
 } from '@coreui/angular';
+
+import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
 import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
 
 
@@ -49,8 +48,7 @@ import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
 export class DetectionInstanceListComponent implements OnInit {
 
   plantId: any = NaN;
-  detectionInstanceList: DetectionInstanceItem[] = [];  // Assuming zones is an array. Adjust type accordingly.
-  tooltipText = 'Vivamus sagittis lacus vel augue laoreet rutrum faucibus.';
+  detectionInstanceList: DetectionInstanceItem[] = [];
 
   constructor(
     private router: Router, 
@@ -62,7 +60,20 @@ export class DetectionInstanceListComponent implements OnInit {
     iconSet.icons = {cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft, cilOptions};
   }
 
+  // ========================
+  // Life Cycle Hooks
+  // ========================
+
   ngOnInit(): void {
+    this.loadZonesByPlantId();
+  }
+
+
+  // ========================
+  // Service Calls
+  // ========================
+
+  loadZonesByPlantId(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const id = params.get('id');
       if (id) {
@@ -77,18 +88,7 @@ export class DetectionInstanceListComponent implements OnInit {
         });
       }
     });
-  }
-
-  
-  navigateToDetectionInstance(detectionInstanceId: number) {
-    this.router.navigate([`configuration/plants/${this.plantId}/detection-instance/${detectionInstanceId}`]);
-  }
-
-
-  navigateToAddDetectionInstance() {
-    this.router.navigate([`configuration/plants/${this.plantId}/add-detection-instance`]);
-  }
-
+  } 
 
   deleteDetectionInstance(detectionInstanceId: number): void {
     this.detectionService.deleteDetectionInstance(detectionInstanceId).subscribe({
@@ -102,8 +102,19 @@ export class DetectionInstanceListComponent implements OnInit {
     });
   }
 
+  // ========================
+  // Navigation Functions
+  // ========================
 
-  navigateBack(){
+  navigateToDetectionInstance(detectionInstanceId: number): void {
+    this.router.navigate([`configuration/plants/${this.plantId}/detection-instance/${detectionInstanceId}`]);
+  }
+
+  navigateToAddDetectionInstance(): void {
+    this.router.navigate([`configuration/plants/${this.plantId}/add-detection-instance`]);
+  }
+
+  navigateBack(): void {
     this.location.back();
   }
 

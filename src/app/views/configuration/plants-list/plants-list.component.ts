@@ -54,15 +54,30 @@ export class PlantsListComponent implements OnInit {
 
   constructor(private plantsService: PlantService) { }
 
+
+  // ========================
+  // Life Cycle Hooks
+  // ========================
+
   ngOnInit(): void {
     this.loadPlants();
   }
+
+
+  // ========================
+  // Service Calls
+  // ========================
 
   loadPlants(): void {
     this.plantsService.getAllPlants().subscribe(plants => {
       this.plantsList = plants;
     });
   }
+
+  
+  // ========================
+  // Utility Functions
+  // ========================
 
   setConfidenceThreshold(value: number): void {
     this.confidenceThreshold = parseFloat((value / 100).toFixed(2));

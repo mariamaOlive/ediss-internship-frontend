@@ -1,21 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, ParamMap } from '@angular/router';
-import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
-import { CameraItem } from 'src/app/core/models/camera';
-import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
-import { CardModule, ButtonModule, GridModule, BadgeModule, FormModule } from '@coreui/angular';
-import { IconDirective } from '@coreui/icons-angular';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { PlantService } from 'src/app/core/services/plant/plant.service';
-import { ZoneService } from 'src/app/core/services/zone/zone.service';
-import { AssigneeService } from 'src/app/core/services/assignee/assignee.service';
-import { CameraService } from 'src/app/core/services/camera/camera.service';
-import { PlantItem } from 'src/app/core/models/plant';
+import { IconDirective } from '@coreui/icons-angular';
+import { CardModule, ButtonModule, GridModule, BadgeModule, FormModule } from '@coreui/angular';
 import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft } from '@coreui/icons';
 import { IconSetService, IconModule } from '@coreui/icons-angular';
+
+import { AssigneeItem } from 'src/app/core/models/assignee';
+import { CameraItem } from 'src/app/core/models/camera';
+import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
+import { PlantItem } from 'src/app/core/models/plant';
 import { ZoneItem } from 'src/app/core/models/zone';
+import { AssigneeService } from 'src/app/core/services/assignee/assignee.service';
+import { CameraService } from 'src/app/core/services/camera/camera.service';
+import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
+import { PlantService } from 'src/app/core/services/plant/plant.service';
+import { ZoneService } from 'src/app/core/services/zone/zone.service';
 
 
 
@@ -39,20 +41,21 @@ import { ZoneItem } from 'src/app/core/models/zone';
   styleUrl: './add-detection-instance.component.scss'
 })
 export class AddDetectionInstanceComponent implements OnInit {
-  // Properties
-  plantId: any = NaN;
+
+  // Template Properties
+  plantId: number = 0;
   plant: PlantItem | null = null;
-  assignees: any;
-  zones: any;
-  cameras: any;
-
-  dropdownListObjects: any[] = [];
+  assignees: AssigneeItem[] = [];
+  zones: ZoneItem[] = [];
+  cameras: CameraItem[] = [];
+  
+  dropdownListObjects: { item_id: number, item_text: string }[] = [];
   dropdownSettingsObjects = {};
-
-  dropdownListCameras: any[] = [];
+  
+  dropdownListCameras: { item_id: number, item_text: string }[] = [];
   dropdownSettingsCameras = {};
 
-  // New Zone properties
+  // New Detection Instance properties
   detectionInstanceName: string = '';
   selectedAssignee: string = "";
   selectedZone:string="";
@@ -62,7 +65,6 @@ export class AddDetectionInstanceComponent implements OnInit {
   selectedItemsCameras: any[] = [];
 
   constructor(
-    private router: Router, 
     private route: ActivatedRoute,
     private location: Location,  
     private detectionService: DetectionInstanceService, 
@@ -75,72 +77,90 @@ export class AddDetectionInstanceComponent implements OnInit {
     iconSet.icons = {cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft};
   }
 
-  // Lifecycle Hook
+  
+  // ========================
+  // Life Cycle Hooks
+  // ========================
+
   ngOnInit() {
-    this.getPlantInfo();
-    this.getAvailableAssignees();
-    this.getAvailableCameras();
+    this.loadPlantInfo();
+    this.loadAssignees();
+    this.loadCameras();
     this.loadMultiSelectorObjectDetection();
   }
 
+  // ========================
   // Service Calls
+  // ========================
 
-  private getPlantInfo(): void {
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      const id = params.get('plantId');
-      if (id) {
-        this.plantId = parseInt(id, 10);
-        this.plantService.getPlantById(parseInt(id, 10)).subscribe({
-          next: plant => {
-            this.plant = plant;
-            this.confidenceThreshold = this.plant.confidenceThreshold;
-            this.getZonesByPlant(parseInt(id, 10));
-          },
-          error: err => {
-            console.error('Error fetching plant info:', err);
-          }
-        });
-      }
-    });
-  }
-
+  
   private getZonesByPlant(plantId: number): void {
     this.zoneService.getZoneByPlantId(plantId).subscribe({
-      next: zones => {
-        this.zones = zones;
-      },
-      error: err => {
-        console.error('Error fetching zones:', err);
-      }
+      next: zones => this.zones = zones,
+      error: err => console.error('Error fetching zones:', err)
     });
   }
 
-  private getAvailableAssignees(): void {
+  private loadAssignees(): void {
     this.assigneeService.getAllAssignees().subscribe({
-      next: assignees => {
-        this.assignees = assignees;
-      },
-      error: err => {
-        console.error('Error fetching assignees:', err);
-      }
+      next: assignees => this.assignees = assignees,
+      error: err => console.error('Error fetching assignees:', err)
     });
   }
 
-  private getAvailableCameras(): void {
+  private loadCameras(): void {
     this.cameraService.getAllCameras().subscribe({
       next: cameras => {
         this.cameras = cameras;
         this.loadMultiSelectorCamera(this.cameras);
       },
-      error: err => {
-        console.error('Error fetching cameras:', err);
-      }
+      error: err => console.error('Error fetching cameras:', err)
     });
   }
 
+  private loadPlantInfo(): void {
+    const id = this.route.snapshot.paramMap.get('plantId');
+    if (id) {
+      this.plantId = parseInt(id, 10);
+      this.plantService.getPlantById(this.plantId).subscribe({
+        next: plant => {
+          this.plant = plant;
+          this.confidenceThreshold = plant.confidenceThreshold;
+          this.getZonesByPlant(this.plantId);
+        },
+        error: err => console.error('Error fetching plant info:', err)
+      });
+    }
+  }
+
+
+  // ========================
   // Multi-Selector Functions
-  
+  // ========================
+
+  private loadMultiSelector() {
+    return {
+        singleSelection: false,
+        idField: 'item_id',
+        textField: 'item_text',
+        selectAllText: 'Select All',
+        unSelectAllText: 'UnSelect All',
+        itemsShowLimit: 5,
+        allowSearchFilter: false
+      
+    };
+  }
+
+  private loadMultiSelectorCamera(cameraList: CameraItem[]): void {
+    this.dropdownListCameras = cameraList.map(camera => {
+      return { item_id: camera.id, item_text: camera.name };
+    });
+    this.selectedItemsCameras = [];
+    this.dropdownSettingsCameras = this.loadMultiSelector();
+  }
+
   private loadMultiSelectorObjectDetection(): void {
+    //TODO: Get list of items dynamically
     this.dropdownListObjects = [
       { item_id: 1, item_text: 'Helmet' },
       { item_id: 2, item_text: 'Hair Net' },
@@ -148,49 +168,15 @@ export class AddDetectionInstanceComponent implements OnInit {
       { item_id: 4, item_text: 'Vest' },
       { item_id: 5, item_text: 'Earplugs' }
     ];
-
+  
     this.selectedItemsObjects = [];
-
-    this.dropdownSettingsObjects = {
-      singleSelection: false,
-      idField: 'item_id',
-      textField: 'item_text',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
-      itemsShowLimit: 5,
-      allowSearchFilter: false
-    };
+    this.dropdownSettingsObjects = this.loadMultiSelector();
   }
+  
 
-  private loadMultiSelectorCamera(cameraList: any): void {
-    this.dropdownListCameras = cameraList.map((camera: { id: any; name: any; }) => {
-      return { item_id: camera.id, item_text: camera.name };
-    });
-
-    this.selectedItemsCameras = [];
-
-    this.dropdownSettingsCameras = {
-      singleSelection: false,
-      idField: 'item_id',
-      textField: 'item_text',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
-      itemsShowLimit: 5,
-      allowSearchFilter: false
-    };
-  }
-
-  // Event Handlers
-
-  onItemSelect(item: any): void {
-    console.log(item);
-  }
-
-  onSelectAll(items: any): void {
-    console.log(items);
-  }
-
-  // Zone Management
+  // ========================
+  // Detection Instance Management
+  // ========================
 
   addNewDetectionInstance(): void {
 
@@ -212,7 +198,6 @@ export class AddDetectionInstanceComponent implements OnInit {
       isRunning: true,
       timeElapsed: 0
     };
-    
 
     this.detectionService.addDetectionInstance(newDetectionInstance).subscribe({
       next: () => {
@@ -225,11 +210,18 @@ export class AddDetectionInstanceComponent implements OnInit {
     });
   }
 
+  // ========================
   // Utility Functions
+  // ========================
 
-  updateConfidenceThreshold(value: number): void {
+  setConfidenceThreshold(value: number): void {
     this.confidenceThreshold = parseFloat((value / 100).toFixed(2));
   }
+
+
+  // ========================
+  // Navigation Functions
+  // ========================
 
   navigateBack(){
     this.location.back();

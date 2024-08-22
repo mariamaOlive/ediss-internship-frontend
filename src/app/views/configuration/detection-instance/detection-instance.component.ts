@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
-import { ZoneItem } from 'src/app/core/models/zone';
-import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
-import { ZoneService } from 'src/app/core/services/zone/zone.service';
 import { CardModule, ButtonModule, GridModule, BadgeModule} from '@coreui/angular';
 import { IconSetService, IconModule } from '@coreui/icons-angular';
 import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft } from '@coreui/icons';
-import { CommonModule, Location } from '@angular/common';
+
+import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
+import { ZoneItem } from 'src/app/core/models/zone';
+import { ZoneService } from 'src/app/core/services/zone/zone.service';
+import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
 
 @Component({
   selector: 'app-detection-instance',
@@ -22,7 +23,6 @@ export class DetectionInstanceComponent {
   detectionInstance: DetectionInstanceItem | null = null;
   zone:ZoneItem | null = null;
 
-
   constructor(
     private detectionService: DetectionInstanceService, 
     private zoneService: ZoneService, 
@@ -33,8 +33,20 @@ export class DetectionInstanceComponent {
     iconSet.icons = {cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft};
   }
   
+  // ========================
+  // Life Cycle Hooks
+  // ========================
 
   ngOnInit(): void {
+    this.loadDetectionInstanceById();
+  }
+
+
+  // ========================
+  // Service Calls
+  // ========================
+
+  loadDetectionInstanceById(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       let id = params.get('detectionId');
 
@@ -50,15 +62,15 @@ export class DetectionInstanceComponent {
         });
       }
     })
-
   }
 
 
+  // ========================
+  // Navigation Functions
+  // ========================
+  
   navigateBack(): void {
     this.location.back();
   }
-
-  
-
 
 }

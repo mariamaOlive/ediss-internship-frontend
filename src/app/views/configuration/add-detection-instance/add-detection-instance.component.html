@@ -97,7 +97,7 @@
                   <label for="numberInput" class="form-label">Confidence Level</label>
                   <div class="input-group confidence-input">
                     <input id="numberInput" type="number" min="0" max="100" [ngModel]="confidenceThreshold * 100"
-                      (ngModelChange)="updateConfidenceThreshold($event)" name="numberInput" required
+                      (ngModelChange)="setConfidenceThreshold($event)" name="numberInput" required
                       class="form-control form-control-sm">
                     <span class="input-group-text">%</span>
                   </div>
@@ -128,8 +128,7 @@
             <div class="d-flex flex-wrap p-0">
               <div class="container__multiselect">
                 <ng-multiselect-dropdown class="multiselect-element" [placeholder]="'Select Objects'"
-                  [settings]="dropdownSettingsObjects" [data]="dropdownListObjects" [(ngModel)]="selectedItemsObjects"
-                  (onSelect)="onItemSelect($event)" (onSelectAll)="onSelectAll($event)">
+                  [settings]="dropdownSettingsObjects" [data]="dropdownListObjects" [(ngModel)]="selectedItemsObjects">
                 </ng-multiselect-dropdown>
               </div>
             </div>
@@ -150,8 +149,7 @@
             <div class="d-flex flex-wrap p-0">
               <div class="container__multiselect">
                 <ng-multiselect-dropdown class="multiselect-element" [placeholder]="'Select Objects'"
-                  [settings]="dropdownSettingsCameras" [data]="dropdownListCameras" [(ngModel)]="selectedItemsCameras"
-                  (onSelect)="onItemSelect($event)" (onSelectAll)="onSelectAll($event)">
+                  [settings]="dropdownSettingsCameras" [data]="dropdownListCameras" [(ngModel)]="selectedItemsCameras">
                 </ng-multiselect-dropdown>
               </div>
             </div>
