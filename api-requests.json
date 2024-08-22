@@ -1,0 +1,507 @@
+##### Features #####
+
+- Show all plants (DONE)
+    - Get all plants added to the configuration view --> We might need to add a boolean to indicate that?
+- Add plant (TODO)
+    # not inplemented in the interface yet
+    - Get all plants
+    - Response: PUT or POST request to be defined 
+- Show Detection Instance List
+    - Get detections intances by plant id
+- Show detaisl Detection Instance
+    - Get information of the Detection Instance
+- Delete Detection instance 
+    - Delete based on the detection instance ID
+- Create Detection Instance
+    - Get plant info
+    - Get all zones
+    - Get all assignees
+    - Get all cameras
+    - Get PPE classes
+    - Response: Similar to the json of "Show detaisl Detection Instance"
+- Get incidents by plant
+    - Get all incidents of a specific plant
+
+-------------x---------------x----------------x-----------------
+
+- Get all plants
+Get basic information about all available plants
+
+Parameters: -
+Response:
+{
+    "type": "array",
+    "items": {
+      "title": "plant",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Unique identifier for each plant"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the plant"
+        },
+        "address": {
+          "type": "string",
+          "description": "Location of the plant"
+        },
+
+        boolean 
+        // "confidence_threshold": {
+        //   "type": "number",
+        //   "description": "Confidence Level for the model",
+        //   "minimum": 0,
+        //   "maximum": 1
+        // }
+      }
+    }
+}
+  
+
+Ex.:
+[
+    {
+      "id": 1,
+      "name": "Chieti",
+      "address": "Chieti - Italy",
+      "confidence_threshold": 0.85
+    },
+    {
+      "id": 2,
+      "name": "Pescara",
+      "address": "Pescara - Italy",
+      "confidence_threshold": 0.90
+    }
+  ]
+
+- Get detections intances by plant id
+Get list of all detection instances part of a plant
+Parameters request: plant_id
+Response:
+{
+    "type": "array",
+    "items": {
+      "title": "detection_instance",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Unique identifier for each detection instance"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the detection instance"
+        },
+        "detection_type": {
+          "type": "number",
+          "description": "Defines if it is a PPE detection or pallet detection"
+        },
+        "status": {
+          "type": "boolean",
+          "description": "Defines if a detection instance is running or not"
+        },
+        "time_elapsed": {
+          "type": "number",
+          "description": "Defines for how long the instance has been running"
+        }
+      }
+    }
+  }
+
+  ex.:
+  [
+    {
+      "id": 1,
+      "name": "Detection Instance 1",
+      "detection_type": 0,
+      "status": true,
+      "time_elapsed": 3600
+    },
+    {
+      "id": 2,
+      "name": "Detection Instance 2",
+      "detection_type": 1,
+      "status": false,
+      "time_elapsed": 1200
+    },
+    {
+      "id": 3,
+      "name": "Detection Instance 3",
+      "detection_type": 0,
+      "status": true,
+      "time_elapsed": 5400
+    }
+  ]
+  
+Get detection instance by id --> This one can be merged with the last one, for me it doesn't matter.
+Parameters request: detection_instance_id
+Response:
+{
+    "title": "detection_instance",
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "Unique identifier for each detection instance"
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of the detection instance"
+      },
+      "detection_type": {
+        "type": "number",
+        "description": "Defines if it is a PPE detection or pallet detection"
+      },
+      "status": {
+        "type": "boolean",
+        "description": "Defines if a detection instance is running or not"
+      },
+      "time_elapsed": {
+        "type": "number",
+        "description": "Defines for how long the instance has been running"
+      },
+      "confidence_threshold": {
+        "type": "number",
+        "description": "Confidence level for the detection"
+      },
+      "zone": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for each zone"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the zone"
+          }
+        }
+      },
+      "assignee": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for each assignee"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the assignee"
+          }
+        }
+      },
+      "detection_classes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "description": "Unique identifier for the class"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the class"
+            }
+          }
+        }
+      },
+      "cameras": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "description": "Unique identifier for the camera"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the camera"
+            },
+            "ip_address": {
+              "type": "string",
+              "description": "IP address of the camera"
+            },
+            "status": {
+              "type": "boolean",
+              "description": "Current status of the camera"
+            }
+          }
+        }
+      }
+    }
+}
+  
+ex.:
+{
+    "id": 1,
+    "name": "Warehouse PPE Detection",
+    "detection_type": 0,
+    "status": true,
+    "time_elapsed": 7200,
+    "confidence_threshold": 0.85,
+    "zone": {
+      "id": 101,
+      "name": "Zone A"
+    },
+    "assignee": {
+      "id": 501,
+      "name": "John Doe"
+    },
+    "detection_classes": [
+      {
+        "id": 1,
+        "name": "Helmet"
+      },
+      {
+        "id": 2,
+        "name": "Vest"
+      }
+    ],
+    "cameras": [
+      {
+        "id": 301,
+        "name": "Camera 1",
+        "ip_address": "192.168.1.10",
+        "status": true
+      },
+      {
+        "id": 302,
+        "name": "Camera 2",
+        "ip_address": "192.168.1.11",
+        "status": false
+      }
+    ]
+  }
+
+Get all zones
+Parameters request: -
+Response:
+{
+    "title": "zones_list",
+    "type": "array",
+    "items": {
+    "type": "object",
+    "properties": {
+        "id": {
+        "type": "integer",
+        "description": "Unique identifier for each zone"
+        },
+        "name": {
+        "type": "string",
+        "description": "Name of the zone"
+        }
+    }
+    }
+} 
+
+ex.:
+
+[
+    {
+      "id": 101,
+      "name": "Essencia"
+    },
+    {
+      "id": 102,
+      "name": "Dispenser"
+    }
+  ]
+    
+
+Get all assignees
+Parameters request: -
+Response:
+{
+    "title": "assignee_list",
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Unique identifier for each assignee"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the assignee"
+        }
+      }
+    }
+}
+
+ ex.:
+ [
+    {
+      "id": 501,
+      "name": "John Doe"
+    },
+    {
+      "id": 502,
+      "name": "Jane Smith"
+    },
+    {
+      "id": 503,
+      "name": "Alice Johnson"
+    }
+]
+   
+
+Get all cameras available
+Parameters request: -
+Response:
+{
+    "title": "cameras_list",
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "id": {
+              "type": "integer",
+              "description": "Unique identifier for the camera"
+        },
+        "name": {
+            "type": "string",
+            "description": "Name of the camera"
+        },
+        "ip_address": {
+            "type": "string",
+            "description": "IP address of the camera"
+        },
+        "status": {
+            "type": "boolean",
+            "description": "Current status of the camera"
+        }
+      }
+    }
+}
+
+ex.:
+[
+    {
+      "id": 301,
+      "name": "Camera 1",
+      "ip_address": "192.168.1.10",
+      "status": true
+    },
+    {
+      "id": 302,
+      "name": "Camera 2",
+      "ip_address": "192.168.1.11",
+      "status": false
+    },
+    {
+      "id": 303,
+      "name": "Camera 3",
+      "ip_address": "192.168.1.12",
+      "status": true
+    }
+  ]
+  
+  Get object detection classes
+  Parameters request: -
+  Response:
+  {
+      "title": "objects_list",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+                "type": "integer",
+                "description": "Unique identifier for the object class"
+          },
+          "name": {
+              "type": "string",
+              "description": "Name of the class"
+          }
+        }
+      }
+  }
+
+ex.:
+[
+    {
+      "id": 1,
+      "name": "Vest"
+    },
+    {
+      "id": 2,
+      "name": "Helmet"
+    },
+    {
+      "id": 3,
+      "name": "Hairnet"
+    }
+]
+  
+
+Get incidents registered in one plant
+Parameters request: plant_id
+Response:
+Response:
+{
+    "type": "array",
+    "items": {
+      "title": "incidents_list",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Unique identifier for each incident"
+        },
+        "recording_id": {
+          "type": "integer",
+          "description": "Unique identifier for each recording"
+        },
+        "detection_instance_id": {
+          "type": "integer",
+          "description": "Unique identifier for each detection instance which registered the incident"
+        },
+        "timestamp": {
+          "type": "number",
+          "description": "Timestamp of the incident"
+        },
+        "class_name": {
+          "type": "string",
+          "description": "Name of the class of the incident"
+        }
+      }
+    }
+}
+
+ex.:
+[
+    {
+      "id": 1,
+      "recording_id": 101,
+      "detection_instance_id": 1001,
+      "timestamp": 1627849200,
+      "class_name": "Helmet"
+    },
+    {
+      "id": 2,
+      "recording_id": 102,
+      "detection_instance_id": 1002,
+      "timestamp": 1627849260,
+      "class_name": "Helmet"
+    },
+    {
+      "id": 3,
+      "recording_id": 103,
+      "detection_instance_id": 1003,
+      "timestamp": 1627849320,
+      "class_name": "Vest"
+    }
+  ]
+  
+
+  
+Questions and Maybe modifications
+
+1. We might need to add a boolean in plants to indicate which one were set up in the dashboard.
+3. We might need to add another instance called detection instance, because for now the zone is only a place and the detection instance is where the setup happens.
+2. The assignee is part of a zone or of detection instance?
