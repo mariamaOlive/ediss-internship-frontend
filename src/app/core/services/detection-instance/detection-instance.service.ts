@@ -1,92 +1,29 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
 import { DetectionInstanceItem } from '../../models/detection-instance';
-import { CameraItem } from '../../models/camera';
+import { mockDetectionInstance } from '../../mock-data/mock-data';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DetectionInstanceService {
-
-  private cameras: CameraItem[] = [
-    { name: "Camera 1", id: 1, ipAddress: "187.20.135.197" },
-    { name: "Camera 2", id: 2, ipAddress: "187.20.135.199" },
-    { name: "Camera 3", id: 3, ipAddress: "187.20.135.200" }
-  ];
   
-  private dataDetection: DetectionInstanceItem[] = [
-    {
-      name: "Detection Instance 1",
-      id: 1,
-      plantId: 1,
-      zoneId: 1,
-      assignee: "Luca Bianchi",
-      confidenceTheshold: 0.5,
-      detectionType: 1,
-      classesDetection: ["Helmet", "Vest", "Hairnet", "Goggles", "Earplugs"],
-      listCameras: this.cameras,
-      isRunning: true,
-      timeElapsed: 0
-    },
-    {
-      name: "Detection Instance 2",
-      id: 2,
-      plantId: 1,
-      zoneId: 2,
-      assignee: "Mariama Oliveira",
-      confidenceTheshold: 0.5,
-      detectionType: 2,
-      classesDetection: ["Helmet"],
-      listCameras: this.cameras,
-      isRunning: false,
-      timeElapsed: 0
-    },
-    {
-      name: "Detection Instance 3",
-      id: 3,
-      plantId: 1,
-      zoneId: 1,
-      assignee: "Minase Serafim",
-      confidenceTheshold: 0.5,
-      detectionType: 1,
-      classesDetection: ["Vest", "Hairnet", "Goggles", "Earplugs"],
-      listCameras: this.cameras,
-      isRunning: true,
-      timeElapsed: 0
-    },
-    {
-      name: "Detection Instance 4",
-      id: 4,
-      plantId: 2,
-      zoneId: 1,
-      assignee: "Mariama Oliveira",
-      confidenceTheshold: 0.5,
-      detectionType: 2,
-      classesDetection: ["Helmet", "Vest", "Hairnet", "Goggles", "Earplugs"],
-      listCameras: this.cameras,
-      isRunning: true,
-      timeElapsed: 0
-    },
-    {
-      name: "Detection Instance 5",
-      id: 5,
-      plantId: 2,
-      zoneId: 1,
-      assignee: "Luca Bianchi",
-      confidenceTheshold: 0.5,
-      detectionType: 1,
-      classesDetection: ["Helmet", "Earplugs"],
-      listCameras: this.cameras,
-      isRunning: true,
-      timeElapsed: 0
-    }
-  ];
+  private dataDetection: DetectionInstanceItem[] = mockDetectionInstance;
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  getDetectionInstanceByPlantId(plantId: number):Observable<DetectionInstanceItem[]>{
+  getDetectionInstanceByPlantId(plantId: number): Observable<DetectionInstanceItem[]> {
     return of(this.dataDetection.filter(item => item.plantId === plantId));
   }
+
+  // HTTP request method to get detection instances by plant ID
+  // getDetectionInstanceByPlantId(plantId: number): Observable<DetectionInstanceItem[]> {
+  //   const apiUrl = `https://api.example.com/detection-instances?plantId=${plantId}`;
+  //   return this.http.get<DetectionInstanceItem[]>(apiUrl);
+  // }
+
 
   getDetectionInstanceInfo(zoneId: number): Observable<DetectionInstanceItem> {
     const zone = this.dataDetection.find(item => item.id === zoneId);
@@ -96,6 +33,13 @@ export class DetectionInstanceService {
     return of(zone);
   }
 
+  // HTTP request method to get detection instance info by zone ID
+  // getDetectionInstanceInfo(zoneId: number): Observable<DetectionInstanceItem> {
+  //   const apiUrl = `https://api.example.com/detection-instances/${zoneId}`;
+  //   return this.http.get<DetectionInstanceItem>(apiUrl);
+  // }
+
+  
   addDetectionInstance(newDetectionInstance: DetectionInstanceItem): Observable<boolean> {
     const existingZone = this.dataDetection.find(zone => zone.id === newDetectionInstance.id);
     if (existingZone) {
@@ -107,6 +51,13 @@ export class DetectionInstanceService {
       return of(true); // Return true indicating success
     }
   }
+
+  // HTTP request method to add a detection instance
+  // addDetectionInstance(newDetectionInstance: DetectionInstanceItem): Observable<boolean> {
+  //   const apiUrl = `https://api.example.com/detection-instances`;
+  //   return this.http.post<boolean>(apiUrl, newDetectionInstance);
+  // }
+
 
   deleteDetectionInstance(zoneId: number): Observable<boolean> {
     const index = this.dataDetection.findIndex(zone => zone.id === zoneId);
@@ -120,4 +71,10 @@ export class DetectionInstanceService {
       return of(false); // Return false indicating failure to delete
     }
   }
+
+  // HTTP request method to delete a detection instance
+  // deleteDetectionInstance(zoneId: number): Observable<boolean> {
+  //   const apiUrl = `https://api.example.com/detection-instances/${zoneId}`;
+  //   return this.http.delete<boolean>(apiUrl);
+  // }
 }

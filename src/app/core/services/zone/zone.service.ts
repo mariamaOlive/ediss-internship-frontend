@@ -1,37 +1,42 @@
 import { Injectable } from '@angular/core';
-import { ZoneItem } from '../../models/zone';
 import { Observable, of, throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
+import { ZoneItem } from '../../models/zone';
+import { mockZones } from '../../mock-data/mock-data';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ZoneService {
 
-  private dataZone: ZoneItem[] = [
-    { name: "Zone 1", id: 1, plantId: 1 },
-    { name: "Zone 2", id: 2, plantId: 1 },
-    { name: "Zone 3", id: 3, plantId: 2 },
-    { name: "Zone 4", id: 4, plantId: 2 },
-    { name: "Zone 5", id: 5, plantId: 3 }
-  ];
-  
+  private dataZone: ZoneItem[] = mockZones;
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-
-  getZoneById(plantId: number): Observable<ZoneItem> {
-    const zoneItem = this.dataZone.find(item => item.id === plantId);
+  getZoneById(zoneId: number): Observable<ZoneItem> {
+    const zoneItem = this.dataZone.find(item => item.id === zoneId);
     if (zoneItem) {
       return of(zoneItem);
     } else {
       return throwError(() => new Error('Zone not found'));
     }
   }
-  
 
-  getZoneByPlantId(plantId:number):Observable<ZoneItem[]>{
+  // HTTP request method to get zone by ID
+  // getZoneById(zoneId: number): Observable<ZoneItem> {
+  //   const apiUrl = `https://api.example.com/zones/${zoneId}`;
+  //   return this.http.get<ZoneItem>(apiUrl);
+  // }
+
+  // Mock method to get zones by plant ID
+  getZoneByPlantId(plantId: number): Observable<ZoneItem[]> {
     return of(this.dataZone.filter(item => item.plantId === plantId));
   }
 
-
+  // HTTP request method to get zones by plant ID
+  // getZoneByPlantId(plantId: number): Observable<ZoneItem[]> {
+  //   const apiUrl = `https://api.example.com/plants/${plantId}/zones`;
+  //   return this.http.get<ZoneItem[]>(apiUrl);
+  // }
 }

@@ -18,10 +18,11 @@ import { IconSetService, IconModule } from '@coreui/icons-angular';
 import { ZoneItem } from 'src/app/core/models/zone';
 
 
+
 @Component({
   selector: 'app-add-detection-instance',
   standalone: true,
-  providers: [IconSetService],
+  providers: [IconSetService, ],
   imports: [
     CardModule, 
     ButtonModule, 

@@ -1,24 +1,28 @@
 import { Injectable } from '@angular/core';
-import { CameraItem } from '../../models/camera';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
+import { CameraItem } from '../../models/camera';
+import { mockCamera } from '../../mock-data/mock-data';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CameraService {
 
-  private dataCameras: CameraItem[] = [
-    { name: "Camera 1", id: 1, ipAddress: "187.20.135.197" },
-    { name: "Camera 2", id: 2, ipAddress: "187.20.135.199" },
-    { name: "Camera 3", id: 3, ipAddress: "187.20.135.200" }
-  ];
+  // TODO: Remove after connecting to API
+  private readonly dataCameras: CameraItem[] = mockCamera;
 
+  constructor(private http: HttpClient) {}
 
-  constructor() {}
-
-  getAllCameras(){
+  // TODO: Remove after connecting to API
+  getAllCameras(): Observable<CameraItem[]> {
     return of(this.dataCameras);
   }
-  
+
+  // TODO: API request
+  // getAllCameras(): Observable<CameraItem[]> {
+  //   const apiUrl = 'https://api.example.com/cameras'; // Replace with your actual API endpoint
+  //   return this.http.get<CameraItem[]>(apiUrl);
+  // }
 }
