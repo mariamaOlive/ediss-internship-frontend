@@ -35,11 +35,8 @@
           <c-row class="mt-3">
             <form cForm class="p-0">
               <div>
-                <input cFormControl
-                placeholder="Type detection instance name" 
-                id="inputZoneName" 
-                type="text" 
-                [(ngModel)]="detectionInstanceName" name="zoneName">
+                <input cFormControl placeholder="Type detection instance name" id="inputZoneName" type="text"
+                  [(ngModel)]="detectionInstanceName" name="zoneName">
               </div>
             </form>
           </c-row>
@@ -48,7 +45,7 @@
     </c-card>
 
     <!-- Card 2 -->
-    <c-card class="mb-3 mt-2">
+    <!-- <c-card class="mb-3 mt-2">
       <c-card-body>
         <c-container>
           <c-row class="mt-3 small-card__title">
@@ -64,10 +61,10 @@
           </c-row>
         </c-container>
       </c-card-body>
-    </c-card>
+    </c-card> -->
 
     <!-- Card 3 -->
-    <c-card class="mb-3 mt-2">
+    <!-- <c-card class="mb-3 mt-2">
       <c-card-body>
         <c-container>
           <c-row class="mt-3 small-card__title">
@@ -83,7 +80,7 @@
           </c-row>
         </c-container>
       </c-card-body>
-    </c-card>
+    </c-card> -->
 
     <!-- Card 4 -->
     <c-card class="mb-3">
@@ -114,17 +111,24 @@
             </div>
           </c-row>
 
-           <!-- Detection type -->
-          <c-row >
+          <!-- Detection type -->
+          <c-row>
             <p class="mb-1">Detection type</p>
             <div class="d-flex flex-wrap">
               <c-form-check>
-                <input cFormCheckInput type="radio" value="1" name="flexRadioDefault" [(ngModel)]="selectedDetectionType" />
+                <input cFormCheckInput type="radio" value="1" name="flexRadioDefault"
+                  [(ngModel)]="selectedDetectionType" />
                 <label cFormCheckLabel>PPE Detection</label>
               </c-form-check>
               <c-form-check class="ms-4">
-                <input cFormCheckInput type="radio" value="2" name="flexRadioDefault" [(ngModel)]="selectedDetectionType"/>
+                <input cFormCheckInput type="radio" value="2" name="flexRadioDefault"
+                  [(ngModel)]="selectedDetectionType" />
                 <label cFormCheckLabel>Pallet Detection</label>
+              </c-form-check>
+              <c-form-check class="ms-4">
+                <input cFormCheckInput type="radio" value="3" name="flexRadioDefault"
+                  [(ngModel)]="selectedDetectionType" />
+                <label cFormCheckLabel>Fork Lift Detection</label>
               </c-form-check>
             </div>
           </c-row>
@@ -141,6 +145,19 @@
             </div>
           </c-row>
 
+          <c-row class="mt-4" *ngIf="selectedDetectionType === '3'">
+            <p class="mb-1">Fork Lift Minimum Distance</p>
+            <div class="d-flex flex-wrap">
+              <form cForm class="p-0">
+                <div class="input-group">
+                  <input cFormControl placeholder="Enter Forklift Minimum Distance" id="inputForkliftDistance"
+                    type="number" [(ngModel)]="forkliftDistance" name="forkliftDistance">
+                  <span class="input-group-text">meters</span>
+                </div>
+              </form>
+            </div>
+          </c-row>
+
         </c-container>
       </c-card-body>
     </c-card>
@@ -153,17 +170,23 @@
             <h6>Cameras</h6>
           </c-row>
           <c-row class="mt-4">
-            <div class="d-flex flex-wrap p-0">
-              <div class="container__multiselect">
-                <ng-multiselect-dropdown class="multiselect-element" [placeholder]="'Select Objects'"
-                  [settings]="dropdownSettingsCameras" [data]="dropdownListCameras" [(ngModel)]="selectedItemsCameras">
-                </ng-multiselect-dropdown>
-              </div>
+            <div *ngFor="let camera of zone.cameras" class="d-flex align-items-center mb-2">
+              <c-form-check>
+                <input 
+                  cFormCheckInput 
+                  type="radio" 
+                  [value]="camera.id" 
+                  name="flexRadioDefaultCamera" 
+                  [(ngModel)]="selectedCameraId" 
+                />
+                <label cFormCheckLabel>{{ camera.name }} - {{ camera.ipAddress }}</label>
+              </c-form-check>
             </div>
           </c-row>
         </c-container>
       </c-card-body>
     </c-card>
+    
 
     <c-container class="d-flex justify-content-center align-items-center">
       <button cButton color="info" variant="outline" class="btn-add" (click)="addNewDetectionInstance()">Add</button>

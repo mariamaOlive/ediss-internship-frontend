@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 
 import { CameraItem } from '../../models/camera';
 import { mockCamera } from '../../mock-data/mock-data';
-import { environment } from '../../config/environment';
 import { API_ENDPOINTS } from '../../config/api-endpoints';
 
 @Injectable({
@@ -15,7 +14,7 @@ export class CameraService {
   // TODO: Remove after connecting to API
   private readonly dataCameras: CameraItem[] = mockCamera;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // TODO: Remove after connecting to API
   getAllCameras(): Observable<CameraItem[]> {
@@ -27,4 +26,5 @@ export class CameraService {
   //   const apiUrl = 'https://api.example.com/cameras'; // Replace with your actual API endpoint
   //   return this.http.get<CameraItem[]>(apiUrl);
   // }
+
 }

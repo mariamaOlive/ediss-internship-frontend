@@ -6,4 +6,5 @@ export interface ZoneItem {
     plantId: number;
     cameras: CameraItem[];
     assigneeId: number;
+    confidenceThreshold: number;
 }

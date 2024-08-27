@@ -19,6 +19,8 @@ import {
 
 import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
 import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
+import { DataTransferService } from 'src/app/core/services/data-transfer/data-transfer.service';
+
 
 
 
@@ -49,12 +51,14 @@ import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
 export class DetectionInstanceListComponent implements OnInit {
 
   plantId: any = NaN;
+  zoneId: any = NaN;
   detectionInstanceList: DetectionInstanceItem[] = [];
 
   constructor(
     private router: Router, 
     private route: ActivatedRoute, 
-    private detectionService: DetectionInstanceService,  
+    private detectionService: DetectionInstanceService, 
+    private dataTransferService: DataTransferService, 
     private location: Location, 
     public iconSet: IconSetService) {
 
@@ -76,10 +80,12 @@ export class DetectionInstanceListComponent implements OnInit {
 
   loadDetectionInstancesByZoneId(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
-      const id = params.get('zoneId');
-      if (id) {
-        this.plantId = id;
-        this.detectionService.fetchDetectionInstanceByZoneId(parseInt(id, 10)).subscribe({
+      const plantId = params.get('plantId');
+      const zoneId = params.get('zoneId');
+      if (plantId && zoneId) {
+        this.zoneId = zoneId;
+        this.plantId = plantId;
+        this.detectionService.fetchDetectionInstanceByZoneId(parseInt(zoneId, 10)).subscribe({
           next: detectionInstances => {
             this.detectionInstanceList = detectionInstances;
           },
@@ -108,11 +114,12 @@ export class DetectionInstanceListComponent implements OnInit {
   // ========================
 
   navigateToDetectionInstance(detectionInstanceId: number): void {
-    this.router.navigate([`configuration/plants/${this.plantId}/detection-instance/${detectionInstanceId}`]);
+    this.router.navigate([`configuration/plants/${this.plantId}/zones/${this.zoneId}/detection-instance/${detectionInstanceId}`]);
   }
 
   navigateToAddDetectionInstance(): void {
-    this.router.navigate([`configuration/plants/${this.plantId}/add-detection-instance`]);
+    this.dataTransferService.setData(this.zoneId);
+    this.router.navigate([`configuration/plants/${this.plantId}/zones/${this.zoneId}/add-detection-instance`]);
   }
 
   navigateBack(): void {

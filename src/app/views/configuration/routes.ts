@@ -24,14 +24,14 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'plants/:plantId/detection-instance/:detectionId',
+    path: 'plants/:plantId/zones/:zoneId/detection-instance/:detectionId',
     loadComponent: () => import('./detection-instance/detection-instance.component').then(m => m.DetectionInstanceComponent),
     data: {
       title: 'Detection Instance Details'
     }
   },
   {
-    path: 'plants/:plantId/add-detection-instance',
+    path: 'plants/:plantId/zones/:zoneId/add-detection-instance',
     loadComponent: () => import('./add-detection-instance/add-detection-instance.component').then(m => m.AddDetectionInstanceComponent),
     data: {
       title: 'Add Detection Instance'

@@ -23,6 +23,7 @@ import { AssigneeService } from 'src/app/core/services/assignee/assignee.service
 import { CameraItem } from 'src/app/core/models/camera';
 import { ZoneItem } from 'src/app/core/models/zone';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
+import { DataTransferService } from 'src/app/core/services/data-transfer/data-transfer.service';
 
 
 
@@ -69,6 +70,7 @@ export class ZonesListComponent {
     private zoneService: ZoneService,
     private assigneeService: AssigneeService,
     private location: Location,
+    private dataTransferService: DataTransferService,
     public iconSet: IconSetService) {
     iconSet.icons = { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft, cilOptions };
   }
@@ -99,7 +101,8 @@ export class ZonesListComponent {
       id: Math.floor(Math.random() * 100001),
       plantId: parseInt(this.plantId),
       cameras: this.cameraList,
-      assigneeId: this.selectedAssignee
+      assigneeId: this.selectedAssignee,
+      confidenceThreshold: this.confidenceThreshold
     };
 
     this.zoneService.addZone(newZone).subscribe({
@@ -164,12 +167,9 @@ export class ZonesListComponent {
   // ========================
 
   navigateToDetectionInstanceList(cardId: number): void {
+    // this.dataTransferService.setData(cardId);
     this.router.navigate([`configuration/plants/${this.plantId}/zones/${cardId}`]);
   }
-
-  // navigateToAddZone(): void {
-  //   this.router.navigate([`configuration/plants/${this.plantId}/add-detection-instance`]);
-  // }
 
   navigateBack(): void {
     this.location.back();

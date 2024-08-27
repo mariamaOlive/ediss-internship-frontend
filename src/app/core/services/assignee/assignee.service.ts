@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { AssigneeItem } from '../../models/assignee';
 import { mockAssignees } from '../../mock-data/mock-data';
-import { environment } from '../../config/environment';
+// import { environment } from '../../config/environment';
 import { API_ENDPOINTS } from '../../config/api-endpoints';
 
 @Injectable({

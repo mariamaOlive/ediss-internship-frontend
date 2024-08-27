@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 
 import { DetectionInstanceItem } from '../../models/detection-instance';
 import { mockDetectionInstance } from '../../mock-data/mock-data';
-import { environment } from '../../config/environment';
 import { API_ENDPOINTS } from '../../config/api-endpoints';
 
 @Injectable({

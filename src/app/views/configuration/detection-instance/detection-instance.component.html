@@ -105,17 +105,18 @@
                                 <c-col class="d-flex justify-content-center align-items-center">Name</c-col>
                                 <c-col class="d-flex justify-content-center align-items-center">IP Address</c-col>
                                 <c-col class="d-flex justify-content-center align-items-center">Status</c-col>
-                                <c-col class="d-flex justify-content-center align-items-center">Action</c-col>
+                                <!-- <c-col class="d-flex justify-content-center align-items-center">Action</c-col> -->
                             </c-row>
                         </c-container>
                     </c-row>
                     <c-row>
                         <c-container>
-                            <c-row *ngFor="let camera of detectionInstance?.listCameras" class="align-items-center">
-                                <c-col class="d-flex justify-content-center align-items-center">{{camera.name}}</c-col>
-                                <c-col class="d-flex justify-content-center align-items-center">{{camera.ipAddress}}</c-col>
+                            <!-- <c-row *ngFor="let camera of detectionInstance?.listCameras" class="align-items-center"> -->
+                            <c-row class="align-items-center">
+                                <c-col class="d-flex justify-content-center align-items-center">{{detectionInstance?.camera?.name}}</c-col>
+                                <c-col class="d-flex justify-content-center align-items-center">{{detectionInstance?.camera?.ipAddress}}</c-col>
                                 <c-col class="d-flex justify-content-center align-items-center">Recording</c-col>
-                                <c-col class="d-flex justify-content-center align-items-center"><button cButton color="danger" variant="ghost" class="btn-sm">Stop</button></c-col>
+                                <!-- <c-col class="d-flex justify-content-center align-items-center"><button cButton color="danger" variant="ghost" class="btn-sm">Stop</button></c-col> -->
                             </c-row>
                         </c-container>
                     </c-row>

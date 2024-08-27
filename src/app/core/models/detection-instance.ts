@@ -9,7 +9,8 @@ export interface DetectionInstanceItem {
     confidenceTheshold: number;
     assignee: string;
     classesDetection: string[];
-    listCameras: CameraItem[];
+    // listCameras: CameraItem[];
+    camera: CameraItem;
     isRunning: boolean;
     timeElapsed: number;
 }
