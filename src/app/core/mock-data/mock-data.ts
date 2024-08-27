@@ -12,9 +12,9 @@ export const mockAssignees: AssigneeItem[] = [
 ];
 
 export const mockPlants: PlantItem[] = [
-  { name: "Plant 1", id: 1, address: "Italy", confidenceThreshold: 0.5, detectionInstances: [] },
-  { name: "Plant 2", id: 2, address: "Italy", confidenceThreshold: 0.6, detectionInstances: [] },
-  { name: "Plant 3", id: 3, address: "Italy", confidenceThreshold: 0.7, detectionInstances: [] }
+  { name: "Plant 1", id: 1, address: "Italy", plantConfidence: 0.5, detectionInstances: [] },
+  { name: "Plant 2", id: 2, address: "Italy", plantConfidence: 0.6, detectionInstances: [] },
+  { name: "Plant 3", id: 3, address: "Italy", plantConfidence: 0.7, detectionInstances: [] }
 ];
 
 export const mockZones: ZoneItem[] = [
@@ -43,7 +43,7 @@ export const mockDetectionInstance: DetectionInstanceItem[] = [
     classesDetection: ["Helmet", "Vest", "Hairnet", "Goggles", "Earplugs"],
     listCameras: mockCamera,  // Use the mockCamera array here
     isRunning: true,
-    timeElapsed: 0
+    timeElapsed: 12323
   },
   {
     name: "Detection Instance 2",
@@ -56,7 +56,7 @@ export const mockDetectionInstance: DetectionInstanceItem[] = [
     classesDetection: ["Helmet"],
     listCameras: mockCamera,  // Use the mockCamera array here
     isRunning: false,
-    timeElapsed: 0
+    timeElapsed: 345
   },
   {
     name: "Detection Instance 3",
@@ -69,7 +69,7 @@ export const mockDetectionInstance: DetectionInstanceItem[] = [
     classesDetection: ["Vest", "Hairnet", "Goggles", "Earplugs"],
     listCameras: mockCamera,  // Use the mockCamera array here
     isRunning: true,
-    timeElapsed: 0
+    timeElapsed: 678
   },
   {
     name: "Detection Instance 4",
@@ -82,7 +82,7 @@ export const mockDetectionInstance: DetectionInstanceItem[] = [
     classesDetection: ["Helmet", "Vest", "Hairnet", "Goggles", "Earplugs"],
     listCameras: mockCamera,  // Use the mockCamera array here
     isRunning: true,
-    timeElapsed: 0
+    timeElapsed: 555
   },
   {
     name: "Detection Instance 5",
@@ -95,6 +95,6 @@ export const mockDetectionInstance: DetectionInstanceItem[] = [
     classesDetection: ["Helmet", "Earplugs"],
     listCameras: mockCamera,  // Use the mockCamera array here
     isRunning: true,
-    timeElapsed: 0
+    timeElapsed: 99999
   }
 ];

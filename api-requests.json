@@ -505,3 +505,17 @@ Questions and Maybe modifications
 1. We might need to add a boolean in plants to indicate which one were set up in the dashboard.
 3. We might need to add another instance called detection instance, because for now the zone is only a place and the detection instance is where the setup happens.
 2. The assignee is part of a zone or of detection instance?
+
+
+Questions:
+
+(X) The confidence level is from 0 to 1 or from 0 to 100? --> Confirm later
+
+
+//Populate database
+INSERT INTO plants (name, description, address, plantConfidence) VALUES
+('Plant A', 'Main manufacturing plant in NY', 'New York, USA', 0.95),
+('Plant B', 'Backup plant in LA', 'Los Angeles, USA', 0.88),
+('Plant C', 'Research and development in Chicago', 'Chicago, USA', 0.92),
+('Plant D', 'Distribution center in Houston', 'Houston, USA', 0.85),
+('Plant E', 'New construction in Phoenix', 'Phoenix, USA', 0.78);

@@ -4,6 +4,6 @@ export interface PlantItem {
     name: string;
     id: number;
     address: string;
-    confidenceThreshold: number;
+    plantConfidence: number;
     detectionInstances: DetectionInstanceItem[];
 }

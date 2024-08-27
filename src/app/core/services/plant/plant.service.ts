@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { PlantItem } from '../../models/plant';
 import { mockPlants } from '../../mock-data/mock-data';
-import { environment } from '../../config/environment';
+import { environment } from 'src/app/environments/environment';
 import { API_ENDPOINTS } from '../../config/api-endpoints';
 import { DetectionInstanceService } from '../detection-instance/detection-instance.service';
 
@@ -21,15 +21,15 @@ export class PlantService {
   ) { }
 
 
-  getAllPlants(): Observable<PlantItem[]> {
-    return of(this.dataPlant);
-  }
+  // getAllPlants(): Observable<PlantItem[]> {
+  //   return of(this.dataPlant);
+  // }
 
   // HTTP request method to get all plants
-  // getAllPlants(): Observable<PlantItem[]> {
-  //   const apiUrl = `https://api.example.com/plants`;
-  //   return this.http.get<PlantItem[]>(apiUrl);
-  // }
+  getAllPlants(): Observable<PlantItem[]> {
+    const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.plants}`;
+    return this.http.get<PlantItem[]>(apiUrl);
+  }
 
 
   getPlantById(plantId: number): Observable<PlantItem> {

@@ -1,3 +1,3 @@
 export const environment = {
-    apiUrl: 'https://api.example.com',  //TODO: TBD
+    apiUrl: 'http://127.0.0.1:8000', 
 };

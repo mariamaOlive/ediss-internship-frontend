@@ -125,7 +125,7 @@ export class AddDetectionInstanceComponent implements OnInit {
       this.plantService.getPlantById(this.plantId).subscribe({
         next: plant => {
           this.plant = plant;
-          this.confidenceThreshold = plant.confidenceThreshold;
+          this.confidenceThreshold = plant.plantConfidence;
           this.getZonesByPlant(this.plantId);
         },
         error: err => console.error('Error fetching plant info:', err)
