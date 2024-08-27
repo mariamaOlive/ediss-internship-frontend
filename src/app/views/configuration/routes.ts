@@ -11,9 +11,16 @@ export const routes: Routes = [
   ,
   {
     path: 'plants/:id',
+    loadComponent: () => import('./zones-list/zones-list.component').then(m => m.ZonesListComponent),
+    data: {
+      title: 'Zones'
+    }
+  },
+  {
+    path: 'plants/:plantId/zones/:zoneId',
     loadComponent: () => import('./detection-instance-list/detection-instance-list.component').then(m => m.DetectionInstanceListComponent),
     data: {
-      title: 'Plants'
+      title: 'Detection Instance List'
     }
   },
   {

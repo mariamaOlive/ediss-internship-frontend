@@ -32,7 +32,7 @@ export class ZoneService {
   // }
 
   // Mock method to get zones by plant ID
-  getZoneByPlantId(plantId: number): Observable<ZoneItem[]> {
+  fetchZonesByPlantId(plantId: number): Observable<ZoneItem[]> {
     return of(this.dataZone.filter(item => item.plantId === plantId));
   }
 

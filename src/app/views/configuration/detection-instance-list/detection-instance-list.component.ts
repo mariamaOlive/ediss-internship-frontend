@@ -65,7 +65,7 @@ export class DetectionInstanceListComponent implements OnInit {
   // ========================
 
   ngOnInit(): void {
-    this.loadZonesByPlantId();
+    this.loadDetectionInstancesByZoneId(); 
   }
 
 
@@ -73,12 +73,12 @@ export class DetectionInstanceListComponent implements OnInit {
   // Service Calls
   // ========================
 
-  loadZonesByPlantId(): void {
+  loadDetectionInstancesByZoneId(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
-      const id = params.get('id');
+      const id = params.get('zoneId');
       if (id) {
         this.plantId = id;
-        this.detectionService.getDetectionInstanceByPlantId(parseInt(id, 10)).subscribe({
+        this.detectionService.fetchDetectionInstanceByZoneId(parseInt(id, 10)).subscribe({
           next: detectionInstances => {
             this.detectionInstanceList = detectionInstances;
           },

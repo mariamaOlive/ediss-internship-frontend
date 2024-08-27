@@ -9,13 +9,9 @@ import {
   DropdownDividerDirective,
   TemplateIdDirective,
   ThemeDirective,
-  DropdownComponent,
-  ButtonDirective,
-  DropdownToggleDirective,
-  DropdownMenuDirective,
-  DropdownItemDirective,
   ModalModule,
   ButtonCloseDirective,
+  ButtonDirective,
   FormModule,
   
 } from '@coreui/angular';
@@ -31,19 +27,16 @@ import { CardListComponent } from 'src/app/shared/components/card-list/card-list
   imports: [
     RouterModule,
     CommonModule,
-    GridModule, CardModule,
+    GridModule, 
+    CardModule,
     TemplateIdDirective,
     IconDirective,
     ThemeDirective,
-    DropdownComponent,
-    ButtonDirective,
-    DropdownToggleDirective,
-    DropdownMenuDirective,
-    DropdownItemDirective,
     RouterLink,
     DropdownDividerDirective,
     ModalModule,
     ButtonCloseDirective,
+    ButtonDirective,
     FormModule,
     FormsModule, CardListComponent],
   templateUrl: './plants-list.component.html',
@@ -55,7 +48,7 @@ export class PlantsListComponent implements OnInit {
   selectedPlant: string = "";
   confidenceThreshold: number = 0;
 
-  constructor(private plantsService: PlantService) { }
+  constructor( private router: Router, private plantsService: PlantService) { }
 
 
   // ========================
@@ -95,6 +88,16 @@ export class PlantsListComponent implements OnInit {
   handleModalChange(event: any) {
     this.visible = event;
   }
+
+
+  // ========================
+  // Navigation Functions
+  // ========================
+
+  navigateToZoneList(cardId: number): void {
+    this.router.navigate([`configuration/plants/${cardId}`]);
+  }
+
 
   
   // ========================

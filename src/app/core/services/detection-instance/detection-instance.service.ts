@@ -16,8 +16,8 @@ export class DetectionInstanceService {
 
   constructor(private http: HttpClient) { }
 
-  getDetectionInstanceByPlantId(plantId: number): Observable<DetectionInstanceItem[]> {
-    return of(this.dataDetection.filter(item => item.plantId === plantId));
+  fetchDetectionInstanceByZoneId(zoneId: number): Observable<DetectionInstanceItem[]> {
+    return of(this.dataDetection.filter(item => item.zoneId === zoneId));
   }
 
   // HTTP request method to get detection instances by plant ID

@@ -37,15 +37,25 @@ import {
 })
 export class CardListComponent {
 
-  @Input() cardList:  Array<{ name: string, description: string, id:number}> = [];
+  @Input() cardList: Array<{ name: string, description: string, id: number }> = [];
   @Input() dropdownOptions: Array<{ label: string, link: any[] }> = [];
-  @Input() routeParameter: string = "";
   @Input() emptyCardText: string = "";
+  @Output() cardClick = new EventEmitter<number>();
   @Output() emptyCardClick = new EventEmitter<void>();
 
+
+  // ========================
+  // Interaction Functions
+  // ========================
+  
+  // Trigges on the click of one the cards of the list
+  onCardClick(cardId: number): void {
+    this.cardClick.emit(cardId); 
+  }
+
   // Emits an event on the click of the empty card
-  onCardClick(): void {
-    this.emptyCardClick.emit(); 
+  onEmptyCardClick(): void {
+    this.emptyCardClick.emit();
   }
 
 }

@@ -42,13 +42,13 @@ export class PlantService {
   //   return this.http.get<PlantItem>(apiUrl);
   // }
 
-
+  //TODO: Redo the whole function
   getPlantByIdWithZone(plantId: number): Observable<PlantItem> {
     const plant = this.dataPlant.find(item => item.id === plantId);
     if (!plant) {
       throw new Error(`Plant with ID ${plantId} not found`);
     }
-    this.detectionService.getDetectionInstanceByPlantId(plantId).subscribe({
+    this.detectionService.fetchDetectionInstanceByZoneId(plantId).subscribe({
       next: detectionInstances => {
         plant.detectionInstances = detectionInstances;
       },

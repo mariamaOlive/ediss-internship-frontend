@@ -95,7 +95,7 @@ export class AddDetectionInstanceComponent implements OnInit {
 
   
   private getZonesByPlant(plantId: number): void {
-    this.zoneService.getZoneByPlantId(plantId).subscribe({
+    this.zoneService.fetchZonesByPlantId(plantId).subscribe({
       next: zones => this.zones = zones,
       error: err => console.error('Error fetching zones:', err)
     });

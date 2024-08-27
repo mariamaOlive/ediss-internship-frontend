@@ -4,8 +4,8 @@
 
 <card-list
 [cardList]="cardList" 
-[routeParameter] = "'plants'"
 [emptyCardText] = "'Add new plant'"
+(cardClick)="navigateToZoneList($event)" 
 (emptyCardClick)="toggleModal()">
 </card-list>  
 
@@ -25,7 +25,7 @@
           </c-row>
           <c-row class="mt-3 small-card__text">
             <select aria-label="Select a plant" cSelect [(ngModel)]="selectedPlant">
-              <option value=null disabled>Select a plant</option>
+              <option value="" disabled>Select a plant</option>
               <option *ngFor="let plant of plantsList" [value]="plant.id">
                 {{ plant.name }}
               </option>
