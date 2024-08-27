@@ -1,6 +1,6 @@
 export interface CameraItem {
     name: string;
-    id: number;
+    id?: number;
     ipAddress: string;
 }
   

@@ -12,13 +12,14 @@ import {
   ModalModule,
   ButtonCloseDirective,
   ButtonDirective,
-  FormModule,
-  
+  FormModule
 } from '@coreui/angular';
 
-import { PlantService } from 'src/app/core/services/plant/plant.service';
-import { PlantItem } from 'src/app/core/models/plant';
 import { CardListComponent } from 'src/app/shared/components/card-list/card-list.component';
+
+import { PlantItem } from 'src/app/core/models/plant';
+import { PlantService } from 'src/app/core/services/plant/plant.service';
+
 
 
 @Component({
@@ -38,7 +39,8 @@ import { CardListComponent } from 'src/app/shared/components/card-list/card-list
     ButtonCloseDirective,
     ButtonDirective,
     FormModule,
-    FormsModule, CardListComponent],
+    FormsModule,
+    CardListComponent],
   templateUrl: './plants-list.component.html',
   styleUrl: './plants-list.component.scss'
 })
@@ -99,7 +101,6 @@ export class PlantsListComponent implements OnInit {
   }
 
 
-  
   // ========================
   // Utility Functions
   // ========================

@@ -21,6 +21,7 @@ import { DetectionInstanceService } from 'src/app/core/services/detection-instan
 import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
 
 
+
 @Component({
   selector: 'app-detection-instance-list',
   standalone: true,

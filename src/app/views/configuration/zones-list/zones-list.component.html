@@ -5,11 +5,119 @@
   <span class="text-secondary fs-3 ms-3">Zones</span>
 </div>
 
-<card-list 
-  [cardList]="cardList"
-  [emptyCardText]="'Add new zone'"
-  (cardClick)="navigateToDetectionInstanceList($event)" 
-  (emptyCardClick)="addNewZone()">
+<card-list [cardList]="cardList" [emptyCardText]="'Add new zone'" (cardClick)="navigateToDetectionInstanceList($event)"
+  (emptyCardClick)="toggleModal() ">
 </card-list>
 
 
+<!-- Modal Add Zone -->
+<c-modal #fullScreenMd fullscreen="md" id="fullScreenMd" [visible]="visible" (visibleChange)="handleModalChange($event)"
+  size="xl">
+  <c-modal-header>
+    <h5 cModalTitle>Add new Zone</h5>
+    <button [cModalToggle]="fullScreenMd.id" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <ng-container *ngTemplateOutlet="longContent"></ng-container>
+  </c-modal-body>
+  <c-modal-footer>
+    <button [cModalToggle]="fullScreenMd.id" cButton color="secondary">
+      Close
+    </button>
+    <button cButton color="primary" (click)="addNewZone()">Add</button>
+  </c-modal-footer>
+</c-modal>
+
+<ng-template #longContent>
+  <c-card class="mb-3 mt-2">
+    <c-card-body>
+      <c-container>
+        <c-row class="mt-3 small-card__title">
+          <h6>Zone name</h6>
+        </c-row>
+        <c-row class="mt-3">
+          <form cForm class="p-0">
+            <div>
+              <input cFormControl placeholder="Type zone name" id="inputZoneName" type="text" [(ngModel)]="zoneName"
+                name="zoneName">
+            </div>
+          </form>
+        </c-row>
+      </c-container>
+    </c-card-body>
+  </c-card>
+
+  <c-card class="mb-3 mt-2">
+    <c-card-body>
+      <c-container>
+        <c-row class="mt-3 small-card__title">
+          <h6>Assignee</h6>
+        </c-row>
+        <c-row class="mt-3">
+          <select aria-label="Select an assignee" cSelect [(ngModel)]="selectedAssignee">
+            <option value="" disabled>Select an assignee</option>
+            <option *ngFor="let assignee of assignees" [value]="assignee.id">
+              {{ assignee.name }}
+            </option>
+          </select>
+        </c-row>
+      </c-container>
+    </c-card-body>
+  </c-card>
+
+  <c-card class="mt-3">
+    <c-container>
+      <c-row class="mt-3 small-card__title">
+        <h6>Confidence Level</h6>
+      </c-row>
+      <c-row class="mt-3 small-card__text">
+        <div>
+          <form #numberForm="ngForm">
+            <div class="mb-3">
+              <div class="input-group confidence-input">
+                <input id="numberInput" type="number" min="0" max="100" [ngModel]="confidenceThreshold * 100"
+                  (ngModelChange)="setConfidenceThreshold($event)" name="numberInput" required
+                  class="form-control form-control-sm">
+                <span class="input-group-text">%</span>
+              </div>
+              <div *ngIf="numberForm.controls['numberInput']?.invalid && numberForm.controls['numberInput']?.touched">
+                <small class="text-danger">Please enter a valid number between 0 and 100.</small>
+              </div>
+            </div>
+          </form>
+        </div>
+      </c-row>
+    </c-container>
+  </c-card>
+
+  <c-card class="mt-3 pb-3">
+    <c-container>
+      <c-row class="mt-3 small-card__title">
+        <h6>Camera Setup</h6>
+      </c-row>
+      <c-row class="mt-3 small-card__text">
+        <c-container>
+          <c-row *ngFor="let camera of cameraList; let i = index">
+            <c-col> {{camera.name}} </c-col>
+            <c-col> {{camera.ipAddress}} </c-col>
+            <c-col>
+              <button cButton color="danger" variant="ghost" (click)="removeCamera(i)">Remove</button>
+            </c-col>
+          </c-row>
+          <c-row>
+            <c-col>
+              <input cFormControl placeholder="Type camera name" id="inputCameraName" type="text" [(ngModel)]="cameraName" name="cameraName">
+            </c-col>
+            <c-col>
+              <input cFormControl placeholder="Type IP Address" id="inputCameraIPAdress" type="text" [(ngModel)]="cameraIPAdress" name="cameraIPAdress">
+            </c-col>
+            <c-col>
+              <button cButton color="primary" variant="ghost" (click)="addCamera()">Add</button>
+            </c-col>
+          </c-row>
+        </c-container>
+      </c-row>
+    </c-container>
+  </c-card>
+  
+</ng-template>

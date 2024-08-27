@@ -9,14 +9,14 @@ import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft } from '@coreui/ico
 import { IconSetService, IconModule } from '@coreui/icons-angular';
 
 import { AssigneeItem } from 'src/app/core/models/assignee';
-import { CameraItem } from 'src/app/core/models/camera';
-import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
-import { PlantItem } from 'src/app/core/models/plant';
-import { ZoneItem } from 'src/app/core/models/zone';
 import { AssigneeService } from 'src/app/core/services/assignee/assignee.service';
+import { CameraItem } from 'src/app/core/models/camera';
 import { CameraService } from 'src/app/core/services/camera/camera.service';
+import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
 import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
+import { PlantItem } from 'src/app/core/models/plant';
 import { PlantService } from 'src/app/core/services/plant/plant.service';
+import { ZoneItem } from 'src/app/core/models/zone';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
 
 
@@ -112,7 +112,7 @@ export class AddDetectionInstanceComponent implements OnInit {
     this.cameraService.getAllCameras().subscribe({
       next: cameras => {
         this.cameras = cameras;
-        this.loadMultiSelectorCamera(this.cameras);
+        // this.loadMultiSelectorCamera(this.cameras);
       },
       error: err => console.error('Error fetching cameras:', err)
     });
@@ -151,13 +151,13 @@ export class AddDetectionInstanceComponent implements OnInit {
     };
   }
 
-  private loadMultiSelectorCamera(cameraList: CameraItem[]): void {
-    this.dropdownListCameras = cameraList.map(camera => {
-      return { item_id: camera.id, item_text: camera.name };
-    });
-    this.selectedItemsCameras = [];
-    this.dropdownSettingsCameras = this.loadMultiSelector();
-  }
+  // private loadMultiSelectorCamera(cameraList: CameraItem[]): void {
+  //   this.dropdownListCameras = cameraList.map(camera => {
+  //     return { item_id: camera.id, item_text: camera.name };
+  //   });
+  //   this.selectedItemsCameras = [];
+  //   this.dropdownSettingsCameras = this.loadMultiSelector();
+  // }
 
   private loadMultiSelectorObjectDetection(): void {
     //TODO: Get list of items dynamically
@@ -182,7 +182,7 @@ export class AddDetectionInstanceComponent implements OnInit {
 
     //TODO: Remove part of this code when connected to the server
     let mappedCameras = this.selectedItemsCameras.map(item => item.item_id);
-    let filteredCameras = this.cameras.filter((item: { id: any; }) => mappedCameras.includes(item.id));
+    // let filteredCameras = this.cameras.filter((item: { id: any; }) => mappedCameras.includes(item.id));
     let mappedObjects = this.selectedItemsObjects.map(item => item.item_text);
 
     const newDetectionInstance: DetectionInstanceItem = {
@@ -194,7 +194,7 @@ export class AddDetectionInstanceComponent implements OnInit {
       confidenceTheshold: this.confidenceThreshold,
       detectionType: parseInt(this.selectedDetectionType),
       classesDetection: mappedObjects,
-      listCameras: filteredCameras,
+      listCameras: [],
       isRunning: true,
       timeElapsed: 0
     };

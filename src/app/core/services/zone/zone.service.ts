@@ -16,6 +16,24 @@ export class ZoneService {
 
   constructor(private http: HttpClient) { }
 
+  addZone(newZone: ZoneItem): Observable<boolean> {
+    const existingZone = this.dataZone.find(zone => zone.id === newZone.id);
+    if (existingZone) {
+      console.error(`Zone with ID ${newZone.id} already exists.`);
+      return of(false); // Return false indicating failure to add
+    } else {
+      this.dataZone.push(newZone);
+      console.log(`Zone with ID ${newZone.id} added.`);
+      return of(true); // Return true indicating success
+    }
+  }
+
+  // HTTP request method to add a zone
+  // addZone(newZone: ZoneItem): Observable<boolean> {
+  //   const apiUrl = `https://api.example.com/detection-instances`;
+  //   return this.http.post<boolean>(apiUrl, newDetectionInstance);
+  // }
+
   getZoneById(zoneId: number): Observable<ZoneItem> {
     const zoneItem = this.dataZone.find(item => item.id === zoneId);
     if (zoneItem) {

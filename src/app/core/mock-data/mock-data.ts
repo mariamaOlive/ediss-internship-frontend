@@ -17,19 +17,50 @@ export const mockPlants: PlantItem[] = [
   { name: "Plant 3", id: 3, address: "Italy", plantConfidence: 0.7, detectionInstances: [] }
 ];
 
-export const mockZones: ZoneItem[] = [
-  { name: "Zone 1", id: 1, plantId: 1 },
-  { name: "Zone 2", id: 2, plantId: 1 },
-  { name: "Zone 3", id: 3, plantId: 2 },
-  { name: "Zone 4", id: 4, plantId: 2 },
-  { name: "Zone 5", id: 5, plantId: 3 }
-];
-
 export const mockCamera: CameraItem[] = [
   { name: "Camera 1", id: 1, ipAddress: "187.20.135.197" },
   { name: "Camera 2", id: 2, ipAddress: "187.20.135.199" },
   { name: "Camera 3", id: 3, ipAddress: "187.20.135.200" }
 ];
+
+export const mockZones: ZoneItem[] = [
+  {
+    name: "Zone 1",
+    id: 1,
+    plantId: 1,
+    cameras: [mockCamera[0], mockCamera[1]], // Use mock cameras
+    assigneeId: 1 // Assign to "Anna Bianchi"
+  },
+  {
+    name: "Zone 2",
+    id: 2,
+    plantId: 1,
+    cameras: [mockCamera[2]], // Use a different camera
+    assigneeId: 2 // Assign to "Giorgia Versace"
+  },
+  {
+    name: "Zone 3",
+    id: 3,
+    plantId: 2,
+    cameras: [mockCamera[1], mockCamera[2]], // Use mock cameras
+    assigneeId: 3 // Assign to "Marta Bergman"
+  },
+  {
+    name: "Zone 4",
+    id: 4,
+    plantId: 2,
+    cameras: [mockCamera[0]], // Use a different camera
+    assigneeId: 4 // Assign to "Pietro Björn"
+  },
+  {
+    name: "Zone 5",
+    id: 5,
+    plantId: 3,
+    cameras: [mockCamera[1], mockCamera[2]], // Use mock cameras
+    assigneeId: 1 // Assign to "Anna Bianchi"
+  }
+];
+
 
 export const mockDetectionInstance: DetectionInstanceItem[] = [
   {

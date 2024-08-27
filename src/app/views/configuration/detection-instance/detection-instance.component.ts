@@ -6,9 +6,11 @@ import { IconSetService, IconModule } from '@coreui/icons-angular';
 import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft } from '@coreui/icons';
 
 import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
+import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
 import { ZoneItem } from 'src/app/core/models/zone';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
-import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
+
+
 
 @Component({
   selector: 'app-detection-instance',
