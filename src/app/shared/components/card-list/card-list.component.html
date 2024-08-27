@@ -1,0 +1,39 @@
+<c-container>
+    <c-row class="g-4">
+      <c-col sm="6" xl="3" *ngFor="let card of cardList">
+        <a [routerLink]="[routeParameter, card.id]" class="card-link">
+          <c-card class="mb-3 p-0 shadow-sm card-container">
+            <div class="card-container-top">
+              <c-dropdown alignment="end" variant="btn-group" class="position-absolute top-0 end-0 m-2">
+                <button [caret]="false" cButton cDropdownToggle class="p-0" color="transparent" aria-label="Open dropdown"
+                  (click)="$event.stopPropagation()">
+                  <svg cIcon name="cilOptions"></svg>
+                </button>
+                <ul cDropdownMenu class="shadow">
+                  <li><a [routerLink]="[]" cDropdownItem>Delete</a></li>
+                </ul>
+              </c-dropdown>
+            </div>
+            <c-card-body>
+              <h6 cCardTitle class="mb-0">{{card.name}}</h6>
+              <p cCardText>
+                <small class="text-medium-emphasis">{{card.description}}</small>
+              </p>
+            </c-card-body>
+          </c-card>
+        </a>
+      </c-col>
+  
+      <!-- Add new card -->
+      <c-col sm="6" xl="3">
+        <c-card 
+          type="button"
+          class="mb-3 p-0 shadow-sm card-container card-container-full"
+          (click)="onCardClick()">
+          <c-card-body class="d-flex align-items-center justify-content-center text-medium-emphasis">
+            {{emptyCardText}}
+          </c-card-body>
+        </c-card>
+      </c-col>
+    </c-row>
+</c-container>

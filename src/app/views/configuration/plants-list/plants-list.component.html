@@ -2,93 +2,63 @@
   <span class="text-secondary fs-3">Configuration</span>
 </div>
 
-<c-container>
-  <c-row class="g-4">
-    <c-col sm="6" xl="3" *ngFor="let plant of plantsList">
-      <a [routerLink]="['plants', plant.id]" class="card-link">
-        <c-card class="mb-3 p-0 shadow-sm card-container">
-          <div class="card-container-top">
-            <c-dropdown alignment="end" variant="btn-group" class="position-absolute top-0 end-0 m-2">
-              <button [caret]="false" cButton cDropdownToggle class="p-0" color="transparent" aria-label="Open dropdown"
-              (click)="$event.stopPropagation()">
-                <svg cIcon name="cilOptions"></svg>
-              </button>
-              <ul cDropdownMenu class="shadow">
-                <li><a [routerLink]="[]" cDropdownItem>Delete</a></li>
-              </ul>
-            </c-dropdown>
-          </div>
-          <c-card-body>
-            <h6 cCardTitle class="mb-0">{{plant.name}}</h6>
-            <p cCardText>
-              <small class="text-medium-emphasis">{{plant.address}}</small>
-            </p>
-          </c-card-body>
-        </c-card>
-      </a>
-    </c-col>
-  
-    <!-- Add new card -->
-    <c-col sm="6" xl="3">
-      <c-card type="button" [cModalToggle]="fullScreenMd.id"  class="mb-3 p-0 shadow-sm card-container card-container-full">
-        <c-card-body class="d-flex align-items-center justify-content-center text-medium-emphasis">
-          Add Plant
-        </c-card-body>
-      </c-card>
-    </c-col>
-  </c-row>
-</c-container>
+<card-list
+[cardList]="cardList" 
+[routeParameter] = "'plants'"
+[emptyCardText] = "'Add new plant'"
+(emptyCardClick)="toggleModal()">
+</card-list>  
+
 
 <!-- Modal Add Plant -->
-<c-modal #fullScreenMd fullscreen="md" id="fullScreenMd">
+<c-modal #fullScreenMd fullscreen="md" id="fullScreenMd" [visible]="visible" (visibleChange)="handleModalChange($event)">
   <c-modal-header>
     <h5 cModalTitle>Add new plant</h5>
     <button [cModalToggle]="fullScreenMd.id" cButtonClose></button>
   </c-modal-header>
   <c-modal-body>
     <c-card>
-    <c-card-body>
+      <c-card-body>
+        <c-container>
+          <c-row class="mt-3 small-card__title">
+            <h6>Available Plants</h6>
+          </c-row>
+          <c-row class="mt-3 small-card__text">
+            <select aria-label="Select a plant" cSelect [(ngModel)]="selectedPlant">
+              <option value=null disabled>Select a plant</option>
+              <option *ngFor="let plant of plantsList" [value]="plant.id">
+                {{ plant.name }}
+              </option>
+            </select>
+          </c-row>
+        </c-container>
+      </c-card-body>
+    </c-card>
+
+    <c-card class="mt-3">
       <c-container>
         <c-row class="mt-3 small-card__title">
-          <h6>Available Plants</h6>
+          <h6>Confidence Level</h6>
         </c-row>
         <c-row class="mt-3 small-card__text">
-          <select aria-label="Select a plant" cSelect [(ngModel)]="selectedPlant">
-            <option value=null disabled>Select a plant</option>
-            <option *ngFor="let plant of plantsList" [value]="plant.id">
-              {{ plant.name }}
-            </option>
-          </select>
+          <div>
+            <form #numberForm="ngForm">
+              <div class="mb-3">
+                <div class="input-group confidence-input">
+                  <input id="numberInput" type="number" min="0" max="100" [ngModel]="confidenceThreshold * 100"
+                    (ngModelChange)="setConfidenceThreshold($event)" name="numberInput" required
+                    class="form-control form-control-sm">
+                  <span class="input-group-text">%</span>
+                </div>
+                <div *ngIf="numberForm.controls['numberInput']?.invalid && numberForm.controls['numberInput']?.touched">
+                  <small class="text-danger">Please enter a valid number between 0 and 100.</small>
+                </div>
+              </div>
+            </form>
+          </div>
         </c-row>
       </c-container>
-    </c-card-body>
-  </c-card>
-
-<c-card class="mt-3">
-  <c-container>
-    <c-row class="mt-3 small-card__title">
-      <h6>Confidence Level</h6>
-    </c-row>
-    <c-row class="mt-3 small-card__text">
-      <div>
-        <form #numberForm="ngForm">
-          <div class="mb-3">
-            <div class="input-group confidence-input">
-              <input id="numberInput" type="number" min="0" max="100" [ngModel]="confidenceThreshold * 100"
-                (ngModelChange)="setConfidenceThreshold($event)" name="numberInput" required
-                class="form-control form-control-sm">
-              <span class="input-group-text">%</span>
-            </div>
-            <div
-              *ngIf="numberForm.controls['numberInput']?.invalid && numberForm.controls['numberInput']?.touched">
-              <small class="text-danger">Please enter a valid number between 0 and 100.</small>
-            </div>
-          </div>
-        </form>
-      </div>
-    </c-row>
-  </c-container>
-</c-card>
+    </c-card>
 
   </c-modal-body>
   <c-modal-footer>

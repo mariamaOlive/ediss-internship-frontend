@@ -16,11 +16,13 @@ import {
   DropdownItemDirective,
   ModalModule,
   ButtonCloseDirective,
-  FormModule
+  FormModule,
+  
 } from '@coreui/angular';
 
 import { PlantService } from 'src/app/core/services/plant/plant.service';
 import { PlantItem } from 'src/app/core/models/plant';
+import { CardListComponent } from 'src/app/shared/components/card-list/card-list.component';
 
 
 @Component({
@@ -43,12 +45,13 @@ import { PlantItem } from 'src/app/core/models/plant';
     ModalModule,
     ButtonCloseDirective,
     FormModule,
-    FormsModule],
+    FormsModule, CardListComponent],
   templateUrl: './plants-list.component.html',
   styleUrl: './plants-list.component.scss'
 })
 export class PlantsListComponent implements OnInit {
   plantsList: PlantItem[] = [];
+  cardList:  Array<{ name: string, description: string, id:number}> = [];
   selectedPlant: string = "";
   confidenceThreshold: number = 0;
 
@@ -69,9 +72,28 @@ export class PlantsListComponent implements OnInit {
   // ========================
 
   loadPlants(): void {
-    this.plantsService.getAllPlants().subscribe(plants => {
+    this.plantsService.fetchAllPlants().subscribe(plants => {
       this.plantsList = plants;
+      this.cardList = this.plantsList.map( plant =>({
+        name: plant.name,
+        description: plant.address,
+        id: plant.id
+      }));
     });
+  }
+
+  
+  // ========================
+  // Modal Functions
+  // ========================
+
+  public visible = false;
+  toggleModal() {
+    this.visible = !this.visible;
+  }
+
+  handleModalChange(event: any) {
+    this.visible = event;
   }
 
   
