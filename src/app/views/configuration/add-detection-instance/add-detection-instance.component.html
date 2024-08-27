@@ -187,9 +187,20 @@
       </c-card-body>
     </c-card>
     
+    <c-container class="d-flex justify-content-end align-items-center pe-0 mb-3">
+      <button 
+        cButton 
+        color="secondary" 
+        variant="outline" 
+        class="btn-cancel me-3" 
+        (click)="navigateBack()">Cancel</button>
 
-    <c-container class="d-flex justify-content-center align-items-center">
-      <button cButton color="info" variant="outline" class="btn-add" (click)="addNewDetectionInstance()">Add</button>
+      <button 
+        cButton 
+        color="info" 
+        variant="outline" 
+        class="btn-add" 
+        (click)="addNewDetectionInstance()">Start detection</button>
     </c-container>
 
 
