@@ -21,12 +21,8 @@ export class PlantService {
   ) { }
 
 
-  // getAllPlants(): Observable<PlantItem[]> {
-  //   return of(this.dataPlant);
-  // }
-
   // HTTP request method to get all plants
-  getAllPlants(): Observable<PlantItem[]> {
+  fetchAllPlants(): Observable<PlantItem[]> {
     const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.plants}`;
     return this.http.get<PlantItem[]>(apiUrl);
   }

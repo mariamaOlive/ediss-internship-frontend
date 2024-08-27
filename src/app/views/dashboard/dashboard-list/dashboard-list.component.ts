@@ -60,7 +60,7 @@ export class DashboardListComponent implements OnInit {
   // ========================
 
   loadPlants(): void {
-    this.plantsService.getAllPlants().subscribe(plants => {
+    this.plantsService.fetchAllPlants().subscribe(plants => {
       this.plantsList = plants;
     });
   }
