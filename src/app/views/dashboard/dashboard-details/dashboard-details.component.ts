@@ -1,8 +1,8 @@
 import { Component, OnInit, inject, WritableSignal, signal, effect, HostListener } from '@angular/core';
 import { ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { CardModule, ButtonModule, GridModule, BadgeModule, FormModule, PageItemDirective, PageLinkDirective, PaginationComponent } from '@coreui/angular';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, FormsModule } from '@angular/forms';
+import { CardModule, GridModule, FormModule, PageItemDirective, PageLinkDirective, PaginationComponent, NavModule, TabsModule, ButtonDirective, ButtonGroupComponent, FormCheckLabelDirective } from '@coreui/angular';
 import { IconSetService, IconModule } from '@coreui/icons-angular';
 import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft } from '@coreui/icons';
 import { ChartjsComponent } from '@coreui/angular-chartjs';
@@ -12,9 +12,11 @@ import { DashboardChartsDataTimeLine } from './dashboard-charts-data-timeline';
 import { DashboardChartsDataDonut } from './dashboard-charts-data-donut';
 
 import { IncidentItem } from 'src/app/core/models/incident';
-import { PlantItem } from 'src/app/core/models/plant';
 import { IncidentService } from 'src/app/core/services/incident/incident.service';
+import { PlantItem } from 'src/app/core/models/plant';
 import { PlantService } from 'src/app/core/services/plant/plant.service';
+import { ZoneService } from 'src/app/core/services/zone/zone.service';
+import { ZoneItem } from 'src/app/core/models/zone';
 
 
 @Component({
@@ -31,7 +33,14 @@ import { PlantService } from 'src/app/core/services/plant/plant.service';
     PageItemDirective,
     PageLinkDirective,
     PaginationComponent,
-    RouterLink],
+    RouterLink,
+    NavModule, 
+    TabsModule,
+    ReactiveFormsModule,
+    ButtonGroupComponent,
+    FormCheckLabelDirective,
+    ButtonDirective
+  ],
   templateUrl: './dashboard-details.component.html',
   styleUrl: './dashboard-details.component.scss'
 })
@@ -42,26 +51,35 @@ export class DashboardDetailsComponent implements OnInit {
   chartsDataDonut: DashboardChartsDataDonut | null = null;
   
   // View Properties
-  incidentsList: IncidentItem[] = []
+  incidentsList: IncidentItem[] = [];
+  zoneList: ZoneItem[] = [];
   plant: PlantItem | null = null;
+  selectedZone: number | null = null;
   selectedInstanceId: string = "";
   paginatedIncidents: any = [];
   itemsPerPage = 10; // Number of items to load each time
   currentPage = 1;
 
+  formRadio1 = new UntypedFormGroup({
+    radio1: new UntypedFormControl('Radio1')
+  });
+
+
   constructor(
     private route: ActivatedRoute,
     private incidentService: IncidentService,
     private plantService: PlantService,
+    private zoneService: ZoneService,
     private location: Location,
-    public iconSet: IconSetService) {
+    public iconSet: IconSetService,
+    private formBuilder: UntypedFormBuilder) {
 
     iconSet.icons = { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft };
     this.loadMoreIncidents(); 
   }
 
   ngOnInit(): void {
-    this.loadAccidents();
+    this.loadDashboardData();
   }
 
   // ========================
@@ -121,10 +139,11 @@ export class DashboardDetailsComponent implements OnInit {
   // Service Calls
   // ========================
 
-  private loadAccidents(): void {
+  private loadDashboardData(): void {
     const plantId = this.route.snapshot.paramMap.get('id');
     if (plantId) {
       const id = parseInt(plantId, 10);
+      this.loadPlantZones(id);
       this.loadIncidentData(id);
       this.loadPlantData(id);
     }
@@ -149,6 +168,13 @@ export class DashboardDetailsComponent implements OnInit {
     });
   }
 
+  private loadPlantZones(plantId: number): void {
+    this.zoneService.fetchZonesByPlantId(plantId).subscribe({
+      next: zones => this.zoneList = zones,
+      error: err => console.error('Error fetching zone information:', err)
+    });
+  }
+
 
   // ========================
   // Utility Functions
@@ -169,6 +195,10 @@ export class DashboardDetailsComponent implements OnInit {
     const newIncidents = this.incidentsList.slice(startIndex, startIndex + this.itemsPerPage);
     this.paginatedIncidents = [...this.paginatedIncidents, ...newIncidents];
     this.currentPage++;
+  }
+
+  setRadioValue(value: string): void {
+    this.formRadio1.setValue({ radio1: value });
   }
 
 
