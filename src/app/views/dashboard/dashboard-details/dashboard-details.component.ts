@@ -54,7 +54,7 @@ export class DashboardDetailsComponent implements OnInit {
   incidentsList: IncidentItem[] = [];
   zoneList: ZoneItem[] = [];
   plant: PlantItem | null = null;
-  selectedZone: number | null = null;
+  selectedZone: number = 0;
   selectedInstanceId: string = "";
   paginatedIncidents: any = [];
   itemsPerPage = 10; // Number of items to load each time
