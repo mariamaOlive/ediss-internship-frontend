@@ -16,7 +16,7 @@ import {
 } from '@coreui/angular';
 
 import { PlantService } from 'src/app/core/services/plant/plant.service';
-import { PlantItem } from 'src/app/core/models/plant';
+import { PlantItem } from 'src/app/core/models/plant.model';
 
 
 @Component({
@@ -60,7 +60,7 @@ export class DashboardListComponent implements OnInit {
   // ========================
 
   loadPlants(): void {
-    this.plantsService.fetchAllPlants().subscribe(plants => {
+    this.plantsService.fetchPlants().subscribe(plants => {
       this.plantsList = plants;
     });
   }

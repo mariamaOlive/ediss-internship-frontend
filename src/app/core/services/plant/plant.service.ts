@@ -1,67 +1,41 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
-import { PlantItem } from '../../models/plant';
-import { mockPlants } from '../../mock-data/mock-data';
+import { PlantItem } from '../../models/plant.model';
 import { environment } from 'src/app/environments/environment';
+import { PlantUpdateRequest } from '../../models/api-requests.model';
 import { API_ENDPOINTS } from '../../config/api-endpoints';
-import { DetectionInstanceService } from '../detection-instance/detection-instance.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlantService {
 
-  private dataPlant: PlantItem[] = mockPlants;
-
   constructor(
-    private detectionService: DetectionInstanceService,
     private http: HttpClient
   ) { }
 
-
-  // HTTP request method to get all plants
-  fetchAllPlants(): Observable<PlantItem[]> {
-    const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.plants}`;
+  /**
+   * Fetch all plants based on their status (active/inactive).
+   * @param status Status of the plants to fetch ('active' or 'inactive').
+   * @returns An Observable of PlantItem array.
+   */
+  fetchPlants(status: string = 'active'): Observable<PlantItem[]> {
+    const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.plants}?plant_status=${status}`;
     return this.http.get<PlantItem[]>(apiUrl);
   }
 
-
-  getPlantById(plantId: number): Observable<PlantItem> {
-    const plant = this.dataPlant.find(item => item.id === plantId);
-    if (!plant) {
-      throw new Error(`Plant with ID ${plantId} not found`);
-    }
-    return of(plant);
+  /**
+   * Update the confidence threshold of a specific plant.
+   * @param plantId The ID of the plant to update.
+   * @param confidenceThreshold The new confidence threshold value.
+   * @returns An Observable of the update response.
+   */
+  updatePlant(plantId: number, confidenceTheshold: number): Observable<any> {
+    const updateRequest: PlantUpdateRequest = { plantConfidence: confidenceTheshold };
+    const url = `${environment.apiUrl}${API_ENDPOINTS.plants}/${plantId}`;
+    return this.http.put(url, updateRequest);
   }
-
-  // HTTP request method to get plant by ID
-  // getPlantById(plantId: number): Observable<PlantItem> {
-  //   const apiUrl = `https://api.example.com/plants/${plantId}`;
-  //   return this.http.get<PlantItem>(apiUrl);
-  // }
-
-  //TODO: Redo the whole function
-  getPlantByIdWithZone(plantId: number): Observable<PlantItem> {
-    const plant = this.dataPlant.find(item => item.id === plantId);
-    if (!plant) {
-      throw new Error(`Plant with ID ${plantId} not found`);
-    }
-    this.detectionService.fetchDetectionInstanceByZoneId(plantId).subscribe({
-      next: detectionInstances => {
-        plant.detectionInstances = detectionInstances;
-      },
-      error: err => {
-        console.error('Error fetching detection instances:', err);
-      }
-    });
-    return of(plant);
-  }
-
-  // HTTP request method to get plant by ID with its detection instances
-  // getPlantByIdWithZone(plantId: number): Observable<PlantItem> {
-  //   const apiUrl = `https://api.example.com/plants/${plantId}/with-detection-instances`;
-  //   return this.http.get<PlantItem>(apiUrl);
-  // }
 }

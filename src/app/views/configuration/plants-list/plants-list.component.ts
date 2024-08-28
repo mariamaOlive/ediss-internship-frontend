@@ -14,10 +14,11 @@ import {
   ButtonDirective,
   FormModule
 } from '@coreui/angular';
+import { finalize } from 'rxjs/operators';
 
 import { CardListComponent } from 'src/app/shared/components/card-list/card-list.component';
 
-import { PlantItem } from 'src/app/core/models/plant';
+import { PlantItem } from 'src/app/core/models/plant.model';
 import { PlantService } from 'src/app/core/services/plant/plant.service';
 
 
@@ -28,7 +29,7 @@ import { PlantService } from 'src/app/core/services/plant/plant.service';
   imports: [
     RouterModule,
     CommonModule,
-    GridModule, 
+    GridModule,
     CardModule,
     TemplateIdDirective,
     IconDirective,
@@ -45,12 +46,13 @@ import { PlantService } from 'src/app/core/services/plant/plant.service';
   styleUrl: './plants-list.component.scss'
 })
 export class PlantsListComponent implements OnInit {
-  plantsList: PlantItem[] = [];
-  cardList:  Array<{ name: string, description: string, id:number}> = [];
+  plantsListActive: PlantItem[] = [];
+  plantsListInactive: PlantItem[] = [];
+  cardList: Array<{ name: string, description: string, id: number }> = [];
   selectedPlant: string = "";
   confidenceThreshold: number = 0;
 
-  constructor( private router: Router, private plantsService: PlantService) { }
+  constructor(private router: Router, private plantsService: PlantService) { }
 
 
   // ========================
@@ -58,18 +60,18 @@ export class PlantsListComponent implements OnInit {
   // ========================
 
   ngOnInit(): void {
-    this.loadPlants();
+    this.loadActivePlants();
   }
 
 
   // ========================
   // Service Calls
   // ========================
-
-  loadPlants(): void {
-    this.plantsService.fetchAllPlants().subscribe(plants => {
-      this.plantsList = plants;
-      this.cardList = this.plantsList.map( plant =>({
+  
+  loadActivePlants(): void {
+    this.plantsService.fetchPlants().subscribe(plants => {
+      this.plantsListActive = plants;
+      this.cardList = this.plantsListActive.map(plant => ({
         name: plant.name,
         description: plant.address,
         id: plant.id
@@ -77,14 +79,40 @@ export class PlantsListComponent implements OnInit {
     });
   }
 
-  
+  loadInactivePlants(): void {
+    this.plantsService.fetchPlants('inactive').subscribe(
+      plants => {
+        this.plantsListInactive = plants
+        this.visible = !this.visible;
+      });
+  }
+
+
+  updatePlant(): void {
+    this.plantsService.updatePlant(parseInt(this.selectedPlant), this.confidenceThreshold).pipe(
+      finalize(() => {
+        this.loadActivePlants();  
+        this.visible = !this.visible;
+      })
+    ).subscribe({
+      next: (response) => {
+        console.log('Plant confidence updated successfully:', response);
+      },
+      error: (error) => {
+        console.error('Error updating plant confidence:', error);
+      }
+    });
+  }
+
+
   // ========================
   // Modal Functions
   // ========================
 
   public visible = false;
   toggleModal() {
-    this.visible = !this.visible;
+    this.loadInactivePlants();
+    this.resetForm();
   }
 
   handleModalChange(event: any) {
@@ -107,5 +135,9 @@ export class PlantsListComponent implements OnInit {
 
   setConfidenceThreshold(value: number): void {
     this.confidenceThreshold = parseFloat((value / 100).toFixed(2));
+  }
+
+  resetForm(): void {
+    this.selectedPlant = ''; // Reset the zone name
   }
 }

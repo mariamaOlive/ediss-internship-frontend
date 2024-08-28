@@ -12,7 +12,7 @@ import { CameraItem } from 'src/app/core/models/camera';
 import { CameraService } from 'src/app/core/services/camera/camera.service';
 import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
 import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
-import { PlantItem } from 'src/app/core/models/plant';
+import { PlantItem } from 'src/app/core/models/plant.model';
 import { PlantService } from 'src/app/core/services/plant/plant.service';
 import { ZoneItem } from 'src/app/core/models/zone';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';

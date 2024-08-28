@@ -13,7 +13,7 @@ import { DashboardChartsDataDonut } from './dashboard-charts-data-donut';
 
 import { IncidentItem } from 'src/app/core/models/incident';
 import { IncidentService } from 'src/app/core/services/incident/incident.service';
-import { PlantItem } from 'src/app/core/models/plant';
+import { PlantItem } from 'src/app/core/models/plant.model';
 import { PlantService } from 'src/app/core/services/plant/plant.service';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
 import { ZoneItem } from 'src/app/core/models/zone';
@@ -145,7 +145,7 @@ export class DashboardDetailsComponent implements OnInit {
       const id = parseInt(plantId, 10);
       this.loadPlantZones(id);
       this.loadIncidentData(id);
-      this.loadPlantData(id);
+      // this.loadPlantData(id);
     }
   }
 
@@ -161,12 +161,12 @@ export class DashboardDetailsComponent implements OnInit {
     });
   }
 
-  private loadPlantData(plantId: number): void {
-    this.plantService.getPlantByIdWithZone(plantId).subscribe({
-      next: plant => this.plant = plant,
-      error: err => console.error('Error fetching plant information:', err)
-    });
-  }
+  // private loadPlantData(plantId: number): void {
+  //   this.plantService.getPlantByIdWithZone(plantId).subscribe({
+  //     next: plant => this.plant = plant,
+  //     error: err => console.error('Error fetching plant information:', err)
+  //   });
+  // }
 
   private loadPlantZones(plantId: number): void {
     this.zoneService.fetchZonesByPlantId(plantId).subscribe({

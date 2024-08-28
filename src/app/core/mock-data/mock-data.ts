@@ -1,7 +1,7 @@
 import { AssigneeItem } from '../models/assignee';
 import { CameraItem } from '../models/camera';
 import { DetectionInstanceItem } from '../models/detection-instance';
-import { PlantItem } from '../models/plant';
+import { PlantItem } from '../models/plant.model';
 import { ZoneItem } from '../models/zone';
 
 export const mockAssignees: AssigneeItem[] = [
@@ -12,9 +12,9 @@ export const mockAssignees: AssigneeItem[] = [
 ];
 
 export const mockPlants: PlantItem[] = [
-  { name: "Plant 1", id: 1, address: "Italy", plantConfidence: 0.5, detectionInstances: [] },
-  { name: "Plant 2", id: 2, address: "Italy", plantConfidence: 0.6, detectionInstances: [] },
-  { name: "Plant 3", id: 3, address: "Italy", plantConfidence: 0.7, detectionInstances: [] }
+  { name: "Plant 1", id: 1, address: "Italy", plantConfidence: 0.5, plantstatus: true },
+  { name: "Plant 2", id: 2, address: "Italy", plantConfidence: 0.6, plantstatus: true },
+  { name: "Plant 3", id: 3, address: "Italy", plantConfidence: 0.7, plantstatus: true }
 ];
 
 
