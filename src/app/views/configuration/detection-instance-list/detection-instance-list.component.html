@@ -9,13 +9,13 @@
     <c-row class="g-4">
       <c-col sm="6" xl="3" *ngFor="let detectionInstance of detectionInstanceList">
           <c-card class="card-container mb-3 p-0 shadow-sm" (click)="navigateToDetectionInstance(detectionInstance.id)">
-            <div class="card-container-top">
+            <div class="card-container-top position-relative">
               <span class="ms-3 mt-3 align-middle status-bubble"
                 [ngClass]="{'bg-success': detectionInstance?.isRunning, 'bg-danger': !detectionInstance?.isRunning}"
                 [cTooltip]="detectionInstance?.isRunning ? 'Running' : 'Paused'" cTooltipPlacement="right">
               </span>
-  
-            <!-- DropDown -->
+            
+              <!-- DropDown -->
               <c-dropdown alignment="end" variant="btn-group" class="position-absolute top-0 end-0 m-2">
                 <button [caret]="false" cButton cDropdownToggle class="p-0" color="transparent" aria-label="Open dropdown"
                 (click)="$event.stopPropagation()">
@@ -25,6 +25,10 @@
                   <li><a [routerLink]="[]" cDropdownItem (click)="deleteDetectionInstance(detectionInstance.id); $event.stopPropagation()">Delete</a></li>
                 </ul>
               </c-dropdown>
+            
+              <button cButton variant="outline"  color="danger" class="position-absolute bottom-0 end-0 m-2" (click)="stopDetectionInstance(detectionInstance.id); $event.stopPropagation()">
+                stop
+              </button>
             </div>
   
             <!-- Card body -->

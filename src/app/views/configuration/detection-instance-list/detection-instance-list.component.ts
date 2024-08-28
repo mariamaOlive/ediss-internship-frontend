@@ -126,4 +126,13 @@ export class DetectionInstanceListComponent implements OnInit {
     this.location.back();
   }
 
+
+  // ========================
+  // Utilities Functions
+  // ========================
+
+  stopDetectionInstance(detectionInstanceId: number){
+
+  }
+
 }
