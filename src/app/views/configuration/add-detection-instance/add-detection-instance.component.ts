@@ -8,12 +8,8 @@ import { CardModule, ButtonModule, GridModule, BadgeModule, FormModule } from '@
 import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft } from '@coreui/icons';
 import { IconSetService, IconModule } from '@coreui/icons-angular';
 
-import { CameraItem } from 'src/app/core/models/camera';
-import { CameraService } from 'src/app/core/services/camera/camera.service';
-import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
 import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
-import { PlantItem } from 'src/app/core/models/plant.model';
-import { PlantService } from 'src/app/core/services/plant/plant.service';
+import { DetectionTypeItem } from 'src/app/core/models/detection-instance';
 import { ZoneItem } from 'src/app/core/models/zone';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
 import { DataTransferService } from 'src/app/core/services/data-transfer/data-transfer.service';
@@ -45,6 +41,7 @@ export class AddDetectionInstanceComponent implements OnInit {
 
   // Template Properties
   zone: ZoneItem | undefined = undefined;
+  detectionTypesList: DetectionTypeItem[] | undefined = undefined;
 
   dropdownListObjects: { item_id: number, item_text: string }[] = [];
   dropdownSettingsObjects = {};
@@ -53,7 +50,7 @@ export class AddDetectionInstanceComponent implements OnInit {
   confidenceThreshold: number = 0;
   detectionInstanceName: string = '';
   forkliftDistance: number = 0;
-  selectedDetectionType: string = "1";
+  selectedDetectionType: number = 1;
   selectedItemsObjects: any[] = [];
   selectedCameraId: number | undefined = undefined;
   // selectedItemsCameras: any[] = [];
@@ -63,7 +60,6 @@ export class AddDetectionInstanceComponent implements OnInit {
     private location: Location,
     private detectionService: DetectionInstanceService,
     private zoneService: ZoneService,
-    private cameraService: CameraService,
     public iconSet: IconSetService,
     private dataTransferService: DataTransferService
   ) {
@@ -77,6 +73,7 @@ export class AddDetectionInstanceComponent implements OnInit {
 
   ngOnInit() {
     this.getZoneInfo();
+    this.getDetectionTypes();
     this.loadMultiSelectorObjectDetection();
   }
 
@@ -113,6 +110,13 @@ export class AddDetectionInstanceComponent implements OnInit {
         console.error('Error adding zone:', err);
       }
     });
+  }
+
+  private getDetectionTypes(): void {
+    this.detectionService.fetchDetectionTypes().subscribe({
+      next: detectionTypes => this.detectionTypesList = detectionTypes,
+      error: err => console.error('Error fetching assignees:', err)
+    })
   }
 
   private getZoneInfo(): void {

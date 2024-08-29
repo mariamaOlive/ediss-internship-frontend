@@ -112,7 +112,7 @@
           </c-row>
 
           <!-- Detection type -->
-          <c-row>
+          <!-- <c-row>
             <p class="mb-1">Detection type</p>
             <div class="d-flex flex-wrap">
               <c-form-check>
@@ -131,10 +131,21 @@
                 <label cFormCheckLabel>Forklift Detection</label>
               </c-form-check>
             </div>
-          </c-row>
+          </c-row> -->
 
+          <c-row>
+            <p class="mb-1">Detection type</p>
+            <div class="d-flex flex-wrap">
+              <c-form-check *ngFor="let type of detectionTypesList; let i = index" [class.ms-4]="i !== 0">
+                <input cFormCheckInput type="radio" [value]="type.id" name="flexRadioDefault"
+                  [(ngModel)]="selectedDetectionType" />
+                <label cFormCheckLabel>{{ type.name }}</label>
+              </c-form-check>
+            </div>
+          </c-row>
+          
           <!-- Form PPE -->
-          <c-row class="mt-4" *ngIf="selectedDetectionType === '1'">
+          <c-row class="mt-4" *ngIf="selectedDetectionType === 1">
             <p class="mb-1">PPE Detection</p>
             <div class="d-flex flex-wrap">
               <div class="container__multiselect">
@@ -144,6 +155,7 @@
               </div>
             </div>
           </c-row>
+          
 
           <!-- <c-row class="mt-4" *ngIf="selectedDetectionType === '3'">
             <p class="mb-1">Fork Lift Minimum Distance</p>

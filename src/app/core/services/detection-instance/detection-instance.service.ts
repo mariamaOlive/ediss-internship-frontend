@@ -71,7 +71,7 @@ export class DetectionInstanceService {
   }
 
 
-  private fetchDetectionTypes(): Observable<DetectionTypeItem[]> {
+  fetchDetectionTypes(): Observable<DetectionTypeItem[]> {
     if (this.detectionTypesCache) {
       // Return cached detection types
       return of(this.detectionTypesCache);
