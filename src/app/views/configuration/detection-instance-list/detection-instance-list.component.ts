@@ -97,7 +97,7 @@ export class DetectionInstanceListComponent implements OnInit {
     });
   } 
 
-  deleteDetectionInstance(detectionInstanceId: number): void {
+  deleteDetectionInstance(detectionInstanceId?: number): void {
     this.detectionService.deleteDetectionInstance(detectionInstanceId).subscribe({
       next: () => {
         //TODO: Change logic when connect to server
@@ -113,7 +113,7 @@ export class DetectionInstanceListComponent implements OnInit {
   // Navigation Functions
   // ========================
 
-  navigateToDetectionInstance(detectionInstanceId: number): void {
+  navigateToDetectionInstance(detectionInstanceId?: number): void {
     this.router.navigate([`configuration/plants/${this.plantId}/zones/${this.zoneId}/detection-instance/${detectionInstanceId}`]);
   }
 
@@ -131,7 +131,7 @@ export class DetectionInstanceListComponent implements OnInit {
   // Utilities Functions
   // ========================
 
-  stopDetectionInstance(detectionInstanceId: number){
+  stopDetectionInstance(detectionInstanceId?: number){
 
   }
 

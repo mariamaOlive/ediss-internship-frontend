@@ -128,7 +128,7 @@
               <c-form-check class="ms-4">
                 <input cFormCheckInput type="radio" value="3" name="flexRadioDefault"
                   [(ngModel)]="selectedDetectionType" />
-                <label cFormCheckLabel>Fork Lift Detection</label>
+                <label cFormCheckLabel>Forklift Detection</label>
               </c-form-check>
             </div>
           </c-row>
@@ -145,7 +145,7 @@
             </div>
           </c-row>
 
-          <c-row class="mt-4" *ngIf="selectedDetectionType === '3'">
+          <!-- <c-row class="mt-4" *ngIf="selectedDetectionType === '3'">
             <p class="mb-1">Fork Lift Minimum Distance</p>
             <div class="d-flex flex-wrap">
               <form cForm class="p-0">
@@ -156,7 +156,7 @@
                 </div>
               </form>
             </div>
-          </c-row>
+          </c-row> -->
 
         </c-container>
       </c-card-body>
@@ -170,7 +170,7 @@
             <h6>Cameras</h6>
           </c-row>
           <c-row class="mt-4">
-            <div *ngFor="let camera of zone.cameras" class="d-flex align-items-center mb-2">
+            <div *ngFor="let camera of zone?.cameras" class="d-flex align-items-center mb-2">
               <c-form-check>
                 <input 
                   cFormCheckInput 
@@ -179,7 +179,7 @@
                   name="flexRadioDefaultCamera" 
                   [(ngModel)]="selectedCameraId" 
                 />
-                <label cFormCheckLabel>{{ camera.name }} - {{ camera.ipAddress }}</label>
+                <label cFormCheckLabel>{{ camera.name }} - {{ camera.ipaddress }}</label>
               </c-form-check>
             </div>
           </c-row>

@@ -1,5 +1,4 @@
 export const API_ENDPOINTS = {
-   
     plants: '/plants',
     zones: '/zones',
     assignees: '/assignees',
@@ -8,10 +7,4 @@ export const API_ENDPOINTS = {
     detection: '/detection',
     scenarios: '/scenario',
     cameras: '/cameras',
-    
-
-
-    incidents: '/incidents',
-    
-    // ...
 };

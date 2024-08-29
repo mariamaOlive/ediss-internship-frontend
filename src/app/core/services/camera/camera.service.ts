@@ -16,21 +16,13 @@ export class CameraService {
 
   constructor(private http: HttpClient) { }
 
-  // TODO: Remove after connecting to API
-  getAllCameras(): Observable<CameraItem[]> {
-    return of(this.dataCameras);
-  }
+  // // TODO: Remove after connecting to API
+  // fetchAllCameras(): Observable<CameraItem[]> {
+  //   return of(this.dataCameras);
+  // }
 
-  fetchCameraById(cameraId: number): Observable<CameraItem> {
+  fetchCameraById(cameraId?: number): Observable<CameraItem> {
     const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.cameras}/${cameraId}`;
     return this.http.get<CameraItem>(apiUrl);
   }
-
-
-  // TODO: API request
-  // getAllCameras(): Observable<CameraItem[]> {
-  //   const apiUrl = 'https://api.example.com/cameras'; // Replace with your actual API endpoint
-  //   return this.http.get<CameraItem[]>(apiUrl);
-  // }
-
 }

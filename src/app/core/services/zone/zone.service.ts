@@ -13,8 +13,6 @@ import { ZoneCreateRequest } from '../../models/api-requests.model';
 })
 export class ZoneService {
 
-  private dataZone: ZoneItem[] = mockZones;
-
   constructor(private http: HttpClient) { }
 
   // HTTP request method to add a zone
@@ -23,7 +21,8 @@ export class ZoneService {
     return this.http.post<any>(apiUrl, newZone);
   }
 
-  fetchZoneById(zoneId: number): Observable<ZoneItem> {
+  // HTTP request method to get zone by its ID
+  fetchZoneById(zoneId?: number): Observable<ZoneItem> {
     const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.zones}/${zoneId}`;
     return this.http.get<ZoneItem>(apiUrl);
   }

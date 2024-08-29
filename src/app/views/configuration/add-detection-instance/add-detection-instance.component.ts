@@ -17,6 +17,8 @@ import { PlantService } from 'src/app/core/services/plant/plant.service';
 import { ZoneItem } from 'src/app/core/models/zone';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
 import { DataTransferService } from 'src/app/core/services/data-transfer/data-transfer.service';
+import { DetectionInstanceRequest, Recording } from 'src/app/core/models/api-requests.model';
+import { ScenarioItem } from 'src/app/core/models/scenario.model';
 
 
 
@@ -42,7 +44,7 @@ import { DataTransferService } from 'src/app/core/services/data-transfer/data-tr
 export class AddDetectionInstanceComponent implements OnInit {
 
   // Template Properties
-  zone: any = {};
+  zone: ZoneItem | undefined = undefined;
 
   dropdownListObjects: { item_id: number, item_text: string }[] = [];
   dropdownSettingsObjects = {};
@@ -53,7 +55,7 @@ export class AddDetectionInstanceComponent implements OnInit {
   forkliftDistance: number = 0;
   selectedDetectionType: string = "1";
   selectedItemsObjects: any[] = [];
-  selectedCameraId: number | null = null;
+  selectedCameraId: number | undefined = undefined;
   // selectedItemsCameras: any[] = [];
 
   constructor(
@@ -82,6 +84,37 @@ export class AddDetectionInstanceComponent implements OnInit {
   // Service Calls
   // ========================
 
+  addNewDetectionInstance(): void {
+
+    let mappedObjects = this.selectedItemsObjects.map(item => {
+      return {id: item.item_id, name: item.item_text, description: ""};
+    });
+
+    const newDetectionInstance: DetectionInstanceRequest = {
+      recording: {
+        name: this.detectionInstanceName,
+        zone_id: this.zone?.id,
+        assignee_id: this.zone?.assignee_id,
+        confidence: this.confidenceThreshold,
+        detection_type_id: 1,
+        camera_id: this.selectedCameraId,
+        status: true,
+      }, 
+      scenarios: mappedObjects
+    };
+
+    debugger
+    this.detectionService.addDetectionInstance(newDetectionInstance).subscribe({
+      next: () => {
+        console.log('Zone added successfully');
+        this.location.back();
+      },
+      error: err => {
+        console.error('Error adding zone:', err);
+      }
+    });
+  }
+
   private getZoneInfo(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const zoneId = params.get('zoneId');
@@ -89,7 +122,8 @@ export class AddDetectionInstanceComponent implements OnInit {
         this.zoneService.fetchZoneById(parseInt(zoneId)).subscribe({
           next: zone => {
             this.zone = zone;
-            this.confidenceThreshold = this.zone.confidenceThreshold;
+            this.confidenceThreshold = this.zone.zoneconfidence;
+            debugger
           },
           error: err => console.error('Error fetching zones:', err)
         });
@@ -129,40 +163,6 @@ export class AddDetectionInstanceComponent implements OnInit {
     this.dropdownSettingsObjects = this.loadMultiSelector();
   }
 
-
-  // ========================
-  // Detection Instance Management
-  // ========================
-
-  addNewDetectionInstance(): void {
-
-    //TODO: Remove part of this code when connected to the server
-    // let mappedCameras = this.selectedItemsCameras.map(item => item.item_id);
-    // let filteredCameras = this.cameras.filter((item: { id: any; }) => mappedCameras.includes(item.id));
-    let mappedObjects = this.selectedItemsObjects.map(item => item.item_text);
-
-    const newDetectionInstance: DetectionInstanceItem = {
-      name: this.detectionInstanceName,
-      id: Math.floor(Math.random() * 100001),
-      assignee: this.zone.assigneeId,
-      confidenceTheshold: this.confidenceThreshold,
-      detectionType: {id:0, name:"", description:""},
-      classesDetection: mappedObjects,
-      camera: { name: "Camera 1", id: 1, ipaddress: "187.20.135.197" },
-      isRunning: true,
-      timeElapsed: 0
-    };
-
-    this.detectionService.addDetectionInstance(newDetectionInstance).subscribe({
-      next: () => {
-        console.log('Zone added successfully');
-        this.location.back();
-      },
-      error: err => {
-        console.error('Error adding zone:', err);
-      }
-    });
-  }
 
   // ========================
   // Utility Functions

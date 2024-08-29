@@ -5,14 +5,14 @@ import { ZoneItem } from "./zone";
 
 export interface DetectionInstanceItem {
     name: string;
-    id: number;
+    id?: number;
     zone?: ZoneItem;
     detectionType?: DetectionTypeItem;
     confidenceTheshold: number;
     assignee?: AssigneeItem;
     classesDetection?: ScenarioItem[];
     camera?: CameraItem;
-    isRunning: boolean;
+    isRunning?: boolean;
     timeElapsed?: number;
 }
 

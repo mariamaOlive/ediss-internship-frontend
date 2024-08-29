@@ -32,17 +32,17 @@ export interface ZoneCreateRequest {
 // ========================
 
 export interface Recording {
-  id: number;
+  id?: number;
   name: string;
-  zone_id: number;
-  assignee_id: number;
+  zone_id?: number;
+  assignee_id?: number;
   detection_type_id: number;
-  starttime: string; 
-  endtime: string;    
-  status: boolean;
+  starttime?: string; 
+  endtime?: string;    
+  status?: boolean;
   confidence: number;
-  task_id: string;
-  camera_id: number;
+  task_id?: string;
+  camera_id?: number;
 }
 
 export interface DetectionInstanceRequest {
