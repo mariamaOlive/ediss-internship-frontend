@@ -95,7 +95,7 @@ export class AddDetectionInstanceComponent implements OnInit {
         zone_id: this.zone?.id,
         assignee_id: this.zone?.assignee_id,
         confidence: Math.round(this.confidenceThreshold*100),
-        detection_type: 1,
+        detection_type: this.selectedDetectionType,
         camera_id: this.selectedCameraId,
         status: true,
       }, 
