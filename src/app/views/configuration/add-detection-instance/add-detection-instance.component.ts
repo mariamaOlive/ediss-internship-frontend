@@ -9,6 +9,7 @@ import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft } from '@coreui/ico
 import { IconSetService, IconModule } from '@coreui/icons-angular';
 
 import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
+import { ScenarioService } from 'src/app/core/services/scenario/scenario.service'
 import { DetectionTypeItem } from 'src/app/core/models/detection-instance';
 import { ZoneItem } from 'src/app/core/models/zone';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
@@ -61,6 +62,7 @@ export class AddDetectionInstanceComponent implements OnInit {
     private detectionService: DetectionInstanceService,
     private zoneService: ZoneService,
     public iconSet: IconSetService,
+    private scenarioService: ScenarioService,
     private dataTransferService: DataTransferService
   ) {
     iconSet.icons = { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft };
@@ -74,7 +76,7 @@ export class AddDetectionInstanceComponent implements OnInit {
   ngOnInit() {
     this.getZoneInfo();
     this.getDetectionTypes();
-    this.loadMultiSelectorObjectDetection();
+    this.getScenarios();
   }
 
   // ========================
@@ -100,7 +102,6 @@ export class AddDetectionInstanceComponent implements OnInit {
       scenarios: mappedObjects
     };
 
-    debugger
     this.detectionService.addDetectionInstance(newDetectionInstance).subscribe({
       next: () => {
         console.log('Zone added successfully');
@@ -119,6 +120,16 @@ export class AddDetectionInstanceComponent implements OnInit {
     })
   }
 
+  private getScenarios(): void {
+    this.scenarioService.fetchScenarios().subscribe({
+      next: scenarios => {
+        const scenariosList = scenarios
+        this.loadMultiSelectorObjectDetection(scenariosList);
+      },
+      error: err => console.error('Error fetching assignees:', err)
+    })
+  }
+
   private getZoneInfo(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const zoneId = params.get('zoneId');
@@ -127,7 +138,6 @@ export class AddDetectionInstanceComponent implements OnInit {
           next: zone => {
             this.zone = zone;
             this.confidenceThreshold = this.zone.zoneconfidence;
-            debugger
           },
           error: err => console.error('Error fetching zones:', err)
         });
@@ -153,15 +163,12 @@ export class AddDetectionInstanceComponent implements OnInit {
     };
   }
 
-  private loadMultiSelectorObjectDetection(): void {
-    //TODO: Get list of items dynamically
-    this.dropdownListObjects = [
-      { item_id: 1, item_text: 'Helmet' },
-      { item_id: 2, item_text: 'Hair Net' },
-      { item_id: 3, item_text: 'Goggles' },
-      { item_id: 4, item_text: 'Vest' },
-      { item_id: 5, item_text: 'Earplugs' }
-    ];
+  private loadMultiSelectorObjectDetection(scenarios: ScenarioItem[]): void {
+    
+    this.dropdownListObjects = scenarios.map(scenario => ({
+      item_id: scenario.id,
+      item_text: scenario.name
+    }));
 
     this.selectedItemsObjects = [];
     this.dropdownSettingsObjects = this.loadMultiSelector();

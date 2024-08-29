@@ -12,7 +12,7 @@ export class ScenarioService {
 
   constructor(private http: HttpClient) { }
 
-  fetchPlants(): Observable<ScenarioItem[]> {
+  fetchScenarios(): Observable<ScenarioItem[]> {
     const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.scenarios}`;
     return this.http.get<ScenarioItem[]>(apiUrl);
   }
