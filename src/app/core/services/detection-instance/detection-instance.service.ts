@@ -26,6 +26,11 @@ export class DetectionInstanceService {
 
   constructor(private http: HttpClient, private assigneeService: AssigneeService, private zoneService: ZoneService, private cameraService: CameraService) {}
 
+  addDetectionInstance(newDetectionInstance: CreateDetectionInstanceRequest): Observable<any> {
+    const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.detection}/start`;
+    return this.http.post<any>(apiUrl, newDetectionInstance);
+  }
+
   fetchDetectionInstancesByZoneId(zoneId: number): Observable<DetectionInstanceItem[]> {
     const detectionInstancesUrl = `${environment.apiUrl}${API_ENDPOINTS.zones}${API_ENDPOINTS.detectionInstances}/${zoneId}`;
     
@@ -70,7 +75,6 @@ export class DetectionInstanceService {
     );
   }
 
-
   fetchDetectionTypes(): Observable<DetectionTypeItem[]> {
     if (this.detectionTypesCache) {
       // Return cached detection types
@@ -83,12 +87,10 @@ export class DetectionInstanceService {
     }
   }
 
-
-  addDetectionInstance(newDetectionInstance: CreateDetectionInstanceRequest): Observable<any> {
-    const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.detection}/start`;
-    return this.http.post<any>(apiUrl, newDetectionInstance);
-  }
-
+  stopDetectionInstance(instanceId?: number): Observable<any> {
+    const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.detection}/stop/${instanceId}`;
+    return this.http.post(apiUrl, {});
+  } 
 
   private mapToDetectionInstance(
     item: DetectionInstanceRequest, 
@@ -109,23 +111,6 @@ export class DetectionInstanceService {
       assignee: assignee ?? undefined  // Default to undefined if not provided
     };
   }
-
-
-  // addDetectionInstance(newDetectionInstance: DetectionInstanceItem): Observable<boolean> {
-  //   const existingZone = this.dataDetection.find(zone => zone.id === newDetectionInstance.id);
-  //   if (existingZone) {
-  //     console.error(`Zone with ID ${newDetectionInstance.id} already exists.`);
-  //     return of(false); // Return false indicating failure to add
-  //   } else {
-  //     this.dataDetection.push(newDetectionInstance);
-  //     console.log(`Zone with ID ${newDetectionInstance.id} added.`);
-  //     return of(true); // Return true indicating success
-  //   }
-  // }
-
-  // HTTP request method to add a detection instance
-
-
 
   deleteDetectionInstance(zoneId?: number): Observable<boolean> {
     const index = this.dataDetection.findIndex(zone => zone.id === zoneId);

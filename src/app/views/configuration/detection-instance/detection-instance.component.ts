@@ -8,7 +8,6 @@ import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft } from '@coreui/ico
 import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
 import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
 import { ZoneItem } from 'src/app/core/models/zone';
-import { ZoneService } from 'src/app/core/services/zone/zone.service';
 
 
 
@@ -27,7 +26,6 @@ export class DetectionInstanceComponent {
 
   constructor(
     private detectionService: DetectionInstanceService, 
-    private zoneService: ZoneService, 
     private route: ActivatedRoute, 
     public iconSet: IconSetService, 
     private location: Location) { 
@@ -58,6 +56,17 @@ export class DetectionInstanceComponent {
         });
       }
     })
+  }
+
+  stopInstance(): void {
+    this.detectionService.stopDetectionInstance(this.detectionInstance?.id).subscribe({
+      next: response => {
+        console.log('Instance stopped successfully:', response);
+      },
+      error: err => {
+        console.error('Error stopping instance:', err);
+      }
+    });
   }
 
 
