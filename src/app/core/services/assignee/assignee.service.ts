@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { AssigneeItem } from '../../models/assignee';
 import { mockAssignees } from '../../mock-data/mock-data';
-// import { environment } from '../../config/environment';
+import { environment } from 'src/app/environments/environment';
 import { API_ENDPOINTS } from '../../config/api-endpoints';
 
 @Injectable({
@@ -17,14 +17,9 @@ export class AssigneeService {
 
   constructor(private http: HttpClient) { }
 
-  
-  getAllAssignees(): Observable<AssigneeItem[]> {
-    return of(this.dataAssignees);
+  // HTTP request method to get all assignees
+  fetchAllAssignees(): Observable<AssigneeItem[]> {
+    const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.assignees}`; // Replace API endpoint
+    return this.http.get<AssigneeItem[]>(apiUrl);
   }
-
-  // TODO: Move to this implementation
-  // getAllAssignees(): Observable<Assignee[]> {
-  //   const apiUrl = 'https://api.example.com/assignees'; // Replace API endpoint
-  //   return this.http.get<Assignee[]>(apiUrl);
-  // }
 }

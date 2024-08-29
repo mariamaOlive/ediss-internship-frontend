@@ -1,10 +1,14 @@
 import { CameraItem } from "./camera";
 
 export interface ZoneItem {
-    name: string;
+    title: string;
     id: number;
-    plantId: number;
+    description: string;
+    plant_id: number;
     cameras: CameraItem[];
-    assigneeId: number;
-    confidenceThreshold: number;
+    assignee_id: number;
+    zoneconfidence: number;
+    zonestatus: string;
 }
+
+

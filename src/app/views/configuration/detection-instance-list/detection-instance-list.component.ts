@@ -85,7 +85,7 @@ export class DetectionInstanceListComponent implements OnInit {
       if (plantId && zoneId) {
         this.zoneId = zoneId;
         this.plantId = plantId;
-        this.detectionService.fetchDetectionInstanceByZoneId(parseInt(zoneId, 10)).subscribe({
+        this.detectionService.fetchDetectionInstancesByZoneId(parseInt(zoneId, 10)).subscribe({
           next: detectionInstances => {
             this.detectionInstanceList = detectionInstances;
           },

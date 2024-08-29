@@ -4,7 +4,9 @@ import { HttpClient } from '@angular/common/http';
 
 import { ZoneItem } from '../../models/zone';
 import { mockZones } from '../../mock-data/mock-data';
+import { environment } from 'src/app/environments/environment';
 import { API_ENDPOINTS } from '../../config/api-endpoints';
+import { ZoneCreateRequest } from '../../models/api-requests.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,47 +17,20 @@ export class ZoneService {
 
   constructor(private http: HttpClient) { }
 
-  addZone(newZone: ZoneItem): Observable<boolean> {
-    const existingZone = this.dataZone.find(zone => zone.id === newZone.id);
-    if (existingZone) {
-      console.error(`Zone with ID ${newZone.id} already exists.`);
-      return of(false); // Return false indicating failure to add
-    } else {
-      this.dataZone.push(newZone);
-      console.log(`Zone with ID ${newZone.id} added.`);
-      return of(true); // Return true indicating success
-    }
-  }
-
   // HTTP request method to add a zone
-  // addZone(newZone: ZoneItem): Observable<boolean> {
-  //   const apiUrl = `https://api.example.com/detection-instances`;
-  //   return this.http.post<boolean>(apiUrl, newDetectionInstance);
-  // }
-
-  getZoneById(zoneId: number): Observable<ZoneItem> {
-    const zoneItem = this.dataZone.find(item => item.id === zoneId);
-    if (zoneItem) {
-      return of(zoneItem);
-    } else {
-      return throwError(() => new Error('Zone not found'));
-    }
+  addZone(newZone: ZoneCreateRequest): Observable<any> {
+    const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.zones}`;
+    return this.http.post<any>(apiUrl, newZone);
   }
 
-  // HTTP request method to get zone by ID
-  // getZoneById(zoneId: number): Observable<ZoneItem> {
-  //   const apiUrl = `https://api.example.com/zones/${zoneId}`;
-  //   return this.http.get<ZoneItem>(apiUrl);
-  // }
-
-  // Mock method to get zones by plant ID
-  fetchZonesByPlantId(plantId: number): Observable<ZoneItem[]> {
-    return of(this.dataZone.filter(item => item.plantId === plantId));
+  fetchZoneById(zoneId: number): Observable<ZoneItem> {
+    const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.zones}/${zoneId}`;
+    return this.http.get<ZoneItem>(apiUrl);
   }
 
   // HTTP request method to get zones by plant ID
-  // getZoneByPlantId(plantId: number): Observable<ZoneItem[]> {
-  //   const apiUrl = `https://api.example.com/plants/${plantId}/zones`;
-  //   return this.http.get<ZoneItem[]>(apiUrl);
-  // }
+  fetchZonesByPlantId(plantId: number): Observable<ZoneItem[]> {
+    const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.plants}${API_ENDPOINTS.zones}/${plantId}?zone_status=active`;
+    return this.http.get<ZoneItem[]>(apiUrl);
+  }
 }

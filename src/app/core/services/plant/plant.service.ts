@@ -3,8 +3,8 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 import { PlantItem } from '../../models/plant.model';
-import { environment } from 'src/app/environments/environment';
 import { PlantUpdateRequest } from '../../models/api-requests.model';
+import { environment } from 'src/app/environments/environment';
 import { API_ENDPOINTS } from '../../config/api-endpoints';
 
 

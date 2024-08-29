@@ -23,7 +23,7 @@
         <select class="select-filter-zone" aria-label="Filter by zone" cSelect [(ngModel)]="selectedZone">
           <option value=0>All zones</option>
           <option *ngFor="let zone of zoneList" [value]="zone.id">
-            {{ zone.name }}
+            {{ zone.title }}
           </option>
         </select>
       </div>

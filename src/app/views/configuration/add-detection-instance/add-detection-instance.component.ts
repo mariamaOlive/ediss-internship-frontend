@@ -86,7 +86,7 @@ export class AddDetectionInstanceComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const zoneId = params.get('zoneId');
       if (zoneId) {
-        this.zoneService.getZoneById(parseInt(zoneId)).subscribe({
+        this.zoneService.fetchZoneById(parseInt(zoneId)).subscribe({
           next: zone => {
             this.zone = zone;
             this.confidenceThreshold = this.zone.confidenceThreshold;
@@ -144,13 +144,11 @@ export class AddDetectionInstanceComponent implements OnInit {
     const newDetectionInstance: DetectionInstanceItem = {
       name: this.detectionInstanceName,
       id: Math.floor(Math.random() * 100001),
-      plantId: this.zone?.plantId,
-      zoneId: this.zone?.id,
       assignee: this.zone.assigneeId,
       confidenceTheshold: this.confidenceThreshold,
-      detectionType: parseInt(this.selectedDetectionType),
+      detectionType: {id:0, name:"", description:""},
       classesDetection: mappedObjects,
-      camera: { name: "Camera 1", id: 1, ipAddress: "187.20.135.197" },
+      camera: { name: "Camera 1", id: 1, ipaddress: "187.20.135.197" },
       isRunning: true,
       timeElapsed: 0
     };

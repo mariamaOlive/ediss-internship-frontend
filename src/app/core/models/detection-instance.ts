@@ -1,15 +1,26 @@
+import { AssigneeItem } from "./assignee";
 import { CameraItem } from "./camera";
+import { ScenarioItem } from "./scenario.model";
+import { ZoneItem } from "./zone";
 
 export interface DetectionInstanceItem {
     name: string;
     id: number;
-    plantId: number;
-    zoneId: number;
-    detectionType: number;
+    zone?: ZoneItem;
+    detectionType?: DetectionTypeItem;
     confidenceTheshold: number;
-    assignee: string;
-    classesDetection: string[];
-    camera: CameraItem;
+    assignee?: AssigneeItem;
+    classesDetection?: ScenarioItem[];
+    camera?: CameraItem;
     isRunning: boolean;
-    timeElapsed: number;
+    timeElapsed?: number;
 }
+
+export interface DetectionTypeItem {
+    id: number;
+    name: string;
+    description: string;
+}
+
+
+

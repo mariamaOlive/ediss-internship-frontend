@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 
 import { CameraItem } from '../../models/camera';
 import { mockCamera } from '../../mock-data/mock-data';
+import { environment } from 'src/app/environments/environment';
 import { API_ENDPOINTS } from '../../config/api-endpoints';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -20,6 +20,12 @@ export class CameraService {
   getAllCameras(): Observable<CameraItem[]> {
     return of(this.dataCameras);
   }
+
+  fetchCameraById(cameraId: number): Observable<CameraItem> {
+    const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.cameras}/${cameraId}`;
+    return this.http.get<CameraItem>(apiUrl);
+  }
+
 
   // TODO: API request
   // getAllCameras(): Observable<CameraItem[]> {

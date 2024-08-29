@@ -99,7 +99,7 @@
         <c-container>
           <c-row *ngFor="let camera of cameraList; let i = index">
             <c-col> {{camera.name}} </c-col>
-            <c-col> {{camera.ipAddress}} </c-col>
+            <c-col> {{camera.ipaddress}} </c-col>
             <c-col>
               <button cButton color="danger" variant="ghost" (click)="removeCamera(i)">Remove</button>
             </c-col>

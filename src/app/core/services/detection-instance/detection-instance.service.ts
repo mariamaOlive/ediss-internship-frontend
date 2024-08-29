@@ -1,46 +1,121 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
-import { DetectionInstanceItem } from '../../models/detection-instance';
+import { DetectionInstanceItem, DetectionTypeItem } from '../../models/detection-instance';
 import { mockDetectionInstance } from '../../mock-data/mock-data';
+import { environment } from 'src/app/environments/environment';
 import { API_ENDPOINTS } from '../../config/api-endpoints';
+import { DetectionInstanceRequest } from '../../models/api-requests.model';
+import { ZoneItem } from '../../models/zone';
+import { AssigneeItem } from '../../models/assignee';
+import { AssigneeService } from '../assignee/assignee.service';
+import { ZoneService } from '../zone/zone.service';
+import { CameraService } from '../camera/camera.service';
+import { CameraItem } from '../../models/camera';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DetectionInstanceService {
-  
+
   private dataDetection: DetectionInstanceItem[] = mockDetectionInstance;
 
-  constructor(private http: HttpClient) { }
+  private detectionTypesCache: DetectionTypeItem[] | null = null;
 
-  fetchDetectionInstanceByZoneId(zoneId: number): Observable<DetectionInstanceItem[]> {
-    return of(this.dataDetection.filter(item => item.zoneId === zoneId));
+  constructor(private http: HttpClient, private assigneeService: AssigneeService, private zoneService: ZoneService, private cameraService: CameraService) {}
+
+  fetchDetectionInstancesByZoneId(zoneId: number): Observable<DetectionInstanceItem[]> {
+    const detectionInstancesUrl = `${environment.apiUrl}${API_ENDPOINTS.zones}${API_ENDPOINTS.detectionInstances}/${zoneId}`;
+    
+    return this.fetchDetectionTypes().pipe(
+      switchMap(detectionTypes => 
+        this.http.get<DetectionInstanceRequest[]>(detectionInstancesUrl).pipe(
+          map(detectionInstances =>
+            detectionInstances.map(item => {
+              const detectionType = detectionTypes.find(dt => dt.id === item.recording.detection_type_id);
+              return this.mapToDetectionInstance(item, detectionType);
+            })
+          )
+        )
+      )
+    );
   }
 
-  // HTTP request method to get detection instances by plant ID
-  // getDetectionInstanceByPlantId(plantId: number): Observable<DetectionInstanceItem[]> {
-  //   const apiUrl = `https://api.example.com/detection-instances?plantId=${plantId}`;
-  //   return this.http.get<DetectionInstanceItem[]>(apiUrl);
+
+  private fetchDetectionTypes(): Observable<DetectionTypeItem[]> {
+    if (this.detectionTypesCache) {
+      // Return cached detection types
+      return of(this.detectionTypesCache);
+    } else {
+      const detectionTypesUrl = `${environment.apiUrl}${API_ENDPOINTS.detection}/types`;
+      return this.http.get<DetectionTypeItem[]>(detectionTypesUrl).pipe(
+        tap(detectionTypes => this.detectionTypesCache = detectionTypes) // Cache the result
+      );
+    }
+  }
+
+
+  // private mapToDetectionInstance(item: DetectionInstanceRequest, detectionType: DetectionTypeItem | undefined): DetectionInstanceItem {
+  //   return {
+  //     id: item.recording.id,
+  //     name: item.recording.name,
+  //     isRunning: item.recording.status,
+  //     confidenceTheshold: item.recording.confidence,
+  //     detectionType: detectionType
+  //   };
   // }
 
-
-  getDetectionInstanceInfo(zoneId: number): Observable<DetectionInstanceItem> {
-    const zone = this.dataDetection.find(item => item.id === zoneId);
-    if (!zone) {
-      throw new Error(`Zone with ID ${zoneId} not found`);
-    }
-    return of(zone);
-  }
 
   // HTTP request method to get detection instance info by zone ID
-  // getDetectionInstanceInfo(zoneId: number): Observable<DetectionInstanceItem> {
-  //   const apiUrl = `https://api.example.com/detection-instances/${zoneId}`;
-  //   return this.http.get<DetectionInstanceItem>(apiUrl);
-  // }
+  fetchDetectionInstanceInfo(detectionId: number): Observable<DetectionInstanceItem> {
+    const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.zones}${API_ENDPOINTS.detectionInstance}/${detectionId}`;
+    
+    return this.fetchDetectionTypes().pipe(
+      switchMap(detectionTypes =>
+        this.http.get<DetectionInstanceRequest>(apiUrl).pipe(
+          switchMap(item => 
+            forkJoin({
+              zone: this.zoneService.fetchZoneById(item.recording.zone_id),
+              camera: this.cameraService.fetchCameraById(item.recording.camera_id),
+              assignee: this.assigneeService.fetchAllAssignees().pipe(
+                map(assignees => assignees.find(assignee => assignee.id === item.recording.assignee_id))
+              )
+            }).pipe(
+              map(({ zone, assignee, camera }) => {
+                const detectionType = detectionTypes.find(dt => dt.id === item.recording.detection_type_id);
+                return this.mapToDetectionInstance(item, detectionType, zone, camera, assignee);
+              })
+            )
+          )
+        )
+      )
+    );
+  }
 
-  
+
+  private mapToDetectionInstance(
+    item: DetectionInstanceRequest, 
+    detectionType: DetectionTypeItem | undefined, 
+    zone?: ZoneItem, 
+    camera?: CameraItem, 
+    assignee?: AssigneeItem
+  ): DetectionInstanceItem {
+    return {
+      id: item.recording.id,
+      name: item.recording.name,
+      isRunning: item.recording.status,
+      confidenceTheshold: item.recording.confidence,
+      detectionType: detectionType,
+      classesDetection: item.scenarios ?? undefined,
+      zone: zone ?? undefined,  // Default to undefined if not provided
+      camera: camera ?? undefined,  // Default to undefined if not provided
+      assignee: assignee ?? undefined  // Default to undefined if not provided
+    };
+  }
+
+
   addDetectionInstance(newDetectionInstance: DetectionInstanceItem): Observable<boolean> {
     const existingZone = this.dataDetection.find(zone => zone.id === newDetectionInstance.id);
     if (existingZone) {

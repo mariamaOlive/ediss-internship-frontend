@@ -24,6 +24,7 @@ import { CameraItem } from 'src/app/core/models/camera';
 import { ZoneItem } from 'src/app/core/models/zone';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
 import { DataTransferService } from 'src/app/core/services/data-transfer/data-transfer.service';
+import { CameraZoneCreateRequest, ZoneCreateRequest } from 'src/app/core/models/api-requests.model';
 
 
 
@@ -59,7 +60,7 @@ export class ZonesListComponent {
   confidenceThreshold: number = 0;
   selectedAssignee: number = NaN;
   zoneName: string = ""
-  cameraList: CameraItem[] = []
+  cameraList: CameraZoneCreateRequest[] = []
   cameraName = ""
   cameraIPAdress = ""
 
@@ -89,20 +90,20 @@ export class ZonesListComponent {
   // ========================
 
   loadAssignees(): void {
-    this.assigneeService.getAllAssignees().subscribe({
+    this.assigneeService.fetchAllAssignees().subscribe({
       next: assignees => this.assignees = assignees,
       error: err => console.error('Error fetching assignees:', err)
     });
   }
 
   addNewZone(): void {
-    const newZone: ZoneItem = {
-      name: this.zoneName,
-      id: Math.floor(Math.random() * 100001),
-      plantId: parseInt(this.plantId),
+    const newZone: ZoneCreateRequest = {
+      title: this.zoneName,
+      plant_id: parseInt(this.plantId),
       cameras: this.cameraList,
-      assigneeId: this.selectedAssignee,
-      confidenceThreshold: this.confidenceThreshold
+      assignee_id: this.selectedAssignee,
+      zoneconfidence: this.confidenceThreshold,
+      description:""
     };
 
     this.zoneService.addZone(newZone).subscribe({
@@ -133,7 +134,7 @@ export class ZonesListComponent {
           next: zones => {
             this.zonesList = zones;
             this.cardList = this.zonesList.map(zone => ({
-              name: zone.name,
+              name: zone.title,
               description: "",
               id: zone.id
             }));
@@ -187,7 +188,7 @@ export class ZonesListComponent {
   // Function to add a new camera to the list
   addCamera(): void {
     if (this.cameraName && this.cameraIPAdress) {
-      this.cameraList.push({ name: this.cameraName, ipAddress: this.cameraIPAdress });
+      this.cameraList.push({ name: this.cameraName, ipaddress: this.cameraIPAdress, description:""});
       this.cameraName = ''; // Reset the input fields
       this.cameraIPAdress = '';
     } else {
