@@ -45,8 +45,27 @@ export interface Recording {
   camera_id?: number;
 }
 
+
+export interface CreateRecording {
+  id?: number;
+  name: string;
+  zone_id?: number;
+  assignee_id?: number;
+  detection_type: number;
+  starttime?: string; 
+  endtime?: string;    
+  status?: boolean;
+  confidence: number;
+  task_id?: string;
+  camera_id?: number;
+}
+
 export interface DetectionInstanceRequest {
   recording: Recording;
+  scenarios: ScenarioItem[];
+}
+export interface CreateDetectionInstanceRequest {
+  recording: CreateRecording;
   scenarios: ScenarioItem[];
 }
 

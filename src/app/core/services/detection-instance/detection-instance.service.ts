@@ -7,7 +7,7 @@ import { DetectionInstanceItem, DetectionTypeItem } from '../../models/detection
 import { mockDetectionInstance } from '../../mock-data/mock-data';
 import { environment } from 'src/app/environments/environment';
 import { API_ENDPOINTS } from '../../config/api-endpoints';
-import { DetectionInstanceRequest } from '../../models/api-requests.model';
+import { CreateDetectionInstanceRequest, DetectionInstanceRequest } from '../../models/api-requests.model';
 import { ZoneItem } from '../../models/zone';
 import { AssigneeItem } from '../../models/assignee';
 import { AssigneeService } from '../assignee/assignee.service';
@@ -84,7 +84,7 @@ export class DetectionInstanceService {
   }
 
 
-  addDetectionInstance(newDetectionInstance: DetectionInstanceRequest): Observable<any> {
+  addDetectionInstance(newDetectionInstance: CreateDetectionInstanceRequest): Observable<any> {
     const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.detection}/start`;
     return this.http.post<any>(apiUrl, newDetectionInstance);
   }
@@ -101,7 +101,7 @@ export class DetectionInstanceService {
       id: item.recording.id,
       name: item.recording.name,
       isRunning: item.recording.status,
-      confidenceTheshold: item.recording.confidence,
+      confidenceTheshold: item.recording.confidence * 100,
       detectionType: detectionType,
       classesDetection: item.scenarios ?? undefined,
       zone: zone ?? undefined,  // Default to undefined if not provided

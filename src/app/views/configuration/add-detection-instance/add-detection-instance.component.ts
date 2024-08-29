@@ -14,7 +14,7 @@ import { DetectionTypeItem } from 'src/app/core/models/detection-instance';
 import { ZoneItem } from 'src/app/core/models/zone';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
 import { DataTransferService } from 'src/app/core/services/data-transfer/data-transfer.service';
-import { DetectionInstanceRequest, Recording } from 'src/app/core/models/api-requests.model';
+import { CreateDetectionInstanceRequest, DetectionInstanceRequest, Recording } from 'src/app/core/models/api-requests.model';
 import { ScenarioItem } from 'src/app/core/models/scenario.model';
 
 
@@ -89,13 +89,13 @@ export class AddDetectionInstanceComponent implements OnInit {
       return {id: item.item_id, name: item.item_text, description: ""};
     });
 
-    const newDetectionInstance: DetectionInstanceRequest = {
+    const newDetectionInstance: CreateDetectionInstanceRequest = {
       recording: {
         name: this.detectionInstanceName,
         zone_id: this.zone?.id,
         assignee_id: this.zone?.assignee_id,
-        confidence: this.confidenceThreshold,
-        detection_type_id: 1,
+        confidence: Math.round(this.confidenceThreshold*100),
+        detection_type: 1,
         camera_id: this.selectedCameraId,
         status: true,
       }, 
@@ -104,7 +104,7 @@ export class AddDetectionInstanceComponent implements OnInit {
 
     this.detectionService.addDetectionInstance(newDetectionInstance).subscribe({
       next: () => {
-        console.log('Zone added successfully');
+        console.log('Detection added successfully');
         this.location.back();
       },
       error: err => {
