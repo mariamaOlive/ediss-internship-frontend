@@ -45,8 +45,12 @@ export class DetectionInstanceComponent {
   // ========================
   // Service Calls
   // ========================
-
-  loadDetectionInstanceById(): void {
+  
+  /**
+   * Loads the detection instance information by its ID.
+   * The ID is retrieved from the route parameters.
+   */
+  private loadDetectionInstanceById(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       let id = params.get('detectionId');
 
@@ -58,6 +62,10 @@ export class DetectionInstanceComponent {
     })
   }
 
+  /**
+   * Stops the currently loaded detection instance.
+   * The instance ID is taken from the currently loaded detection instance.
+   */
   stopInstance(): void {
     this.detectionService.stopDetectionInstance(this.detectionInstance?.id).subscribe({
       next: response => {
@@ -74,6 +82,9 @@ export class DetectionInstanceComponent {
   // Navigation Functions
   // ========================
   
+  /**
+   * Navigates back to the previous location in the browser history.
+   */
   navigateBack(): void {
     this.location.back();
   }

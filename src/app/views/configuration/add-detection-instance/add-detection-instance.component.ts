@@ -13,7 +13,6 @@ import { ScenarioService } from 'src/app/core/services/scenario/scenario.service
 import { DetectionTypeItem } from 'src/app/core/models/detection-instance.model';
 import { ZoneItem } from 'src/app/core/models/zone.model';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
-import { DataTransferService } from 'src/app/core/services/data-transfer/data-transfer.service';
 import { CreateDetectionInstanceRequest, DetectionInstanceRequest, Recording } from 'src/app/core/models/api-requests.model';
 import { ScenarioItem } from 'src/app/core/models/scenario.model';
 
@@ -40,21 +39,18 @@ import { ScenarioItem } from 'src/app/core/models/scenario.model';
 })
 export class AddDetectionInstanceComponent implements OnInit {
 
-  // Template Properties
-  zone: ZoneItem | undefined = undefined;
-  detectionTypesList: DetectionTypeItem[] | undefined = undefined;
-
+  // View variables
+  zone?: ZoneItem;
+  detectionTypesList?: DetectionTypeItem[];
   dropdownListObjects: { item_id: number, item_text: string }[] = [];
   dropdownSettingsObjects = {};
-
-  // New Detection Instance properties
-  confidenceThreshold: number = 0;
-  detectionInstanceName: string = '';
-  forkliftDistance: number = 0;
-  selectedDetectionType: number = 1;
+  
+  // Input variables
+  confidenceThreshold = 0;
+  detectionInstanceName = '';
+  selectedDetectionType = 1;
   selectedItemsObjects: any[] = [];
-  selectedCameraId: number | undefined = undefined;
-  // selectedItemsCameras: any[] = [];
+  selectedCameraId?: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -63,7 +59,6 @@ export class AddDetectionInstanceComponent implements OnInit {
     private zoneService: ZoneService,
     public iconSet: IconSetService,
     private scenarioService: ScenarioService,
-    private dataTransferService: DataTransferService
   ) {
     iconSet.icons = { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft };
   }
@@ -74,15 +69,19 @@ export class AddDetectionInstanceComponent implements OnInit {
   // ========================
 
   ngOnInit() {
-    this.getZoneInfo();
-    this.getDetectionTypes();
-    this.getScenarios();
+    this.loadZoneInfo();
+    this.loadDetectionTypes();
+    this.loadScenarios();
   }
 
   // ========================
   // Service Calls
   // ========================
 
+  /**
+   * Adds a new detection instance based on the form data.
+   * Throws an error if `zone`, `assignee_id`, or `selectedCameraId` is not defined.
+   */
   addNewDetectionInstance(): void {
 
     let mappedObjects = this.selectedItemsObjects.map(item => {
@@ -92,7 +91,7 @@ export class AddDetectionInstanceComponent implements OnInit {
     if (!this.zone || !this.zone.assignee_id || !this.selectedCameraId) {
       throw new Error('Zone, Assignee ID, and Camera ID must all be defined.');
     }
-    
+
     const newDetectionInstance: CreateDetectionInstanceRequest = {
       recording: {
         name: this.detectionInstanceName,
@@ -117,14 +116,20 @@ export class AddDetectionInstanceComponent implements OnInit {
     });
   }
 
-  private getDetectionTypes(): void {
+  /**
+   * Loads detection types from the service and assigns them to `detectionTypesList`.
+   */
+  private loadDetectionTypes(): void {
     this.detectionService.fetchDetectionTypes().subscribe({
       next: detectionTypes => this.detectionTypesList = detectionTypes,
       error: err => console.error('Error fetching assignees:', err)
     })
   }
 
-  private getScenarios(): void {
+  /**
+   * Loads scenarios from the service and sets up the multi-selector.
+   */
+  private loadScenarios(): void {
     this.scenarioService.fetchScenarios().subscribe({
       next: scenarios => {
         const scenariosList = scenarios
@@ -134,7 +139,10 @@ export class AddDetectionInstanceComponent implements OnInit {
     })
   }
 
-  private getZoneInfo(): void {
+  /**
+   * Loads zone information based on the `zoneId` route parameter.
+   */
+  private loadZoneInfo(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const zoneId = params.get('zoneId');
       if (zoneId) {
@@ -154,7 +162,11 @@ export class AddDetectionInstanceComponent implements OnInit {
   // Multi-Selector Functions
   // ========================
 
-  private loadMultiSelector() {
+  /**
+   * Sets up the multi-selector dropdown with scenarios.
+   * @param scenarios The list of scenarios to populate the dropdown.
+   */
+  private setupMultiSelector() {
     return {
       singleSelection: false,
       idField: 'item_id',
@@ -167,6 +179,10 @@ export class AddDetectionInstanceComponent implements OnInit {
     };
   }
 
+  /**
+   * Returns the configuration settings for the multi-selector dropdown.
+   * @returns The settings object for the multi-selector dropdown.
+   */
   private loadMultiSelectorObjectDetection(scenarios: ScenarioItem[]): void {
     
     this.dropdownListObjects = scenarios.map(scenario => ({
@@ -175,7 +191,7 @@ export class AddDetectionInstanceComponent implements OnInit {
     }));
 
     this.selectedItemsObjects = [];
-    this.dropdownSettingsObjects = this.loadMultiSelector();
+    this.dropdownSettingsObjects = this.setupMultiSelector();
   }
 
 
@@ -183,6 +199,10 @@ export class AddDetectionInstanceComponent implements OnInit {
   // Utility Functions
   // ========================
 
+  /**
+   * Sets the confidence threshold based on a value.
+   * @param value The value to set the confidence threshold to.
+   */
   setConfidenceThreshold(value: number): void {
     this.confidenceThreshold = parseFloat((value / 100).toFixed(2));
   }
@@ -192,6 +212,9 @@ export class AddDetectionInstanceComponent implements OnInit {
   // Navigation Functions
   // ========================
 
+  /**
+   * Navigates back to the previous page.
+   */
   navigateBack() {
     this.location.back();
   }

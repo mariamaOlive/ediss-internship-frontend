@@ -78,6 +78,9 @@ export class DetectionInstanceListComponent implements OnInit {
   // Service Calls
   // ========================
 
+  /**
+   * Loads detection instances by the zone ID from the route parameters.
+   */
   loadDetectionInstancesByZoneId(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const plantId = params.get('plantId');
@@ -97,10 +100,15 @@ export class DetectionInstanceListComponent implements OnInit {
     });
   } 
 
+   //TODO: Change logic when connect to server
+  /**
+   * Deletes a detection instance by its ID.
+   * @param detectionInstanceId The ID of the detection instance to delete.
+   */
   deleteDetectionInstance(detectionInstanceId?: number): void {
     this.detectionService.deleteDetectionInstance(detectionInstanceId).subscribe({
       next: () => {
-        //TODO: Change logic when connect to server
+       
         this.detectionInstanceList = this.detectionInstanceList.filter(instance => instance.id !== detectionInstanceId);
       },
       error: err => {
@@ -113,15 +121,25 @@ export class DetectionInstanceListComponent implements OnInit {
   // Navigation Functions
   // ========================
 
+   /**
+   * Navigates to the details page of a specific detection instance.
+   * @param detectionInstanceId The ID of the detection instance to navigate to.
+   */
   navigateToDetectionInstance(detectionInstanceId?: number): void {
     this.router.navigate([`configuration/plants/${this.plantId}/zones/${this.zoneId}/detection-instance/${detectionInstanceId}`]);
   }
 
+  /**
+   * Navigates to the page for adding a new detection instance.
+   */
   navigateToAddDetectionInstance(): void {
     this.dataTransferService.setData(this.zoneId);
     this.router.navigate([`configuration/plants/${this.plantId}/zones/${this.zoneId}/add-detection-instance`]);
   }
 
+  /**
+   * Navigates back to the previous page.
+   */
   navigateBack(): void {
     this.location.back();
   }
@@ -131,6 +149,10 @@ export class DetectionInstanceListComponent implements OnInit {
   // Utilities Functions
   // ========================
 
+  /**
+   * Stops a detection instance by its ID.
+   * @param detectionInstanceId The ID of the detection instance to stop.
+   */
   stopDetectionInstance(detectionInstanceId?: number){
 
   }

@@ -46,11 +46,13 @@ import { PlantService } from 'src/app/core/services/plant/plant.service';
   styleUrl: './plants-list.component.scss'
 })
 export class PlantsListComponent implements OnInit {
+
   plantsListActive: PlantItem[] = [];
   plantsListInactive: PlantItem[] = [];
   cardList: Array<{ name: string, description: string, id: number }> = [];
   selectedPlant: string = "";
   confidenceThreshold: number = 0;
+  public visible = false;
 
   constructor(private router: Router, private plantsService: PlantService) { }
 
@@ -68,7 +70,10 @@ export class PlantsListComponent implements OnInit {
   // Service Calls
   // ========================
   
-  loadActivePlants(): void {
+  /**
+   * Loads the list of active plants and populates the card list.
+   */
+  private loadActivePlants(): void {
     this.plantsService.fetchPlants().subscribe(plants => {
       this.plantsListActive = plants;
       this.cardList = this.plantsListActive.map(plant => ({
@@ -79,7 +84,11 @@ export class PlantsListComponent implements OnInit {
     });
   }
 
-  loadInactivePlants(): void {
+  /**
+   * Loads the list of inactive plants that are not part of the cards and triggers modal.
+   * Toggles the visibility of the modal when loading completes.
+   */
+  private loadInactivePlants(): void {
     this.plantsService.fetchPlants('inactive').subscribe(
       plants => {
         this.plantsListInactive = plants
@@ -88,6 +97,9 @@ export class PlantsListComponent implements OnInit {
   }
 
 
+  /**
+   * Updates the selected plant's confidence threshold and reloads the active plants list.
+   */
   updatePlant(): void {
     this.plantsService.updatePlant(parseInt(this.selectedPlant), this.confidenceThreshold).pipe(
       finalize(() => {
@@ -109,12 +121,19 @@ export class PlantsListComponent implements OnInit {
   // Modal Functions
   // ========================
 
-  public visible = false;
+  
+   /**
+   * Toggles the visibility of the modal and resets the form.
+   */
   toggleModal() {
     this.loadInactivePlants();
     this.resetForm();
   }
 
+  /**
+   * Handles changes to the modal's visibility.
+   * @param event The event emitted when the modal's visibility changes.
+   */
   handleModalChange(event: any) {
     this.visible = event;
   }
@@ -124,6 +143,10 @@ export class PlantsListComponent implements OnInit {
   // Navigation Functions
   // ========================
 
+  /**
+   * Navigates to the zone list view for the selected plant.
+   * @param cardId The ID of the plant to navigate to.
+   */
   navigateToZoneList(cardId: number): void {
     this.router.navigate([`configuration/plants/${cardId}`]);
   }
@@ -133,11 +156,18 @@ export class PlantsListComponent implements OnInit {
   // Utility Functions
   // ========================
 
+  /**
+   * Sets the confidence threshold based on a value from an input.
+   * @param value The value to set the confidence threshold to.
+   */
   setConfidenceThreshold(value: number): void {
     this.confidenceThreshold = parseFloat((value / 100).toFixed(2));
   }
 
-  resetForm(): void {
+  /**
+   * Resets the form fields to their default values.
+   */
+  private resetForm(): void {
     this.selectedPlant = ''; // Reset the zone name
   }
 }

@@ -55,6 +55,7 @@ export class ZonesListComponent {
   cardList: Array<{ name: string, description: string, id: number }> = [];
   plantId: any = NaN;
   zonesList: ZoneItem[] = [];
+  visible = false;
 
   //Input properties
   confidenceThreshold: number = 0;
@@ -89,6 +90,9 @@ export class ZonesListComponent {
   // Service Calls
   // ========================
 
+  /**
+   * Loads the list of assignees from the server.
+   */
   loadAssignees(): void {
     this.assigneeService.fetchAllAssignees().subscribe({
       next: assignees => this.assignees = assignees,
@@ -96,6 +100,10 @@ export class ZonesListComponent {
     });
   }
 
+  /**
+   * Adds a new zone using the current form data.
+   * Refreshes the list of zones after successful addition.
+   */
   addNewZone(): void {
     const newZone: ZoneCreateRequest = {
       title: this.zoneName,
@@ -103,7 +111,7 @@ export class ZonesListComponent {
       cameras: this.cameraList,
       assignee_id: this.selectedAssignee,
       zoneconfidence: this.confidenceThreshold,
-      description:""
+      description: ""
     };
 
     this.zoneService.addZone(newZone).subscribe({
@@ -125,6 +133,9 @@ export class ZonesListComponent {
     });
   }
 
+  /**
+  * Loads the list of zones by the plant ID from the route parameters.
+  */
   loadZonesByPlantId(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const id = params.get('id');
@@ -152,12 +163,18 @@ export class ZonesListComponent {
   // Modal Functions
   // ========================
 
-  public visible = false;
+  /**
+   * Toggles the visibility of the modal and loads the list of assignees.
+   */
   toggleModal() {
     this.loadAssignees();
     this.visible = !this.visible;
   }
 
+  /**
+   * Handles changes to the modal's visibility.
+   * @param event The event emitted when the modal's visibility changes.
+   */
   handleModalChange(event: any) {
     this.visible = event;
   }
@@ -167,11 +184,18 @@ export class ZonesListComponent {
   // Navigation Functions
   // ========================
 
+  /**
+   * Navigates to the detection instance list for the selected zone.
+   * @param cardId The ID of the selected zone.
+   */
   navigateToDetectionInstanceList(cardId: number): void {
     // this.dataTransferService.setData(cardId);
     this.router.navigate([`configuration/plants/${this.plantId}/zones/${cardId}`]);
   }
 
+  /**
+   * Navigates back to the previous page.
+   */
   navigateBack(): void {
     this.location.back();
   }
@@ -181,14 +205,20 @@ export class ZonesListComponent {
   // Utility Functions
   // ========================
 
+  /**
+   * Sets the confidence threshold based on a value from an input.
+   * @param value The value to set the confidence threshold to.
+   */
   setConfidenceThreshold(value: number): void {
     this.confidenceThreshold = parseFloat((value / 100).toFixed(2));
   }
 
-  // Function to add a new camera to the list
+  /**
+   * Adds a new camera to the list of cameras for the zone.
+   */
   addCamera(): void {
     if (this.cameraName && this.cameraIPAdress) {
-      this.cameraList.push({ name: this.cameraName, ipaddress: this.cameraIPAdress, description:""});
+      this.cameraList.push({ name: this.cameraName, ipaddress: this.cameraIPAdress, description: "" });
       this.cameraName = ''; // Reset the input fields
       this.cameraIPAdress = '';
     } else {
@@ -196,11 +226,17 @@ export class ZonesListComponent {
     }
   }
 
-  // Function to remove a camera from the list
+  /**
+   * Removes a camera from the list of cameras for the zone.
+   * @param index The index of the camera to remove.
+   */
   removeCamera(index: number): void {
     this.cameraList.splice(index, 1);
   }
 
+  /**
+   * Resets the form fields to their default values.
+   */
   resetForm(): void {
     this.zoneName = ''; // Reset the zone name
     this.cameraList = []; // Clear the camera list
