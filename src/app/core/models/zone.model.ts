@@ -1,4 +1,4 @@
-import { CameraItem } from "./camera";
+import { CameraItem } from "./camera.model";
 
 export interface ZoneItem {
     title: string;

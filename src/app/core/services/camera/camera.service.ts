@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
-import { CameraItem } from '../../models/camera';
+import { CameraItem } from '../../models/camera.model';
 import { mockCamera } from '../../mock-data/mock-data';
 import { environment } from 'src/app/environments/environment';
 import { API_ENDPOINTS } from '../../config/api-endpoints';

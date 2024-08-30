@@ -3,17 +3,17 @@ import { forkJoin, Observable, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
-import { DetectionInstanceItem, DetectionTypeItem } from '../../models/detection-instance';
+import { DetectionInstanceItem, DetectionTypeItem } from '../../models/detection-instance.model';
 import { mockDetectionInstance } from '../../mock-data/mock-data';
 import { environment } from 'src/app/environments/environment';
 import { API_ENDPOINTS } from '../../config/api-endpoints';
 import { CreateDetectionInstanceRequest, DetectionInstanceRequest } from '../../models/api-requests.model';
-import { ZoneItem } from '../../models/zone';
-import { AssigneeItem } from '../../models/assignee';
+import { ZoneItem } from '../../models/zone.model';
+import { AssigneeItem } from '../../models/assignee.model';
 import { AssigneeService } from '../assignee/assignee.service';
 import { ZoneService } from '../zone/zone.service';
 import { CameraService } from '../camera/camera.service';
-import { CameraItem } from '../../models/camera';
+import { CameraItem } from '../../models/camera.model';
 
 @Injectable({
   providedIn: 'root'

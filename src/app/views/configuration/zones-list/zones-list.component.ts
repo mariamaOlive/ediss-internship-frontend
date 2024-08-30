@@ -18,10 +18,10 @@ import {
 
 import { CardListComponent } from 'src/app/shared/components/card-list/card-list.component';
 
-import { AssigneeItem } from 'src/app/core/models/assignee';
+import { AssigneeItem } from 'src/app/core/models/assignee.model';
 import { AssigneeService } from 'src/app/core/services/assignee/assignee.service';
-import { CameraItem } from 'src/app/core/models/camera';
-import { ZoneItem } from 'src/app/core/models/zone';
+import { CameraItem } from 'src/app/core/models/camera.model';
+import { ZoneItem } from 'src/app/core/models/zone.model';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
 import { DataTransferService } from 'src/app/core/services/data-transfer/data-transfer.service';
 import { CameraZoneCreateRequest, ZoneCreateRequest } from 'src/app/core/models/api-requests.model';

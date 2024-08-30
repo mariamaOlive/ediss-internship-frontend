@@ -11,12 +11,12 @@ import { ChartOptions } from 'chart.js';
 import { DashboardChartsDataTimeLine } from './dashboard-charts-data-timeline';
 import { DashboardChartsDataDonut } from './dashboard-charts-data-donut';
 
-import { IncidentItem } from 'src/app/core/models/incident';
+import { IncidentItem } from 'src/app/core/models/incident.model';
 import { IncidentService } from 'src/app/core/services/incident/incident.service';
 import { PlantItem } from 'src/app/core/models/plant.model';
 import { PlantService } from 'src/app/core/services/plant/plant.service';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
-import { ZoneItem } from 'src/app/core/models/zone';
+import { ZoneItem } from 'src/app/core/models/zone.model';
 
 
 @Component({

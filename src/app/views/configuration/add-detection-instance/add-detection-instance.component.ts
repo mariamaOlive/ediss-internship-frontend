@@ -10,8 +10,8 @@ import { IconSetService, IconModule } from '@coreui/icons-angular';
 
 import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
 import { ScenarioService } from 'src/app/core/services/scenario/scenario.service'
-import { DetectionTypeItem } from 'src/app/core/models/detection-instance';
-import { ZoneItem } from 'src/app/core/models/zone';
+import { DetectionTypeItem } from 'src/app/core/models/detection-instance.model';
+import { ZoneItem } from 'src/app/core/models/zone.model';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
 import { DataTransferService } from 'src/app/core/services/data-transfer/data-transfer.service';
 import { CreateDetectionInstanceRequest, DetectionInstanceRequest, Recording } from 'src/app/core/models/api-requests.model';

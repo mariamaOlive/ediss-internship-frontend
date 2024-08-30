@@ -1,8 +1,8 @@
-import { AssigneeItem } from '../models/assignee';
-import { CameraItem } from '../models/camera';
-import { DetectionInstanceItem } from '../models/detection-instance';
+import { AssigneeItem } from '../models/assignee.model';
+import { CameraItem } from '../models/camera.model';
+import { DetectionInstanceItem } from '../models/detection-instance.model';
 import { PlantItem } from '../models/plant.model';
-import { ZoneItem } from '../models/zone';
+import { ZoneItem } from '../models/zone.model';
 
 export const mockAssignees: AssigneeItem[] = [
   // { name: "Anna Bianchi", id: 1 },

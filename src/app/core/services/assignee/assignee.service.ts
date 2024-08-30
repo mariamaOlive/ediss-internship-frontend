@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
-import { AssigneeItem } from '../../models/assignee';
+import { AssigneeItem } from '../../models/assignee.model';
 import { mockAssignees } from '../../mock-data/mock-data';
 import { environment } from 'src/app/environments/environment';
 import { API_ENDPOINTS } from '../../config/api-endpoints';

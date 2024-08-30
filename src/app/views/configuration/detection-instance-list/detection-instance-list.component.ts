@@ -18,7 +18,7 @@ import {
 } from '@coreui/angular';
 
 import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
-import { DetectionInstanceItem } from 'src/app/core/models/detection-instance';
+import { DetectionInstanceItem } from 'src/app/core/models/detection-instance.model';
 import { DataTransferService } from 'src/app/core/services/data-transfer/data-transfer.service';
 
 

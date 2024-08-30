@@ -10,7 +10,7 @@ import {
 } from 'chart.js';
 import { DeepPartial } from 'chart.js/dist/types/utils';
 import { getStyle, hexToRgba } from '@coreui/utils';
-import { IncidentItem } from 'src/app/core/models/incident';
+import { IncidentItem } from 'src/app/core/models/incident.model';
 import { IncidentService } from 'src/app/core/services/incident/incident.service';
 import { differenceInDays } from 'date-fns';
 

@@ -1,7 +1,7 @@
-import { AssigneeItem } from "./assignee";
-import { CameraItem } from "./camera";
+import { AssigneeItem } from "./assignee.model";
+import { CameraItem } from "./camera.model";
 import { ScenarioItem } from "./scenario.model";
-import { ZoneItem } from "./zone";
+import { ZoneItem } from "./zone.model";
 
 export interface DetectionInstanceItem {
     name: string;

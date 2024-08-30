@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { API_ENDPOINTS } from '../../config/api-endpoints';
 
-import { IncidentItem } from '../../models/incident';
+import { IncidentItem } from '../../models/incident.model';
 @Injectable({
   providedIn: 'root'
 })

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
-import { ZoneItem } from '../../models/zone';
+import { ZoneItem } from '../../models/zone.model';
 import { mockZones } from '../../mock-data/mock-data';
 import { environment } from 'src/app/environments/environment';
 import { API_ENDPOINTS } from '../../config/api-endpoints';
