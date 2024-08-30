@@ -89,11 +89,15 @@ export class AddDetectionInstanceComponent implements OnInit {
       return {id: item.item_id, name: item.item_text, description: ""};
     });
 
+    if (!this.zone || !this.zone.assignee_id || !this.selectedCameraId) {
+      throw new Error('Zone, Assignee ID, and Camera ID must all be defined.');
+    }
+    
     const newDetectionInstance: CreateDetectionInstanceRequest = {
       recording: {
         name: this.detectionInstanceName,
-        zone_id: this.zone?.id,
-        assignee_id: this.zone?.assignee_id,
+        zone_id: this.zone.id,
+        assignee_id: this.zone.assignee_id,
         confidence: Math.round(this.confidenceThreshold*100),
         detection_type: this.selectedDetectionType,
         camera_id: this.selectedCameraId,

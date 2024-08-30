@@ -3,7 +3,6 @@ import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 import { CameraItem } from '../../models/camera.model';
-import { mockCamera } from '../../mock-data/mock-data';
 import { environment } from 'src/app/environments/environment';
 import { API_ENDPOINTS } from '../../config/api-endpoints';
 @Injectable({
@@ -11,17 +10,14 @@ import { API_ENDPOINTS } from '../../config/api-endpoints';
 })
 export class CameraService {
 
-  // TODO: Remove after connecting to API
-  private readonly dataCameras: CameraItem[] = mockCamera;
-
   constructor(private http: HttpClient) { }
 
-  // // TODO: Remove after connecting to API
-  // fetchAllCameras(): Observable<CameraItem[]> {
-  //   return of(this.dataCameras);
-  // }
-
-  fetchCameraById(cameraId?: number): Observable<CameraItem> {
+  /**
+   * Fetches a camera by its ID.
+   * @param cameraId The ID of the camera to fetch.
+   * @returns An Observable of CameraItem.
+   */
+  fetchCameraById(cameraId: number): Observable<CameraItem> {
     const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.cameras}/${cameraId}`;
     return this.http.get<CameraItem>(apiUrl);
   }

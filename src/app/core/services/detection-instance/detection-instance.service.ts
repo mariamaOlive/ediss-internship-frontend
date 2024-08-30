@@ -21,21 +21,30 @@ import { CameraItem } from '../../models/camera.model';
 export class DetectionInstanceService {
 
   private dataDetection: DetectionInstanceItem[] = mockDetectionInstance;
-
   private detectionTypesCache: DetectionTypeItem[] | null = null;
 
-  constructor(private http: HttpClient, private assigneeService: AssigneeService, private zoneService: ZoneService, private cameraService: CameraService) {}
+  constructor(private http: HttpClient, private assigneeService: AssigneeService, private zoneService: ZoneService, private cameraService: CameraService) { }
 
+  /**
+   * Adds a new detection instance by sending a request to the server.
+   * @param newDetectionInstance The detection instance data to be created.
+   * @returns An Observable that emits the server's response.
+   */
   addDetectionInstance(newDetectionInstance: CreateDetectionInstanceRequest): Observable<any> {
     const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.detection}/start`;
     return this.http.post<any>(apiUrl, newDetectionInstance);
   }
 
+  /**
+   * Fetches all detection instances for a given zone by its ID.
+   * @param zoneId The ID of the zone to fetch detection instances for.
+   * @returns An Observable that emits an array of DetectionInstanceItem objects.
+   */
   fetchDetectionInstancesByZoneId(zoneId: number): Observable<DetectionInstanceItem[]> {
     const detectionInstancesUrl = `${environment.apiUrl}${API_ENDPOINTS.zones}${API_ENDPOINTS.detectionInstances}/${zoneId}`;
-    
+
     return this.fetchDetectionTypes().pipe(
-      switchMap(detectionTypes => 
+      switchMap(detectionTypes =>
         this.http.get<DetectionInstanceRequest[]>(detectionInstancesUrl).pipe(
           map(detectionInstances =>
             detectionInstances.map(item => {
@@ -48,15 +57,18 @@ export class DetectionInstanceService {
     );
   }
 
-
-  // HTTP request method to get detection instance info by zone ID
+  /**
+   * Fetches detailed information about a specific detection instance by its ID.
+   * @param detectionId The ID of the detection instance to fetch information for.
+   * @returns An Observable that emits the detailed DetectionInstanceItem object.
+   */
   fetchDetectionInstanceInfo(detectionId: number): Observable<DetectionInstanceItem> {
     const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.zones}${API_ENDPOINTS.detectionInstance}/${detectionId}`;
-    
+
     return this.fetchDetectionTypes().pipe(
       switchMap(detectionTypes =>
         this.http.get<DetectionInstanceRequest>(apiUrl).pipe(
-          switchMap(item => 
+          switchMap(item =>
             forkJoin({
               zone: this.zoneService.fetchZoneById(item.recording.zone_id),
               camera: this.cameraService.fetchCameraById(item.recording.camera_id),
@@ -75,6 +87,10 @@ export class DetectionInstanceService {
     );
   }
 
+  /**
+  * Fetches detection types from the server, with caching to avoid redundant requests.
+  * @returns An Observable that emits an array of DetectionTypeItem objects.
+  */
   fetchDetectionTypes(): Observable<DetectionTypeItem[]> {
     if (this.detectionTypesCache) {
       // Return cached detection types
@@ -87,16 +103,30 @@ export class DetectionInstanceService {
     }
   }
 
+  /**
+  * Stops a detection instance by sending a stop request to the server.
+  * @param instanceId The ID of the detection instance to stop.
+  * @returns An Observable that emits the server's response.
+  */
   stopDetectionInstance(instanceId?: number): Observable<any> {
     const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.detection}/stop/${instanceId}`;
     return this.http.post(apiUrl, {});
-  } 
+  }
 
+  /**
+   * Maps the server response to a DetectionInstanceItem object.
+   * @param item The detection instance data from the server.
+   * @param detectionType The detection type associated with the detection instance.
+   * @param zone The zone associated with the detection instance.
+   * @param camera The camera associated with the detection instance.
+   * @param assignee The assignee associated with the detection instance.
+   * @returns A DetectionInstanceItem object representing the detection instance.
+   */
   private mapToDetectionInstance(
-    item: DetectionInstanceRequest, 
-    detectionType: DetectionTypeItem | undefined, 
-    zone?: ZoneItem, 
-    camera?: CameraItem, 
+    item: DetectionInstanceRequest,
+    detectionType: DetectionTypeItem | undefined,
+    zone?: ZoneItem,
+    camera?: CameraItem,
     assignee?: AssigneeItem
   ): DetectionInstanceItem {
     return {
@@ -112,6 +142,8 @@ export class DetectionInstanceService {
     };
   }
 
+
+  //TODO: There's no API endpoint
   deleteDetectionInstance(zoneId?: number): Observable<boolean> {
     const index = this.dataDetection.findIndex(zone => zone.id === zoneId);
 
@@ -127,7 +159,7 @@ export class DetectionInstanceService {
 
   // HTTP request method to delete a detection instance
   // deleteDetectionInstance(zoneId: number): Observable<boolean> {
-  //   const apiUrl = `https://api.example.com/detection-instances/${zoneId}`;
-  //   return this.http.delete<boolean>(apiUrl);
+    //   return this.http.delete<boolean>(apiUrl);
+    //   const apiUrl = `https://api.example.com/detection-instances/${zoneId}`;
   // }
 }

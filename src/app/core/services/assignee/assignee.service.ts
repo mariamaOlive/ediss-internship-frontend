@@ -3,7 +3,6 @@ import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 import { AssigneeItem } from '../../models/assignee.model';
-import { mockAssignees } from '../../mock-data/mock-data';
 import { environment } from 'src/app/environments/environment';
 import { API_ENDPOINTS } from '../../config/api-endpoints';
 
@@ -12,12 +11,12 @@ import { API_ENDPOINTS } from '../../config/api-endpoints';
 })
 export class AssigneeService {
 
-  // TODO: Remove after connecting to API
-  private readonly dataAssignees: AssigneeItem[] = mockAssignees;
-
   constructor(private http: HttpClient) { }
 
-  // HTTP request method to get all assignees
+  /**
+   * Fetches all assignees from the API.
+   * @returns An Observable of AssigneeItem array.
+   */
   fetchAllAssignees(): Observable<AssigneeItem[]> {
     const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.assignees}`; // Replace API endpoint
     return this.http.get<AssigneeItem[]>(apiUrl);

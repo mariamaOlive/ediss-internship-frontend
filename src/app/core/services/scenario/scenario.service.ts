@@ -12,6 +12,10 @@ export class ScenarioService {
 
   constructor(private http: HttpClient) { }
 
+  /**
+   * Fetches all scenarios from the server.
+   * @returns An Observable that emits an array of ScenarioItem objects.
+   */
   fetchScenarios(): Observable<ScenarioItem[]> {
     const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.scenarios}`;
     return this.http.get<ScenarioItem[]>(apiUrl);

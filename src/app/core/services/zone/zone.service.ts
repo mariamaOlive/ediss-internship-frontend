@@ -3,7 +3,6 @@ import { Observable, of, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 import { ZoneItem } from '../../models/zone.model';
-import { mockZones } from '../../mock-data/mock-data';
 import { environment } from 'src/app/environments/environment';
 import { API_ENDPOINTS } from '../../config/api-endpoints';
 import { ZoneCreateRequest } from '../../models/api-requests.model';
@@ -15,19 +14,31 @@ export class ZoneService {
 
   constructor(private http: HttpClient) { }
 
-  // HTTP request method to add a zone
+  /**
+   * Adds a new zone by sending a request to the server.
+   * @param newZone The data for the new zone to be created.
+   * @returns An Observable that emits the server's response.
+   */
   addZone(newZone: ZoneCreateRequest): Observable<any> {
     const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.zones}`;
     return this.http.post<any>(apiUrl, newZone);
   }
 
-  // HTTP request method to get zone by its ID
-  fetchZoneById(zoneId?: number): Observable<ZoneItem> {
+  /**
+   * Fetches a zone by its ID.
+   * @param zoneId The ID of the zone to fetch.
+   * @returns An Observable that emits a ZoneItem object.
+   */
+  fetchZoneById(zoneId: number): Observable<ZoneItem> {
     const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.zones}/${zoneId}`;
     return this.http.get<ZoneItem>(apiUrl);
   }
 
-  // HTTP request method to get zones by plant ID
+  /**
+   * Fetches all active zones for a given plant by its ID.
+   * @param plantId The ID of the plant to fetch zones for.
+   * @returns An Observable that emits an array of ZoneItem objects.
+   */
   fetchZonesByPlantId(plantId: number): Observable<ZoneItem[]> {
     const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.plants}${API_ENDPOINTS.zones}/${plantId}?zone_status=active`;
     return this.http.get<ZoneItem[]>(apiUrl);
