@@ -81,7 +81,7 @@
                     <c-row class="mb-2" *ngIf="detectionInstance?.detectionType?.id === 1">
                         <p class="mb-1">PPE Detected</p>
                         <div class="d-flex flex-wrap">
-                            <c-badge *ngFor="let class of detectionInstance?.classesDetection" color="primary"
+                            <c-badge *ngFor="let class of detectionInstance?.classesDetection" 
                                 class="me-2 small-card__badge">{{class.name}}</c-badge>
                         </div>
                     </c-row>

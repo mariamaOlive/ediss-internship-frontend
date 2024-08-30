@@ -2,22 +2,9 @@
     <span class="text-secondary fs-3">Dashboard</span>
   </div>
   
-  <c-container>
-    <c-row class="g-4">
-      <c-col sm="6" xl="3" *ngFor="let plant of plantsList">
-        <a [routerLink]="['plants', plant.id]" class="card-link">
-          <c-card class="mb-3 p-0 shadow-sm card-container">
-            <div class="card-container-top">
-            </div>
-            <c-card-body>
-              <h6 cCardTitle class="mb-0">{{plant.name}}</h6>
-              <p cCardText>
-                <small class="text-medium-emphasis">{{plant.address}}</small>
-              </p>
-            </c-card-body>
-          </c-card>
-        </a>
-      </c-col>
-    </c-row>
-  </c-container>
-  
+<card-list 
+  [cardList]="cardList" 
+  (cardClick)="navigateToDashboardDetails($event)"
+  [showEmptyCard]="false"
+  [topContainerColor]="'#337059'">
+</card-list>

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterModule, RouterLink } from '@angular/router';
+import { RouterModule, Router, RouterLink } from '@angular/router';
 import { IconDirective } from '@coreui/icons-angular';
 import {
   GridModule,
@@ -14,6 +14,8 @@ import {
   DropdownMenuDirective,
   DropdownItemDirective
 } from '@coreui/angular';
+
+import { CardListComponent } from 'src/app/shared/components/card-list/card-list.component';
 
 import { PlantService } from 'src/app/core/services/plant/plant.service';
 import { PlantItem } from 'src/app/core/models/plant.model';
@@ -35,7 +37,8 @@ import { PlantItem } from 'src/app/core/models/plant.model';
     DropdownMenuDirective,
     DropdownItemDirective,
     RouterLink,
-    DropdownDividerDirective],
+    DropdownDividerDirective,
+    CardListComponent],
   templateUrl: './dashboard-list.component.html',
   styleUrl: './dashboard-list.component.scss'
 })
@@ -43,8 +46,9 @@ import { PlantItem } from 'src/app/core/models/plant.model';
 export class DashboardListComponent implements OnInit {
   
   plantsList: PlantItem[] = [];
+  cardList: Array<{ name: string, description: string, id: number }> = [];
 
-  constructor(private plantsService: PlantService) { }
+  constructor(private router: Router, private plantsService: PlantService) { }
 
   // ========================
   // Life Cycle Hooks
@@ -62,6 +66,21 @@ export class DashboardListComponent implements OnInit {
   loadPlants(): void {
     this.plantsService.fetchPlants().subscribe(plants => {
       this.plantsList = plants;
+      this.cardList = this.plantsList.map(plant => ({
+        name: plant.name,
+        description: plant.address,
+        id: plant.id
+      }));
     });
   }
+
+
+  // ========================
+  // Navigation Functions
+  // ========================
+
+  navigateToDashboardDetails(cardId: number): void {
+    this.router.navigate([`dashboard/plants/${cardId}`]);
+  }
+
 }

@@ -3,11 +3,12 @@
 </div>
 
 <card-list
-[cardList]="cardList" 
-[emptyCardText] = "'Add new plant'"
-(cardClick)="navigateToZoneList($event)" 
-(emptyCardClick)="toggleModal()">
-</card-list>  
+  [cardList]="cardList"
+  [emptyCardText]="'Add new plant'"
+  (cardClick)="navigateToZoneList($event)"
+  (emptyCardClick)="toggleModal()"
+  [topContainerColor]="'#337059'">
+</card-list> 
 
 
 <!-- Modal Add Plant -->
@@ -62,9 +63,9 @@
 
   </c-modal-body>
   <c-modal-footer>
-    <button [cModalToggle]="fullScreenMd.id" cButton color="secondary">
+    <button [cModalToggle]="fullScreenMd.id" cButton color="secondary" variant="ghost">
       Close
     </button>
-    <button cButton color="primary" (click)="updatePlant()">Add</button>
+    <button cButton class="btn-add" (click)="updatePlant()">Add</button>
   </c-modal-footer>
 </c-modal>

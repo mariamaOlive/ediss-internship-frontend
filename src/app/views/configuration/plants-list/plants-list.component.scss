@@ -2,27 +2,15 @@
     height: 52px;
 }
 
-// .card-container{
-//     width: 250px; 
-//     height: 180px; 
-//     overflow: hidden;
-// }
+.btn-add{
+    background-color: #337059;
+    border-color: #337059;
+}
 
-// .card-container-top{
-//     height: 100px; 
-//     background-color: #c1e899; 
-//     position: relative;
-// }
+.btn-add:active, .btn-add:focus {
+    background-color: #669A8C !important;  /* Green */
+    border-color: #669A8C !important;      /* Green border */
+    color: #fff;                           /* White text */
+}
 
-// .card-container-full{
-//     background-color: #c1e899; 
-//     border-width: 0;
-// }
 
-// .confidence-input{
-//     width: 150px;
-// }
-
-// .card-link{
-//     text-decoration: none;
-// }

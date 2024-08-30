@@ -2,14 +2,23 @@
     border-bottom: 1px solid #d8d9d9;
 }
 
-
 .confidence-input{
     width: 150px;
 } 
 
-
 .container__multiselect {
     width: 100% !important;
+}
+
+.btn-add{
+    background-color: #337059;
+    border-color: #337059;
+}
+
+.btn-add:active, .btn-add:focus {
+    background-color: #669A8C !important;  /* Green */
+    border-color: #669A8C !important;      /* Green border */
+    color: #fff;                           /* White text */
 }
 
 

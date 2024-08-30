@@ -13,11 +13,15 @@
 
 .card-container-top{
     height: 100px; 
-    background-color: #d8d9d9; 
+    background-color: #7F7E82; 
     position: relative;
 }
 
 .card-container-full{
-    background-color: #d8d9d9; 
+    background-color: #7F7E82; 
     border-width: 0;
+}
+
+.card-empty{
+    color: white;
 }

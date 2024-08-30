@@ -1,22 +1,45 @@
-.small-card__title{
+.small-card__title {
     border-bottom: 1px solid #d8d9d9;
 }
 
-.small-card__subtitle{
+.small-card__subtitle {
     font-weight: 600;
     font-size: 15px;
 }
 
-.card-timeline-list{
+.card-timeline-list {
     height: 400px;
 }
 
-.card-timeline-sub-list{
-    height: 270px; 
+.card-timeline-sub-list {
+    height: 270px;
     overflow-y: auto;
 }
 
 
-.select-filter-zone{
+.select-filter-zone {
     width: 250px;
+}
+
+/* Style the buttons inside the c-button-group */
+c-button-group[role="group"] .btn-check+label {
+    color: #337059;
+    border: 1px solid #337059;
+}
+
+/* Active/Selected state */
+c-button-group[role="group"] .btn-check:checked+label {
+    background-color: #337059;
+    border-color: #337059;
+    color: white;
+}
+
+a.nav-link.active {
+    background-color: #337059 !important;
+    color: white !important;
+}
+
+/* Optional: Custom style for non-active tabs */
+a.nav-link {
+    color: #337059 !important;
 }

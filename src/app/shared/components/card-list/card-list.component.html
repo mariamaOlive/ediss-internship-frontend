@@ -3,7 +3,7 @@
       <c-col sm="6" xl="3" *ngFor="let card of cardList">
         <!-- <a [routerLink]="[routeParameter, card.id]" class="card-link"> -->
           <c-card class="mb-3 p-0 shadow-sm card-container" (click)="onCardClick(card.id)">
-            <div class="card-container-top">
+            <div class="card-container-top"  [ngStyle]="{ 'background-color': topContainerColor }">
               <c-dropdown alignment="end" variant="btn-group" class="position-absolute top-0 end-0 m-2">
                 <button [caret]="false" cButton cDropdownToggle class="p-0" color="transparent" aria-label="Open dropdown"
                   (click)="$event.stopPropagation()">
@@ -25,12 +25,13 @@
       </c-col>
   
       <!-- Add new card -->
-      <c-col sm="6" xl="3">
+      <c-col sm="6" xl="3"  *ngIf="showEmptyCard">
         <c-card 
           type="button"
           class="mb-3 p-0 shadow-sm card-container card-container-full"
+          [ngStyle]="{ 'background-color': topContainerColor }"
           (click)="onEmptyCardClick()">
-          <c-card-body class="d-flex align-items-center justify-content-center text-medium-emphasis">
+          <c-card-body class="d-flex align-items-center justify-content-center card-empty">
             {{emptyCardText}}
           </c-card-body>
         </c-card>

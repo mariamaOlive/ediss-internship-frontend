@@ -26,7 +26,7 @@
                 </ul>
               </c-dropdown>
             
-              <button cButton variant="outline"  color="danger" class="position-absolute bottom-0 end-0 m-2" (click)="stopDetectionInstance(detectionInstance.id); $event.stopPropagation()">
+              <button cButton variant="outline"  color="light" class="position-absolute bottom-0 end-0 m-2" (click)="stopDetectionInstance(detectionInstance.id); $event.stopPropagation()">
                 stop
               </button>
             </div>
@@ -44,7 +44,7 @@
       <!-- Add new card -->
       <c-col sm="6" xl="3">
           <c-card class="mb-3 p-0 shadow-sm card-container card-container-full" (click)="navigateToAddDetectionInstance()">
-            <c-card-body class="d-flex align-items-center justify-content-center text-medium-emphasis">
+            <c-card-body class="d-flex align-items-center justify-content-center card-empty">
               Create Detection Instance
             </c-card-body>
           </c-card>

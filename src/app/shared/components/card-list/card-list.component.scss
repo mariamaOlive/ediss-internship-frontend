@@ -6,12 +6,10 @@
 
 .card-container-top{
     height: 100px; 
-    background-color: #c1e899; 
     position: relative;
 }
 
 .card-container-full{
-    background-color: #c1e899; 
     border-width: 0;
 }
 
@@ -21,4 +19,8 @@
 
 .card-link{
     text-decoration: none;
+}
+
+.card-empty{
+    color: white;
 }

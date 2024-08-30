@@ -42,7 +42,8 @@ export class CardListComponent {
   @Input() emptyCardText: string = "";
   @Output() cardClick = new EventEmitter<number>();
   @Output() emptyCardClick = new EventEmitter<void>();
-
+  @Input() topContainerColor: string = '';
+  @Input() showEmptyCard: boolean = true; 
 
   // ========================
   // Interaction Functions

@@ -1,0 +1,20 @@
+.btn-add{
+    background-color: #337059;
+    border-color: #337059;
+}
+
+.btn-add:active, .btn-add:focus {
+    background-color: #669A8C !important;  /* Green */
+    border-color: #669A8C !important;      /* Green border */
+    color: #fff;                           /* White text */
+}
+
+.btn-add-camera {
+    color: #337059;
+}
+
+.btn-add-camera:hover {
+    background-color: #337059;
+    border-color: #337059;
+    color: white;
+}

@@ -5,8 +5,12 @@
   <span class="text-secondary fs-3 ms-3">Zones</span>
 </div>
 
-<card-list [cardList]="cardList" [emptyCardText]="'Add new zone'" (cardClick)="navigateToDetectionInstanceList($event)"
-  (emptyCardClick)="toggleModal() ">
+<card-list 
+  [cardList]="cardList" 
+  [emptyCardText]="'Add new zone'" 
+  (cardClick)="navigateToDetectionInstanceList($event)"
+  (emptyCardClick)="toggleModal() "
+  [topContainerColor]="'#669A8C'">
 </card-list>
 
 
@@ -21,10 +25,10 @@
     <ng-container *ngTemplateOutlet="longContent"></ng-container>
   </c-modal-body>
   <c-modal-footer>
-    <button [cModalToggle]="fullScreenMd.id" cButton color="secondary">
+    <button [cModalToggle]="fullScreenMd.id" cButton color="secondary" variant="ghost">
       Close
     </button>
-    <button cButton color="primary" (click)="addNewZone()">Add</button>
+    <button class="btn-add" cButton color="primary" (click)="addNewZone()">Add</button>
   </c-modal-footer>
 </c-modal>
 
@@ -112,7 +116,7 @@
               <input cFormControl placeholder="Type IP Address" id="inputCameraIPAdress" type="text" [(ngModel)]="cameraIPAdress" name="cameraIPAdress">
             </c-col>
             <c-col>
-              <button cButton color="primary" variant="ghost" (click)="addCamera()">Add</button>
+              <button cButton color="primary" class="btn-add-camera" variant="ghost" (click)="addCamera()">Add</button>
             </c-col>
           </c-row>
         </c-container>
