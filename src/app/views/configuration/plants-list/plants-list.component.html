@@ -2,17 +2,14 @@
   <span class="text-secondary fs-3">Configuration</span>
 </div>
 
-<card-list
-  [cardList]="cardList"
-  [emptyCardText]="'Add new plant'"
-  (cardClick)="navigateToZoneList($event)"
-  (emptyCardClick)="toggleModal()"
-  [topContainerColor]="'#337059'">
-</card-list> 
+<card-list [cardList]="cardList" [emptyCardText]="'Add new plant'" (cardClick)="navigateToZoneList($event)"
+  (emptyCardClick)="toggleModal()" [topContainerColor]="'#337059'">
+</card-list>
 
 
 <!-- Modal Add Plant -->
-<c-modal #fullScreenMd fullscreen="md" id="fullScreenMd" [visible]="visible" (visibleChange)="handleModalChange($event)">
+<c-modal #fullScreenMd fullscreen="md" id="fullScreenMd" [visible]="visible"
+  (visibleChange)="handleModalChange($event)">
   <c-modal-header>
     <h5 cModalTitle>Add new plant</h5>
     <button [cModalToggle]="fullScreenMd.id" cButtonClose></button>
@@ -37,28 +34,31 @@
     </c-card>
 
     <c-card class="mt-3">
-      <c-container>
-        <c-row class="mt-3 small-card__title">
-          <h6>Confidence Level</h6>
-        </c-row>
-        <c-row class="mt-3 small-card__text">
-          <div>
-            <form #numberForm="ngForm">
-              <div class="mb-3">
-                <div class="input-group confidence-input">
-                  <input id="numberInput" type="number" min="0" max="100" [ngModel]="confidenceThreshold * 100"
-                    (ngModelChange)="setConfidenceThreshold($event)" name="numberInput" required
-                    class="form-control form-control-sm">
-                  <span class="input-group-text">%</span>
+      <c-card-body>
+        <c-container>
+          <c-row class="mt-3 small-card__title">
+            <h6>Confidence Level</h6>
+          </c-row>
+          <c-row class="mt-3 small-card__text">
+            <div>
+              <form #numberForm="ngForm">
+                <div class="mb-3">
+                  <div class="input-group confidence-input">
+                    <input id="numberInput" type="number" min="0" max="100" [ngModel]="confidenceThreshold * 100"
+                      (ngModelChange)="setConfidenceThreshold($event)" name="numberInput" required
+                      class="form-control form-control-sm">
+                    <span class="input-group-text">%</span>
+                  </div>
+                  <div
+                    *ngIf="numberForm.controls['numberInput']?.invalid && numberForm.controls['numberInput']?.touched">
+                    <small class="text-danger">Please enter a valid number between 0 and 100.</small>
+                  </div>
                 </div>
-                <div *ngIf="numberForm.controls['numberInput']?.invalid && numberForm.controls['numberInput']?.touched">
-                  <small class="text-danger">Please enter a valid number between 0 and 100.</small>
-                </div>
-              </div>
-            </form>
-          </div>
-        </c-row>
-      </c-container>
+              </form>
+            </div>
+          </c-row>
+        </c-container>
+      </c-card-body>
     </c-card>
 
   </c-modal-body>
