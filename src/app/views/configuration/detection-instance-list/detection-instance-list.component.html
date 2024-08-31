@@ -31,7 +31,7 @@
                 </ul>
               </c-dropdown>
             
-              <button cButton variant="outline"  color="light" class="position-absolute bottom-0 end-0 m-2" (click)="stopDetectionInstance(detectionInstance.id); $event.stopPropagation()">
+              <button *ngIf="detectionInstance?.isRunning" cButton variant="outline"  color="light" class="position-absolute bottom-0 end-0 m-2" (click)="stopDetectionInstance(detectionInstance.id); $event.stopPropagation()">
                 stop
               </button>
             </div>

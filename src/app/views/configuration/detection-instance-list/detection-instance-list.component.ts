@@ -31,9 +31,9 @@ import { DataTransferService } from 'src/app/core/services/data-transfer/data-tr
   imports: [
     CommonModule,
     RouterModule,
-    GridModule, 
-    CardModule, 
-    TemplateIdDirective, 
+    GridModule,
+    CardModule,
+    TemplateIdDirective,
     ThemeDirective,
     DropdownComponent,
     ButtonDirective,
@@ -42,7 +42,7 @@ import { DataTransferService } from 'src/app/core/services/data-transfer/data-tr
     DropdownItemDirective,
     RouterLink,
     DropdownDividerDirective,
-    TooltipModule, 
+    TooltipModule,
     IconModule
   ],
   templateUrl: './detection-instance-list.component.html',
@@ -55,14 +55,14 @@ export class DetectionInstanceListComponent implements OnInit {
   detectionInstanceList: DetectionInstanceItem[] = [];
 
   constructor(
-    private router: Router, 
-    private route: ActivatedRoute, 
-    private detectionService: DetectionInstanceService, 
-    private dataTransferService: DataTransferService, 
-    private location: Location, 
+    private router: Router,
+    private route: ActivatedRoute,
+    private detectionService: DetectionInstanceService,
+    private dataTransferService: DataTransferService,
+    private location: Location,
     public iconSet: IconSetService) {
 
-    iconSet.icons = {cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft, cilOptions};
+    iconSet.icons = { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft, cilOptions };
   }
 
   // ========================
@@ -70,7 +70,7 @@ export class DetectionInstanceListComponent implements OnInit {
   // ========================
 
   ngOnInit(): void {
-    this.loadDetectionInstancesByZoneId(); 
+    this.loadDetectionInstancesByZoneId();
   }
 
 
@@ -98,9 +98,9 @@ export class DetectionInstanceListComponent implements OnInit {
         });
       }
     });
-  } 
+  }
 
-   //TODO: Change logic when connect to server
+  //TODO: Change logic when connect to server
   /**
    * Deletes a detection instance by its ID.
    * @param detectionInstanceId The ID of the detection instance to delete.
@@ -108,7 +108,7 @@ export class DetectionInstanceListComponent implements OnInit {
   deleteDetectionInstance(detectionInstanceId?: number): void {
     this.detectionService.deleteDetectionInstance(detectionInstanceId).subscribe({
       next: () => {
-       
+
         this.detectionInstanceList = this.detectionInstanceList.filter(instance => instance.id !== detectionInstanceId);
       },
       error: err => {
@@ -121,10 +121,10 @@ export class DetectionInstanceListComponent implements OnInit {
   // Navigation Functions
   // ========================
 
-   /**
-   * Navigates to the details page of a specific detection instance.
-   * @param detectionInstanceId The ID of the detection instance to navigate to.
-   */
+  /**
+  * Navigates to the details page of a specific detection instance.
+  * @param detectionInstanceId The ID of the detection instance to navigate to.
+  */
   navigateToDetectionInstance(detectionInstanceId?: number): void {
     this.router.navigate([`configuration/plants/${this.plantId}/zones/${this.zoneId}/detection-instance/${detectionInstanceId}`]);
   }
@@ -153,8 +153,15 @@ export class DetectionInstanceListComponent implements OnInit {
    * Stops a detection instance by its ID.
    * @param detectionInstanceId The ID of the detection instance to stop.
    */
-  stopDetectionInstance(detectionInstanceId?: number){
-
+  stopDetectionInstance(detectionInstanceId?: number) {
+    this.detectionService.stopDetectionInstance(detectionInstanceId).subscribe({
+      next: response => {
+        console.log('Instance stopped successfully:', response);
+      },
+      error: err => {
+        console.error('Error stopping instance:', err);
+      }
+    });
   }
 
 }

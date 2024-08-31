@@ -21,15 +21,15 @@
                                 <span class="ms-2 align-middle status-bubble"
                                     [ngClass]="{'bg-success': detectionInstance?.isRunning, 'bg-danger': !detectionInstance?.isRunning}"></span>
                                 
-                                <span class="ms-1 text-medium-emphasis">{{ detectionInstance?.isRunning ? 'Running' : 'Paused' }}</span>
+                                <span class="ms-1 text-medium-emphasis">{{ detectionInstance?.isRunning ? 'Running' : 'Stopped' }}</span>
                             </div>
                         </c-row>
                         
                     </c-container>
                 </c-col>
                 <c-col sm="2" xs="4" class="d-flex justify-content-center align-items-center">
-                    <button cButton color="danger" variant="outline" (click)="stopInstance()">Stop</button>
-                  </c-col>
+                    <button *ngIf="detectionInstance?.isRunning"  cButton color="danger" variant="outline" (click)="stopInstance()">Stop</button>
+                </c-col>
             </c-row>
 
         </c-container>
