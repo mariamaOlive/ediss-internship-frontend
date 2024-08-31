@@ -102,7 +102,7 @@ export class ZonesListComponent {
    */
   addNewZone(): void {
 
-    if(!this.plantId){
+    if (!this.plantId) {
       throw new Error('Plant ID not defined.');
     }
 
@@ -152,7 +152,7 @@ export class ZonesListComponent {
     this.plantService.fetchPlants().subscribe({
       next: plants => {
         this.plantInfo = plants.find(item => item.id === this.plantId);
-        if(this.plantInfo?.plantConfidence){
+        if (this.plantInfo?.plantConfidence) {
           this.confidenceThreshold = this.plantInfo?.plantConfidence;
         }
       }
@@ -166,7 +166,7 @@ export class ZonesListComponent {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const id = params.get('id');
       if (id) {
-        this.plantId = parseInt(id,10);
+        this.plantId = parseInt(id, 10);
         this.zoneService.fetchZonesByPlantId(parseInt(id, 10)).subscribe({
           next: zones => {
             this.zonesList = zones;
