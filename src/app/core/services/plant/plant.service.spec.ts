@@ -59,7 +59,7 @@ describe('PlantService', () => {
     const confidenceThreshold = 90;
 
     service.updatePlant(plantId, confidenceThreshold).subscribe(response => {
-      expect(response).toBeTruthy(); // In a real case, assert more specific response handling
+      expect(response.plantConfidence).toBe(confidenceThreshold);
     });
 
     const req = httpTestingController.expectOne(`${environment.apiUrl}${API_ENDPOINTS.plants}/${plantId}`);

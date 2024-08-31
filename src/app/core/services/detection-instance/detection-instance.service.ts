@@ -4,7 +4,6 @@ import { map, switchMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
 import { DetectionInstanceItem, DetectionTypeItem } from '../../models/detection-instance.model';
-import { mockDetectionInstance } from '../../mock-data/mock-data';
 import { environment } from 'src/app/environments/environment';
 import { API_ENDPOINTS } from '../../config/api-endpoints';
 import { CreateDetectionInstanceRequest, DetectionInstanceRequest } from '../../models/api-requests.model';
@@ -20,7 +19,6 @@ import { CameraItem } from '../../models/camera.model';
 })
 export class DetectionInstanceService {
 
-  private dataDetection: DetectionInstanceItem[] = mockDetectionInstance;
   private detectionTypesCache: DetectionTypeItem[] | null = null;
 
   constructor(private http: HttpClient, private assigneeService: AssigneeService, private zoneService: ZoneService, private cameraService: CameraService) { }
@@ -163,15 +161,6 @@ export class DetectionInstanceService {
 
   //TODO: There's no API endpoint
   deleteDetectionInstance(zoneId?: number): Observable<boolean> {
-    const index = this.dataDetection.findIndex(zone => zone.id === zoneId);
-
-    if (index !== -1) {
-      this.dataDetection.splice(index, 1);
-      console.log(`Zone with ID ${zoneId} deleted.`);
-      return of(true); // Return true indicating successful deletion
-    } else {
-      console.error(`Zone with ID ${zoneId} not found.`);
-      return of(false); // Return false indicating failure to delete
-    }
+    return of(true);
   }
 }

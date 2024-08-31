@@ -1,8 +1,10 @@
 import { AssigneeItem } from '../models/assignee.model';
 import { CameraItem } from '../models/camera.model';
-import { DetectionInstanceItem } from '../models/detection-instance.model';
+import { DetectionInstanceItem, DetectionTypeItem } from '../models/detection-instance.model';
 import { PlantItem } from '../models/plant.model';
 import { ZoneItem } from '../models/zone.model';
+import { CreateDetectionInstanceRequest, DetectionInstanceRequest, ZoneCreateRequest } from '../models/api-requests.model';
+import { ScenarioItem } from '../models/scenario.model';
 
 // Mock data for AssigneeItem
 export const mockAssignees: AssigneeItem[] = [
@@ -70,133 +72,185 @@ export const mockPlantsInactive: PlantItem[] = [
 ]
 
 export const mockCamera: CameraItem[] = [
-//   { name: "Camera 1", id: 1, ipAddress: "187.20.135.197" },
-//   { name: "Camera 2", id: 2, ipAddress: "187.20.135.199" },
-//   { name: "Camera 3", id: 3, ipAddress: "187.20.135.200" },
-//   { name: "Camera 4", id: 4, ipAddress: "187.20.135.201" },
-//   { name: "Camera 5", id: 5, ipAddress: "187.20.135.202" }
+  { name: "Camera 1", id: 1, ipaddress: "187.20.135.197" },
+  { name: "Camera 2", id: 2, ipaddress: "187.20.135.199" },
+  { name: "Camera 3", id: 3, ipaddress: "187.20.135.200" },
+  { name: "Camera 4", id: 4, ipaddress: "187.20.135.201" },
+  { name: "Camera 5", id: 5, ipaddress: "187.20.135.202" }
 ];
 
 
-export const mockZones: ZoneItem[] = [
-  // {
-  //   title: "Zone 1",
-  //   id: 1,
-  //   plant_id: 1,
-  //   cameras: [mockCamera[0], mockCamera[1]], // Use mock cameras
-  //   assigneeId: 1, // Assign to "Anna Bianchi"
-  //   zoneconfidence: 0.8,
-  //   zonestatus:"active",
-  //   description:"" 
-  // },
-  // {
-  //   title: "Zone 2",
-  //   id: 2,
-  //   plant_id: 1,
-  //   cameras: [mockCamera[2]], // Use a different camera
-  //   assigneeId: 2, // Assign to "Giorgia Versace"
-  //   zoneconfidence: 0.6,
-  //   zonestatus:"active",
-  //   description:"" 
-  // },
-  // {
-  //   title: "Zone 3",
-  //   id: 3,
-  //   plant_id: 2,
-  //   cameras: [mockCamera[1], mockCamera[2]], // Use mock cameras
-  //   assigneeId: 3, // Assign to "Marta Bergman"
-  //   zoneconfidence: 0.7,
-  //   zonestatus:"active",
-  //   description:"" 
-  // },
-  // {
-  //   title: "Zone 4",
-  //   id: 4,
-  //   plant_id: 2,
-  //   cameras: [mockCamera[0]], // Use a different camera
-  //   assigneeId: 4, // Assign to "Pietro Björn"
-  //   zoneconfidence: 0.9,
-  //   zonestatus:"active",
-  //   description:"" 
-  // },
-  // {
-  //   title: "Zone 5",
-  //   id: 5,
-  //   plant_id: 3,
-  //   cameras: [mockCamera[1], mockCamera[2]], // Use mock cameras
-  //   assigneeId: 1, // Assign to "Anna Bianchi"
-  //   zoneconfidence: 0.85,
-  //   zonestatus:"active",
-  //   description:"" 
-  // }
+export const mockZones: ZoneItem[] = [{
+  id: 1,
+  title: 'Zone 1',
+  description: 'This is the first test zone',
+  plant_id: 101,
+  cameras: [
+    {
+      id: 1,
+      name: 'Camera 1',
+      ipaddress: '192.168.1.101'
+    },
+    {
+      id: 2,
+      name: 'Camera 2',
+      ipaddress: '192.168.1.102'
+    }
+  ],
+  assignee_id: 201,
+  zoneconfidence: 90,
+  zonestatus: 'active'
+},
+{
+  id: 2,
+  title: 'Zone 2',
+  description: 'This is the second test zone',
+  plant_id: 102,
+  cameras: [
+    {
+      id: 3,
+      name: 'Camera 3',
+      ipaddress: '192.168.2.101'
+    }
+  ],
+  assignee_id: 202,
+  zoneconfidence: 85,
+  zonestatus: 'inactive'
+},
+{
+  id: 3,
+  title: 'Zone 3',
+  description: 'This is the third test zone',
+  plant_id: 103,
+  cameras: [],
+  assignee_id: 203,
+  zoneconfidence: 75,
+  zonestatus: 'active'
+}
 ];
 
 
+export const mockZoneRequest: ZoneCreateRequest = {
+  title: 'New Zone',
+  plant_id: 1,
+  cameras: [{
+    name: 'Camera 3',
+    ipaddress: '192.168.2.101',
+    description: ""
+  }],
+  assignee_id: 2,
+  zoneconfidence: 85,
+  description: 'Test Zone',
+  status: 'active'
+};
 
-export const mockDetectionInstance: DetectionInstanceItem[] = [
-  // {
-  //   name: "Detection Instance 1",
-  //   id: 1,
-  //   plantId: 1,
-  //   zoneId: 1,
-  //   assignee: "Luca Bianchi",
-  //   confidenceTheshold: 0.5,
-  //   detectionType: 1,
-  //   classesDetection: ["Helmet", "Vest", "Hairnet", "Goggles", "Earplugs"],
-  //   camera: mockCamera[0],  // Use the first camera from Zone 1
-  //   isRunning: true,
-  //   timeElapsed: 12323
-  // },
-  // {
-  //   name: "Detection Instance 2",
-  //   id: 2,
-  //   plantId: 1,
-  //   zoneId: 2,
-  //   assignee: "Mariama Oliveira",
-  //   confidenceTheshold: 0.5,
-  //   detectionType: 2,
-  //   classesDetection: ["Helmet"],
-  //   camera: mockCamera[2],  // Use the camera from Zone 2
-  //   isRunning: false,
-  //   timeElapsed: 345
-  // },
-  // {
-  //   name: "Detection Instance 3",
-  //   id: 3,
-  //   plantId: 1,
-  //   zoneId: 1,
-  //   assignee: "Minase Serafim",
-  //   confidenceTheshold: 0.5,
-  //   detectionType: 1,
-  //   classesDetection: ["Vest", "Hairnet", "Goggles", "Earplugs"],
-  //   camera: mockCamera[1],  // Use the second camera from Zone 1
-  //   isRunning: true,
-  //   timeElapsed: 678
-  // },
-  // {
-  //   name: "Detection Instance 4",
-  //   id: 4,
-  //   plantId: 2,
-  //   zoneId: 3,
-  //   assignee: "Mariama Oliveira",
-  //   confidenceTheshold: 0.5,
-  //   detectionType: 2,
-  //   classesDetection: ["Helmet", "Vest", "Hairnet", "Goggles", "Earplugs"],
-  //   camera: mockCamera[2],  // Use a camera from Zone 3
-  //   isRunning: true,
-  //   timeElapsed: 555
-  // },
-  // {
-  //   name: "Detection Instance 5",
-  //   id: 5,
-  //   plantId: 2,
-  //   zoneId: 4,
-  //   assignee: "Luca Bianchi",
-  //   confidenceTheshold: 0.5,
-  //   detectionType: 1,
-  //   classesDetection: ["Helmet", "Earplugs"],
-  //   camera: mockCamera[0],  // Use the camera from Zone 4
-  //   isRunning: true,
-  //   timeElapsed: 99999
-  // }
+
+export const mockScenarios: ScenarioItem[] = [
+  {
+    id: 1,
+    name: 'Vest',
+    description: 'Detection of safety vests in the area.'
+  },
+  {
+    id: 2,
+    name: 'Helmet',
+    description: 'Detection of safety helmets on personnel.'
+  },
+  {
+    id: 3,
+    name: 'Mask',
+    description: 'Detection of protective masks on workers.'
+  },
+  {
+    id: 4,
+    name: 'Goggles',
+    description: 'Detection of safety goggles for eye protection.'
+  },
+  {
+    id: 5,
+    name: 'Hairnet',
+    description: 'Detection of hairnets in areas where they are required.'
+  },
+  {
+    id: 6,
+    name: 'Earplugs',
+    description: 'Detection of earplugs for hearing protection in noisy environments.'
+  }
 ];
+
+
+export const mockDetectionTypes: DetectionTypeItem[] = [
+  { id: 1, name: 'PPE Detection', description: 'Detects PPE like helmets, vests, etc.' },
+  { id: 2, name: 'Intrusion Detection', description: 'Detects unauthorized intrusions.' },
+  { id: 3, name: 'Fire Detection', description: 'Detects fire or smoke in the area.' }
+];
+
+
+export const mockNewDetectionInstance: CreateDetectionInstanceRequest = {
+  recording: {
+    name: 'Test Instance',
+    zone_id: 1,
+    assignee_id: 2,
+    confidence: 95,
+    detection_type: 1,
+    camera_id: 3,
+    status: true
+  },
+  scenarios: [mockScenarios[0],mockScenarios[2]]
+};
+
+// Mock DetectionInstanceRequest, which will be transformed into DetectionInstanceItem by the service
+export const mockDetectionInstanceRequests: DetectionInstanceRequest[] = [
+  {
+    recording: {
+      id: 1,
+      name: 'Detection 1',
+      zone_id: 1,
+      assignee_id: 1,
+      detection_type_id: 1,
+      starttime: '2023-08-29T08:00:00Z',
+      confidence: 0.95,
+      camera_id: 1,
+      status: true
+    },
+    scenarios: [mockScenarios[0], mockScenarios[1]] // Vest and Helmet
+  },
+  {
+    recording: {
+      id: 2,
+      name: 'Detection 2',
+      zone_id: 1,
+      assignee_id: 2,
+      detection_type_id: 2,
+      starttime: '2023-08-29T09:00:00Z',
+      confidence: 0.90,
+      camera_id: 2,
+      status: true
+    },
+    scenarios: [mockScenarios[2]] // Mask
+  }
+];
+
+
+export const mockDetectionInstances: DetectionInstanceItem[] = mockDetectionInstanceRequests.map(request => {
+  const zone = mockZones.find(z => z.id === request.recording.zone_id);
+  const assignee = mockAssignees.find(a => a.id === request.recording.assignee_id);
+  const camera = mockCamera.find(c => c.id === request.recording.camera_id);
+  const detectionType = mockDetectionTypes.find(dt => dt.id === request.recording.detection_type_id);
+
+  return {
+    id: request.recording.id,
+    name: request.recording.name,
+    zone: zone,
+    detectionType: detectionType,
+    confidenceTheshold: request.recording.confidence * 100,
+    assignee: assignee,
+    classesDetection: request.scenarios,
+    camera: camera,
+    isRunning: request.recording.status,
+    starttime: request.recording.starttime,
+    timeElapsed: undefined // Time elapsed can be calculated as needed
+  };
+});
+
+
