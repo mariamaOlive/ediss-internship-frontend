@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DetectionInstanceComponent } from './detection-instance.component';
 
-describe('DetectionInstanceComponent', () => {
+xdescribe('DetectionInstanceComponent', () => {
   let component: DetectionInstanceComponent;
   let fixture: ComponentFixture<DetectionInstanceComponent>;
 

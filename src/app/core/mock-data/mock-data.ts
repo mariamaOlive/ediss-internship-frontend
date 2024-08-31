@@ -4,19 +4,70 @@ import { DetectionInstanceItem } from '../models/detection-instance.model';
 import { PlantItem } from '../models/plant.model';
 import { ZoneItem } from '../models/zone.model';
 
+// Mock data for AssigneeItem
 export const mockAssignees: AssigneeItem[] = [
-  // { name: "Anna Bianchi", id: 1 },
-  // { name: "Giorgia Versace", id: 2 },
-  // { name: "Marta Bergman", id: 3 },
-  // { name: "Pietro Björn", id: 4 }
+  {
+    id: 1,
+    name: 'John Doe',
+    email: 'john.doe@example.com',
+    phone: '123-456-7890'
+  },
+  {
+    id: 2,
+    name: 'Jane Smith',
+    email: 'jane.smith@example.com',
+    phone: '098-765-4321'
+  },
+  {
+    id: 3,
+    name: 'Alice Johnson',
+    email: 'alice.johnson@example.com',
+    phone: '555-555-5555'
+  }
 ];
 
-export const mockPlants: PlantItem[] = [
-  { name: "Plant 1", id: 1, address: "Italy", plantConfidence: 0.5, plantstatus: true },
-  { name: "Plant 2", id: 2, address: "Italy", plantConfidence: 0.6, plantstatus: true },
-  { name: "Plant 3", id: 3, address: "Italy", plantConfidence: 0.7, plantstatus: true }
+
+export const mockPlantsActive: PlantItem[] = [
+  {
+    id: 1,
+    name: 'Aptar Plant 1',
+    address: '123 Main St, Springfield, IL',
+    plantConfidence: 85,
+    plantstatus: true,
+  },
+  {
+    id: 2,
+    name: 'Aptar Plant 2',
+    address: '456 Oak Ave, Metropolis, NY',
+    plantConfidence: 90,
+    plantstatus: true,
+  },
+  {
+    id: 5,
+    name: 'Aptar Plant 5',
+    address: '456 Oak Ave, Metropolis, NY',
+    plantConfidence: 92,
+    plantstatus: true,
+  }
 ];
 
+
+export const mockPlantsInactive: PlantItem[] = [
+  {
+    id: 3,
+    name: 'Aptar Plant 3',
+    address: '789 Maple Dr, Gotham, NJ',
+    plantConfidence: 75,
+    plantstatus: false,
+  },
+  {
+    id: 4,
+    name: 'Aptar Plant 4',
+    address: '101 Pine Ln, Star City, CA',
+    plantConfidence: 65,
+    plantstatus: true,
+  }
+]
 
 export const mockCamera: CameraItem[] = [
 //   { name: "Camera 1", id: 1, ipAddress: "187.20.135.197" },

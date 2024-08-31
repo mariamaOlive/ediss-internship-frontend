@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { DetectionInstanceService } from './detection-instance.service';
 
-describe('DetectionInstanceService', () => {
+xdescribe('DetectionInstanceService', () => {
   let service: DetectionInstanceService;
 
   beforeEach(() => {

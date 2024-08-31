@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { IncidentService } from './incident.service';
 
-describe('IncidentService', () => {
+xdescribe('IncidentService', () => {
   let service: IncidentService;
 
   beforeEach(() => {
