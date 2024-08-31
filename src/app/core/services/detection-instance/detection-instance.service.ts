@@ -38,7 +38,7 @@ export class DetectionInstanceService {
   /**
    * Fetches all detection instances for a given zone by its ID.
    * @param zoneId The ID of the zone to fetch detection instances for.
-   * @returns An Observable that emits an array of DetectionInstanceItem objects.
+   * @returns An Observable that emits an array of DetectionInstanceItem objects sorted by startTime.
    */
   fetchDetectionInstancesByZoneId(zoneId: number): Observable<DetectionInstanceItem[]> {
     const detectionInstancesUrl = `${environment.apiUrl}${API_ENDPOINTS.zones}${API_ENDPOINTS.detectionInstances}/${zoneId}`;
@@ -51,7 +51,10 @@ export class DetectionInstanceService {
               const detectionType = detectionTypes.find(dt => dt.id === item.recording.detection_type_id);
               return this.mapToDetectionInstance(item, detectionType);
             })
-          )
+          ),
+          map(detectionInstances => detectionInstances.sort((a, b) => {
+            return new Date(b.starttime).getTime() - new Date(a.starttime).getTime(); //Descending order
+          }))
         )
       )
     );
@@ -68,23 +71,37 @@ export class DetectionInstanceService {
     return this.fetchDetectionTypes().pipe(
       switchMap(detectionTypes =>
         this.http.get<DetectionInstanceRequest>(apiUrl).pipe(
-          switchMap(item =>
-            forkJoin({
-              zone: this.zoneService.fetchZoneById(item.recording.zone_id),
-              camera: this.cameraService.fetchCameraById(item.recording.camera_id),
-              assignee: this.assigneeService.fetchAllAssignees().pipe(
-                map(assignees => assignees.find(assignee => assignee.id === item.recording.assignee_id))
-              )
-            }).pipe(
-              map(({ zone, assignee, camera }) => {
-                const detectionType = detectionTypes.find(dt => dt.id === item.recording.detection_type_id);
-                return this.mapToDetectionInstance(item, detectionType, zone, camera, assignee);
-              })
-            )
-          )
+          switchMap(item => this.fetchAdditionalInfo(item).pipe(
+            map(({ zone, assignee, camera }) => {
+              const detectionType = detectionTypes.find(dt => dt.id === item.recording.detection_type_id);
+              return this.mapToDetectionInstance(item, detectionType, zone, camera, assignee);
+            })
+          ))
         )
       )
     );
+  }
+
+  /**
+   * Fetches the zone, camera, and assignee details for a detection instance.
+   * @param {DetectionInstanceRequest} item - The detection instance request with `zone_id`, `camera_id`, and `assignee_id`.
+   * @returns {Observable<{ zone: ZoneItem; camera: CameraItem; assignee: AssigneeItem }>} - An observable emitting the zone, 
+   * camera, and assignee details. Throws an error if the assignee is not found.
+   */
+  private fetchAdditionalInfo(item: DetectionInstanceRequest): Observable<{ zone: ZoneItem; camera: CameraItem; assignee: AssigneeItem }> {
+    return forkJoin({
+      zone: this.zoneService.fetchZoneById(item.recording.zone_id),
+      camera: this.cameraService.fetchCameraById(item.recording.camera_id),
+      assignee: this.assigneeService.fetchAllAssignees().pipe(
+        map(assignees => {
+          const assignee = assignees.find(assignee => assignee.id === item.recording.assignee_id);
+          if (!assignee) {
+            throw new Error(`Assignee with ID ${item.recording.assignee_id} not found.`);
+          }
+          return assignee;
+        })
+      )
+    });
   }
 
   /**
@@ -136,6 +153,7 @@ export class DetectionInstanceService {
       confidenceTheshold: item.recording.confidence * 100,
       detectionType: detectionType,
       classesDetection: item.scenarios ?? undefined,
+      starttime: item.recording.starttime,
       zone: zone ?? undefined,  // Default to undefined if not provided
       camera: camera ?? undefined,  // Default to undefined if not provided
       assignee: assignee ?? undefined  // Default to undefined if not provided
@@ -156,10 +174,4 @@ export class DetectionInstanceService {
       return of(false); // Return false indicating failure to delete
     }
   }
-
-  // HTTP request method to delete a detection instance
-  // deleteDetectionInstance(zoneId: number): Observable<boolean> {
-    //   return this.http.delete<boolean>(apiUrl);
-    //   const apiUrl = `https://api.example.com/detection-instances/${zoneId}`;
-  // }
 }

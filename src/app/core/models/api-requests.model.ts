@@ -37,7 +37,7 @@ export interface Recording {
   zone_id: number;
   assignee_id?: number;
   detection_type_id: number;
-  starttime?: string; 
+  starttime: string; 
   endtime?: string;    
   status?: boolean;
   confidence: number;

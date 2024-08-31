@@ -13,6 +13,7 @@ export interface DetectionInstanceItem {
     classesDetection?: ScenarioItem[];
     camera?: CameraItem;
     isRunning?: boolean;
+    starttime: string; 
     timeElapsed?: number;
 }
 
