@@ -97,8 +97,9 @@
                 <div class="mb-3">
                   <label for="numberInput" class="form-label">Confidence Level</label>
                   <div class="input-group confidence-input">
-                    <input id="numberInput" type="number" min="0" max="100" [ngModel]="confidenceThreshold * 100"
-                      (ngModelChange)="setConfidenceThreshold($event)" name="numberInput" required
+                    <input id="numberInput" type="number" min="0" max="100" 
+                      [(ngModel)]="confidenceThreshold"
+                      name="numberInput" required
                       class="form-control form-control-sm">
                     <span class="input-group-text">%</span>
                   </div>

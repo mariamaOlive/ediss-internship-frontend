@@ -196,19 +196,6 @@ export class AddDetectionInstanceComponent implements OnInit {
 
 
   // ========================
-  // Utility Functions
-  // ========================
-
-  /**
-   * Sets the confidence threshold based on a value.
-   * @param value The value to set the confidence threshold to.
-   */
-  setConfidenceThreshold(value: number): void {
-    this.confidenceThreshold = parseFloat((value / 100).toFixed(2));
-  }
-
-
-  // ========================
   // Navigation Functions
   // ========================
 
