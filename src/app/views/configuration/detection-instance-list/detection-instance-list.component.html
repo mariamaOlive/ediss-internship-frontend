@@ -10,10 +10,15 @@
       <c-col sm="6" xl="3" *ngFor="let detectionInstance of detectionInstanceList">
           <c-card class="card-container mb-3 p-0 shadow-sm" (click)="navigateToDetectionInstance(detectionInstance.id)">
             <div class="card-container-top position-relative">
-              <span class="ms-3 mt-3 align-middle status-bubble"
-                [ngClass]="{'bg-success': detectionInstance?.isRunning, 'bg-danger': !detectionInstance?.isRunning}"
-                [cTooltip]="detectionInstance?.isRunning ? 'Running' : 'Paused'" cTooltipPlacement="right">
-              </span>
+              <div class="mt-2 d-flex align-items-center">
+                <span class="ms-3 align-middle status-bubble"
+                  [ngClass]="{'bg-success': detectionInstance?.isRunning, 'bg-danger': !detectionInstance?.isRunning}">
+                </span>
+                <span class="ms-2 text-white">
+                  {{ detectionInstance?.isRunning ? 'Running' : 'Stopped' }}
+                </span>
+              </div>
+              
             
               <!-- DropDown -->
               <c-dropdown alignment="end" variant="btn-group" class="position-absolute top-0 end-0 m-2">
