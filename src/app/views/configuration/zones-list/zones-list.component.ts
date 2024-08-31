@@ -20,7 +20,8 @@ import { CardListComponent } from 'src/app/shared/components/card-list/card-list
 
 import { AssigneeItem } from 'src/app/core/models/assignee.model';
 import { AssigneeService } from 'src/app/core/services/assignee/assignee.service';
-import { CameraItem } from 'src/app/core/models/camera.model';
+import { PlantItem } from 'src/app/core/models/plant.model';
+import { PlantService } from 'src/app/core/services/plant/plant.service';
 import { ZoneItem } from 'src/app/core/models/zone.model';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
 import { DataTransferService } from 'src/app/core/services/data-transfer/data-transfer.service';
@@ -53,9 +54,11 @@ export class ZonesListComponent {
   //Template properties
   assignees: AssigneeItem[] = [];
   cardList: Array<{ name: string, description: string, id: number }> = [];
-  plantId: any = NaN;
-  zonesList: ZoneItem[] = [];
+  plantId?: number;
+  plantInfo?: PlantItem;
   visible = false;
+  zonesList: ZoneItem[] = [];
+
 
   //Input properties
   confidenceThreshold: number = 0;
@@ -69,8 +72,9 @@ export class ZonesListComponent {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private zoneService: ZoneService,
     private assigneeService: AssigneeService,
+    private plantService: PlantService,
+    private zoneService: ZoneService,
     private location: Location,
     private dataTransferService: DataTransferService,
     public iconSet: IconSetService) {
@@ -90,27 +94,25 @@ export class ZonesListComponent {
   // Service Calls
   // ========================
 
-  /**
-   * Loads the list of assignees from the server.
-   */
-  loadAssignees(): void {
-    this.assigneeService.fetchAllAssignees().subscribe({
-      next: assignees => this.assignees = assignees,
-      error: err => console.error('Error fetching assignees:', err)
-    });
-  }
+
 
   /**
    * Adds a new zone using the current form data.
    * Refreshes the list of zones after successful addition.
    */
   addNewZone(): void {
+
+    if(!this.plantId){
+      throw new Error('Plant ID not defined.');
+    }
+
     const newZone: ZoneCreateRequest = {
       title: this.zoneName,
-      plant_id: parseInt(this.plantId),
+      plant_id: this.plantId,
       cameras: this.cameraList,
       assignee_id: this.selectedAssignee,
       zoneconfidence: this.confidenceThreshold,
+      status: 'active',
       description: ""
     };
 
@@ -134,13 +136,37 @@ export class ZonesListComponent {
   }
 
   /**
+  * Loads the list of assignees from the server.
+  */
+  loadAssignees(): void {
+    this.assigneeService.fetchAllAssignees().subscribe({
+      next: assignees => this.assignees = assignees,
+      error: err => console.error('Error fetching assignees:', err)
+    });
+  }
+
+  /**
+  * Loads the plant info from the server.
+  */
+  loadPlantInfo(): void {
+    this.plantService.fetchPlants().subscribe({
+      next: plants => {
+        this.plantInfo = plants.find(item => item.id === this.plantId);
+        if(this.plantInfo?.plantConfidence){
+          this.confidenceThreshold = this.plantInfo?.plantConfidence;
+        }
+      }
+    })
+  }
+
+  /**
   * Loads the list of zones by the plant ID from the route parameters.
   */
   loadZonesByPlantId(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const id = params.get('id');
       if (id) {
-        this.plantId = id;
+        this.plantId = parseInt(id,10);
         this.zoneService.fetchZonesByPlantId(parseInt(id, 10)).subscribe({
           next: zones => {
             this.zonesList = zones;
@@ -168,6 +194,7 @@ export class ZonesListComponent {
    */
   toggleModal() {
     this.loadAssignees();
+    this.loadPlantInfo();
     this.visible = !this.visible;
   }
 
@@ -204,14 +231,6 @@ export class ZonesListComponent {
   // ========================
   // Utility Functions
   // ========================
-
-  /**
-   * Sets the confidence threshold based on a value from an input.
-   * @param value The value to set the confidence threshold to.
-   */
-  setConfidenceThreshold(value: number): void {
-    this.confidenceThreshold = parseFloat((value / 100).toFixed(2));
-  }
 
   /**
    * Adds a new camera to the list of cameras for the zone.

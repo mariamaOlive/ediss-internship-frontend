@@ -157,14 +157,6 @@ export class PlantsListComponent implements OnInit {
   // ========================
 
   /**
-   * Sets the confidence threshold based on a value from an input.
-   * @param value The value to set the confidence threshold to.
-   */
-  setConfidenceThreshold(value: number): void {
-    this.confidenceThreshold = parseFloat((value / 100).toFixed(2));
-  }
-
-  /**
    * Resets the form fields to their default values.
    */
   private resetForm(): void {

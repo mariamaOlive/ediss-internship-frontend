@@ -22,9 +22,10 @@ export interface ZoneCreateRequest {
   title: string;
   description: string;
   plant_id: number;
-  cameras: CameraZoneCreateRequest[];  
+  cameras: CameraZoneCreateRequest[];
   assignee_id: number;
   zoneconfidence: number;
+  status: string;
 }
 
 // ========================
@@ -37,8 +38,8 @@ export interface Recording {
   zone_id: number;
   assignee_id?: number;
   detection_type_id: number;
-  starttime: string; 
-  endtime?: string;    
+  starttime: string;
+  endtime?: string;
   status?: boolean;
   confidence: number;
   task_id?: string;
@@ -50,7 +51,7 @@ export interface CreateRecording {
   name: string;
   zone_id: number;
   assignee_id: number;
-  detection_type: number; 
+  detection_type: number;
   status?: boolean;
   confidence: number;
   camera_id: number;
