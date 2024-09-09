@@ -7,4 +7,5 @@ export const API_ENDPOINTS = {
     detection: '/detection',
     scenarios: '/scenario',
     cameras: '/cameras',
+    reports: '/reports/incident_data'
 };
