@@ -177,7 +177,7 @@ export class ZonesListComponent {
             }));
           },
           error: err => {
-            console.error('Error fetching detections instance:', err);
+            console.error('Error fetching Zones:', err);
           }
         });
       }
