@@ -43,15 +43,15 @@
     </div>
 
     <c-nav variant="pills" class="m-4">
-      <a [active]="true" [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="0" cNavLink>PPE Detection</a>
-      <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="1" cNavLink>Pallet Detection</a>
-      <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="2" cNavLink>Forklift Detection</a>
+      <a [active]="true" [cTabContent]="tabContent" (click)="selectTab(0)" [routerLink] [tabPaneIdx]="0" cNavLink>PPE Detection</a>
+      <a [cTabContent]="tabContent" (click)="selectTab(1)" [routerLink] [tabPaneIdx]="1" cNavLink>Pallet Detection</a>
+      <a [cTabContent]="tabContent" (click)="selectTab(2)" [routerLink] [tabPaneIdx]="2" cNavLink>Forklift Detection</a>
     </c-nav>
     <c-tab-content #tabContent="cTabContent">
       <c-tab-pane class="ps-4 pe-4">
 
         <!-- Card 1 -->
-        <c-card class="mb-3 mt-2 pb-2">
+        <!-- <c-card class="mb-3 mt-2 pb-2">
           <c-card-body>
             <c-container>
               <c-row class="mt-3 small-card__title">
@@ -64,7 +64,7 @@
               </c-row>
             </c-container>
           </c-card-body>
-        </c-card>
+        </c-card> -->
 
         <!-- Card 2 -->
         <c-card class="mb-3 mt-2 pb-2">
@@ -75,7 +75,7 @@
               </c-row>
               <c-row class="mt-3 small-card__text">
                 <c-chart [data]="chartsData?.data" [height]="300" [ngStyle]="{ 'marginTop.px': 40 }"
-                  [options]="chartsData?.options" [type]="chartsData?.type" (chartRef)="handleChartRef($event)">
+                  [options]="chartsData?.options" [type]="'line'" (chartRef)="handleChartRef($event)">
                   Timeline chart
                 </c-chart>
               </c-row>
@@ -116,6 +116,20 @@
 
       </c-tab-pane>
       <c-tab-pane class="ps-4 pe-4">
+
+        <c-card class="mb-3 mt-2 pb-2">
+          <c-card-body>
+            <c-container>
+              <c-row class="mt-3 small-card__title">
+                <!-- <h6>Nr. of incidents in the last {{ days }} days</h6> -->
+              </c-row>
+              <c-row class="mt-3 small-card__text ps-4">
+                <!-- {{ incidentReport?.incidents_by_type?.[0]?.count ?? 'N/A' }} -->
+              </c-row>
+            </c-container>
+          </c-card-body>
+        </c-card>
+        
         <c-card class="mb-3 mt-2 pb-2">
           <c-card-body>
             <c-container>
@@ -124,7 +138,7 @@
               </c-row>
               <c-row class="mt-3 small-card__text">
                 <c-chart [data]="chartsData?.data" [height]="300" [ngStyle]="{ 'marginTop.px': 40 }"
-                  [options]="chartsData?.options" [type]="chartsData?.type" (chartRef)="handleChartRef($event)">
+                  [options]="chartsData?.options" [type]="'line'" (chartRef)="handleChartRef($event)">
                   Timeline chart
                 </c-chart>
               </c-row>
@@ -142,7 +156,7 @@
               </c-row>
               <c-row class="mt-3 small-card__text">
                 <c-chart [data]="chartsData?.data" [height]="300" [ngStyle]="{ 'marginTop.px': 40 }"
-                  [options]="chartsData?.options" [type]="chartsData?.type" (chartRef)="handleChartRef($event)">
+                  [options]="chartsData?.options" [type]="'line'" (chartRef)="handleChartRef($event)">
                   Timeline chart
                 </c-chart>
               </c-row>
@@ -151,13 +165,6 @@
         </c-card>
       </c-tab-pane>
     </c-tab-content>
-
-
-
-
-
-
-
 
   </c-card-body>
 </c-card>

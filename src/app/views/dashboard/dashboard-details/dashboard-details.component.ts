@@ -8,6 +8,7 @@ import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft } from '@coreui/ico
 import { ChartjsComponent } from '@coreui/angular-chartjs';
 import { ChartOptions } from 'chart.js';
 
+
 import { DashboardChartsDataTimeLine } from './dashboard-charts-data-timeline';
 import { DashboardChartsDataDonut } from './dashboard-charts-data-donut';
 
@@ -17,6 +18,7 @@ import { PlantItem } from 'src/app/core/models/plant.model';
 import { PlantService } from 'src/app/core/services/plant/plant.service';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
 import { ZoneItem } from 'src/app/core/models/zone.model';
+import { IncidentDataItem } from 'src/app/core/models/incident-data.model';
 
 
 @Component({
@@ -51,14 +53,17 @@ export class DashboardDetailsComponent implements OnInit {
   chartsDataDonut: DashboardChartsDataDonut | null = null;
   
   // View Properties
-  incidentsList: IncidentItem[] = [];
+  incidentReport?: IncidentDataItem;
   zoneList: ZoneItem[] = [];
   plant: PlantItem | null = null;
+  plantId?: number;
   selectedZone: number = 0;
   selectedInstanceId: string = "";
   paginatedIncidents: any = [];
   itemsPerPage = 10; // Number of items to load each time
   currentPage = 1;
+  days: number = 7;
+  activeTab: number = 0;
 
   formRadio1 = new UntypedFormGroup({
     radio1: new UntypedFormControl('Radio1')
@@ -75,7 +80,6 @@ export class DashboardDetailsComponent implements OnInit {
     private formBuilder: UntypedFormBuilder) {
 
     iconSet.icons = { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft };
-    this.loadMoreIncidents(); 
   }
 
   ngOnInit(): void {
@@ -140,22 +144,34 @@ export class DashboardDetailsComponent implements OnInit {
   // ========================
 
   private loadDashboardData(): void {
-    const plantId = this.route.snapshot.paramMap.get('id');
-    if (plantId) {
-      const id = parseInt(plantId, 10);
-      this.loadPlantZones(id);
-      this.loadIncidentData(id);
-      // this.loadPlantData(id);
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.plantId = parseInt(id, 10);
+      this.loadPlantZones(this.plantId);
+      this.loadIncidentData(this.plantId);
+    }else {
+      console.error('Invalid plantId:', id);
+    }
+  }
+
+  private requestIncidents(): void{
+    if (this.plantId && !isNaN(this.plantId)) {
+      this.loadIncidentData(this.plantId);
+    } else {
+      console.error('Invalid plantId:', this.plantId);
     }
   }
 
   private loadIncidentData(plantId: number): void {
-    this.incidentService.getIncidentsByPlantId(plantId).subscribe({
+
+    const tab = this.activeTab + 1;
+    const nDays = this.days-1;
+    this.incidentService.fetchIncidentsByPlant(plantId, tab, nDays).subscribe({
       next: incidents => {
-        this.incidentsList = incidents;
-        this.chartsData = new DashboardChartsDataTimeLine(this.incidentsList);
-        this.chartsDataDonut = new DashboardChartsDataDonut(this.incidentsList);
-        this.loadMoreIncidents(); // Initial load of paginated data
+        this.incidentReport = incidents;
+        this.chartsData = new DashboardChartsDataTimeLine(this.incidentReport);
+        // this.chartsDataDonut = new DashboardChartsDataDonut(this.incidentsList);
+        // this.loadMoreIncidents(); // Initial load of paginated data
       },
       error: err => console.error('Error fetching incidents:', err)
     });
@@ -180,25 +196,22 @@ export class DashboardDetailsComponent implements OnInit {
   // Utility Functions
   // ========================
 
-  @HostListener('window:scroll', ['$event'])
-  onScroll(event: any): void {
-    const pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
-    const max = document.documentElement.scrollHeight;
-
-    if (pos >= max) {
-      this.loadMoreIncidents();
-    }
-  }
-
-  loadMoreIncidents() {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const newIncidents = this.incidentsList.slice(startIndex, startIndex + this.itemsPerPage);
-    this.paginatedIncidents = [...this.paginatedIncidents, ...newIncidents];
-    this.currentPage++;
-  }
-
   setRadioValue(value: string): void {
     this.formRadio1.setValue({ radio1: value });
+    
+    if (value === 'Radio1') {
+      this.days = 7;
+    } else if (value === 'Radio2') {
+      this.days = 30;
+    }
+
+    console.log('Selected value:', this.days);
+    this.requestIncidents();
+  }
+
+  selectTab(index: number) {
+    this.activeTab = index;
+    this.requestIncidents();
   }
 
 

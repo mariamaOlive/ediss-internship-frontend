@@ -13,54 +13,26 @@ import { getStyle, hexToRgba } from '@coreui/utils';
 import { IncidentItem } from 'src/app/core/models/incident.model';
 import { IncidentService } from 'src/app/core/services/incident/incident.service';
 import { differenceInDays } from 'date-fns';
+import { IncidentDataItem } from 'src/app/core/models/incident-data.model';
 
 
 export class DashboardChartsDataTimeLine {
-  incidentList: IncidentItem[];
-  type:any;
-  options:any;
+  type: any;
+  options: any;
   data : any; 
-  data1: any;
-  data2: any;
-  data3: any;
-  elements : any;
-  highestScaleY:number = 100
+  elements: any;
+  highestScaleY: number = 100
 
-  constructor(incidentList: IncidentItem[]) {
-    this.incidentList = incidentList;
+  constructor(private incident: IncidentDataItem) {
     this.initMainChart();
   }
 
-  // public mainChart: IChartProps = { type: 'line' };
-
-  public random(min: number, max: number) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  }
 
   initMainChart(period: string = 'Week') {
     const brandSuccess = getStyle('--cui-success') ?? '#4dbd74';
     const brandInfo = getStyle('--cui-info') ?? '#20a8d8';
     const brandInfoBg = hexToRgba(getStyle('--cui-info') ?? '#20a8d8', 10);
     const brandDanger = getStyle('--cui-danger') ?? '#f86c6b';
-
-    // mainChart
-    this.elements = period === 'Month' ? 12 : 7;
-    this.data1 = [];
-    this.data2 = [];
-    this.data3 = [];
-
-    // Treat data of time series
-    this.data1 = this.countIncidentsByDay(this.filterIncidentsByTypeAndTimestamp(this.incidentList, "Helmet", 7),7);
-    this.data2 = this.countIncidentsByDay(this.filterIncidentsByTypeAndTimestamp(this.incidentList, "Vest", 7),7);
-    this.data3 = this.countIncidentsByDay(this.filterIncidentsByTypeAndTimestamp(this.incidentList, "Hairnet", 7),7);
-
-    this.highestScaleY = this.getHighestValue(this.data1, this.data2, this.data3);
-
-
-    let labels: string[] = this.generateXLabels();
-
-    
-    
 
     const colors = [
       {
@@ -87,23 +59,35 @@ export class DashboardChartsDataTimeLine {
       }
     ];
 
-    const datasets: ChartDataset[] = [
-      {
-        data: this.data1,
-        label: 'Helmet',
-        ...colors[0]
-      },
-      {
-        data: this.data2,
-        label: 'Vest',
-        ...colors[1]
-      },
-      {
-        data: this.data3,
-        label: 'Hairnet',
-        ...colors[2]
-      }
-    ];
+    // Empty datasets to start fresh
+    let datasets: any[] = [];
+
+    const incidentTypesArray = this.incident.incidents_by_type.map(entry => entry.type);
+    
+
+    // // Loop through each incident type and prepare its dataset
+    incidentTypesArray.forEach((type, index) => {
+      const numberIncidentsArray = Object.values(this.incident.incidents_timeline).map(entry => (entry as { [key: string]: number })[type]);
+      numberIncidentsArray.reverse();
+
+      // Add to the datasets
+      datasets.push({
+        data: numberIncidentsArray,
+        label: type,
+        ...colors[0] 
+      });
+    });
+
+    this.highestScaleY = this.getHighestValue(...datasets.map(dataset => dataset.data));
+
+    const labels = this.generateXLabels();
+
+
+
+
+    
+
+
 
     const plugins: DeepPartial<PluginOptionsByType<any>> = {
       legend: {
@@ -199,12 +183,12 @@ export class DashboardChartsDataTimeLine {
   }
 
   //Count Number of incidents by date
-  countIncidentsByDay(incidents: IncidentItem[], numberDaysAgo:number):number[]{
+  countIncidentsByDay(incidents: IncidentItem[], numberDaysAgo: number): number[] {
     let arrayCount = Array(numberDaysAgo).fill(0);
-    for(var incident of incidents){
+    for (var incident of incidents) {
       const today = new Date();
       const daysDifference = differenceInDays(today, incident.timestamp);
-      arrayCount[daysDifference] +=1;
+      arrayCount[daysDifference] += 1;
     }
 
     return arrayCount.reverse() //Make today the last date;
@@ -216,24 +200,23 @@ export class DashboardChartsDataTimeLine {
 
     // Use Math.max to find the highest value in the combined array
     const highestValue = Math.max(...combinedArray);
-    console.log(highestValue)
     return highestValue;
   }
 
-  generateXLabels():string[]{
-    const week = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', ];
+  generateXLabels(): string[] {
+    const week = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',];
 
-      // Get today's date
-      const today = new Date();
-      const todayIndex = today.getDay(); // Sunday - Saturday : 0 - 6
+    // Get today's date
+    const today = new Date();
+    const todayIndex = today.getDay(); // Sunday - Saturday : 0 - 6
 
-      // Generate labels for today and the last 6 days
-      const labels = [];
-      for (let i = 0; i < 7; i++) {
-        const dayIndex = (todayIndex - i + 7) % 7;
-        labels.unshift(week[dayIndex]);
-      }
-      return labels;
+    // Generate labels for today and the last 6 days
+    const labels = [];
+    for (let i = 0; i < 7; i++) {
+      const dayIndex = (todayIndex - i + 7) % 7;
+      labels.unshift(week[dayIndex]);
+    }
+    return labels;
   }
-  
+
 }

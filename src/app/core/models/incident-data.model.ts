@@ -1,12 +1,5 @@
 export interface IncidentDataItem {
-    // id: number;
-    // name: string;
-    // email: string;
-    // phone: string;
-
-    // {
-    //     "incidents_by_type": [],
-    //     "incidents_timeline": {}
-    // }
+    incidents_by_type: any[],
+    incidents_timeline: any
 }
   
