@@ -43,7 +43,8 @@
     </div>
 
     <c-nav variant="pills" class="m-4">
-      <a [active]="true" [cTabContent]="tabContent" (click)="selectTab(0)" [routerLink] [tabPaneIdx]="0" cNavLink>PPE Detection</a>
+      <a [active]="true" [cTabContent]="tabContent" (click)="selectTab(0)" [routerLink] [tabPaneIdx]="0" cNavLink>PPE
+        Detection</a>
       <a [cTabContent]="tabContent" (click)="selectTab(1)" [routerLink] [tabPaneIdx]="1" cNavLink>Pallet Detection</a>
       <a [cTabContent]="tabContent" (click)="selectTab(2)" [routerLink] [tabPaneIdx]="2" cNavLink>Forklift Detection</a>
     </c-nav>
@@ -51,131 +52,119 @@
       <c-tab-pane class="ps-4 pe-4">
 
         <!-- Card 1 -->
-        <c-card class="mb-3 mt-2 pb-2">
-          <c-card-body>
-            <c-container>
-              <c-row class="mt-3 small-card__title">
-                <h6>Incidents by type</h6>
-              </c-row>
-              <c-row class="mt-3 small-card__text">
-                <c-chart [data]="chartsDataDonut?.data" [height]="300" [ngStyle]="{ 'marginTop.px': 40 }"
-                  [options]="chartsDataDonut?.options" [type]="'doughnut'"
-                  (chartRef)="handleChartRefDounut($event)" />
-              </c-row>
-            </c-container>
-          </c-card-body>
-        </c-card>
 
-        <!-- Card 2 -->
-        <c-card class="mb-3 mt-2 pb-2">
-          <c-card-body>
-            <c-container>
-              <c-row class="mt-3 small-card__title">
-                <h6>Incidents Timeline</h6>
-              </c-row>
-              <c-row class="mt-3 small-card__text">
-                <c-chart [data]="chartsData?.data" [height]="300" [ngStyle]="{ 'marginTop.px': 40 }"
-                  [options]="chartsData?.options" [type]="'line'" (chartRef)="handleChartRef($event)">
-                  Timeline chart
-                </c-chart>
-              </c-row>
-            </c-container>
-          </c-card-body>
-        </c-card>
+        <div *ngIf="!incidentsEmpty">
+          <c-card class="mb-3 mt-2 pb-2">
+            <c-card-body>
+              <c-container>
+                <c-row class="mt-3 small-card__title">
+                  <h6>Incidents by type</h6>
+                </c-row>
+                <c-row class="mt-3 small-card__text">
+                  <c-chart [data]="chartsDataDonut?.data" [height]="300" [ngStyle]="{ 'marginTop.px': 40 }"
+                    [options]="chartsDataDonut?.options" [type]="'doughnut'"
+                    (chartRef)="handleChartRefDounut($event)" />
+                </c-row>
+              </c-container>
+            </c-card-body>
+          </c-card>
 
-        <!-- Card 3 -->
-        <!-- <c-card class="mb-3 pb-2 card-timeline-list">
-          <c-card-body>
-            <c-container>
-              <c-row class="mt-3 small-card__title">
-                <h6>Incidents timeline details</h6>
-              </c-row>
-              <c-row>
-                <c-container>
-                  <c-row class="mt-3 mb-2 small-card__subtitle">
-                    <c-col class="d-flex justify-content-center align-items-center">Object</c-col>
-                    <c-col class="d-flex justify-content-center align-items-center">Timestamp</c-col>
-                    <c-col class="d-flex justify-content-center align-items-center">Detection instance</c-col>
-                  </c-row>
-                </c-container>
-              </c-row>
-              <c-row class="pb-3">
-                <c-container class="card-timeline-sub-list">
-                  <c-row *ngFor="let incident of paginatedIncidents" class="align-items-center">
-                    <c-col class="d-flex justify-content-center align-items-center">{{ incident.className }}</c-col>
-                    <c-col class="d-flex justify-content-center align-items-center">{{ incident.timestamp }}</c-col>
-                    <c-col class="d-flex justify-content-center align-items-center">{{ incident.detectionInstanceId
-                      }}</c-col>
-                  </c-row>
-                </c-container>
-              </c-row>
-            </c-container>
-          </c-card-body>
-        </c-card> -->
+          <!-- Card 2 -->
+          <c-card class="mb-3 mt-2 pb-2">
+            <c-card-body>
+              <c-container>
+                <c-row class="mt-3 small-card__title">
+                  <h6>Incidents Timeline</h6>
+                </c-row>
+                <c-row class="mt-3 small-card__text">
+                  <c-chart [data]="chartsData?.data" [height]="300" [ngStyle]="{ 'marginTop.px': 40 }"
+                    [options]="chartsData?.options" [type]="'line'" (chartRef)="handleChartRef($event)">
+                    Timeline chart
+                  </c-chart>
+                </c-row>
+              </c-container>
+            </c-card-body>
+          </c-card>
+        </div>
+        <div *ngIf="incidentsEmpty">
+          <p>No data available for PPE incidents.</p>
+        </div>
 
 
       </c-tab-pane>
       <c-tab-pane class="ps-4 pe-4">
 
-        <c-card class="mb-3 mt-2 pb-2">
-          <c-card-body>
-            <c-container>
-              <c-row class="mt-3 small-card__title">
-                <h6>Nr. of incidents in the last {{ days }} days</h6>
-              </c-row>
-              <c-row class="mt-3 small-card__text ps-4">
-                {{ incidentReport?.incidents_by_type?.[0]?.count ?? 'N/A' }}
-              </c-row>
-            </c-container>
-          </c-card-body>
-        </c-card>
-        
-        <c-card class="mb-3 mt-2 pb-2">
-          <c-card-body>
-            <c-container>
-              <c-row class="mt-3 small-card__title">
-                <h6>Incidents Timeline</h6>
-              </c-row>
-              <c-row class="mt-3 small-card__text">
-                <c-chart [data]="chartsData?.data" [height]="300" [ngStyle]="{ 'marginTop.px': 40 }"
-                  [options]="chartsData?.options" [type]="'line'" (chartRef)="handleChartRef($event)">
-                  Timeline chart
-                </c-chart>
-              </c-row>
-            </c-container>
-          </c-card-body>
-        </c-card>
+        <div *ngIf="!incidentsEmpty">
+          <c-card class="mb-3 mt-2 pb-2">
+            <c-card-body>
+              <c-container>
+                <c-row class="mt-3 small-card__title">
+                  <h6>Nr. of incidents in the last {{ days }} days</h6>
+                </c-row>
+                <c-row class="mt-3 small-card__text ps-4">
+                  {{ incidentReport?.incidents_by_type?.[0]?.count ?? 'N/A' }}
+                </c-row>
+              </c-container>
+            </c-card-body>
+          </c-card>
+
+          <c-card class="mb-3 mt-2 pb-2">
+            <c-card-body>
+              <c-container>
+                <c-row class="mt-3 small-card__title">
+                  <h6>Incidents Timeline</h6>
+                </c-row>
+                <c-row class="mt-3 small-card__text">
+                  <c-chart [data]="chartsData?.data" [height]="300" [ngStyle]="{ 'marginTop.px': 40 }"
+                    [options]="chartsData?.options" [type]="'line'" (chartRef)="handleChartRef($event)">
+                    Timeline chart
+                  </c-chart>
+                </c-row>
+              </c-container>
+            </c-card-body>
+          </c-card>
+        </div>
+        <div *ngIf="incidentsEmpty">
+          <p>No data available for Pallet incidents.</p>
+        </div>
       </c-tab-pane>
 
       <c-tab-pane class="ps-4 pe-4">
-        <c-card class="mb-3 mt-2 pb-2">
-          <c-card-body>
-            <c-container>
-              <c-row class="mt-3 small-card__title">
-                <h6>Nr. of incidents in the last {{ days }} days</h6>
-              </c-row>
-              <c-row class="mt-3 small-card__text ps-4">
-                {{ incidentReport?.incidents_by_type?.[0]?.count ?? 'N/A' }}
-              </c-row>
-            </c-container>
-          </c-card-body>
-        </c-card>
-        
-        <c-card class="mb-3 mt-2 pb-2">
-          <c-card-body>
-            <c-container>
-              <c-row class="mt-3 small-card__title">
-                <h6>Incidents Timeline</h6>
-              </c-row>
-              <c-row class="mt-3 small-card__text">
-                <c-chart [data]="chartsData?.data" [height]="300" [ngStyle]="{ 'marginTop.px': 40 }"
-                  [options]="chartsData?.options" [type]="'line'" (chartRef)="handleChartRef($event)">
-                  Timeline chart
-                </c-chart>
-              </c-row>
-            </c-container>
-          </c-card-body>
-        </c-card>
+        <div *ngIf="!incidentsEmpty">
+          <c-card class="mb-3 mt-2 pb-2">
+            <c-card-body>
+              <c-container>
+                <c-row class="mt-3 small-card__title">
+                  <h6>Nr. of incidents in the last {{ days }} days</h6>
+                </c-row>
+                <c-row class="mt-3 small-card__text ps-4">
+                  {{ incidentReport?.incidents_by_type?.[0]?.count ?? 'N/A' }}
+                </c-row>
+              </c-container>
+            </c-card-body>
+          </c-card>
+
+          <c-card class="mb-3 mt-2 pb-2">
+            <c-card-body>
+              <c-container>
+                <c-row class="mt-3 small-card__title">
+                  <h6>Incidents Timeline</h6>
+                </c-row>
+                <c-row class="mt-3 small-card__text">
+                  <c-chart [data]="chartsData?.data" [height]="300" [ngStyle]="{ 'marginTop.px': 40 }"
+                    [options]="chartsData?.options" [type]="'line'" (chartRef)="handleChartRef($event)">
+                    Timeline chart
+                  </c-chart>
+                </c-row>
+              </c-container>
+            </c-card-body>
+          </c-card>
+
+        </div>
+        <div *ngIf="incidentsEmpty">
+          <p>No data available for Forklift incidents.</p>
+        </div>
+
       </c-tab-pane>
     </c-tab-content>
 

@@ -64,6 +64,7 @@ export class DashboardDetailsComponent implements OnInit {
   currentPage = 1;
   days: number = 7;
   activeTab: number = 0;
+  incidentsEmpty = false; 
 
   formRadio1 = new UntypedFormGroup({
     radio1: new UntypedFormControl('Radio1')
@@ -169,6 +170,7 @@ export class DashboardDetailsComponent implements OnInit {
     this.incidentService.fetchIncidentsByPlant(plantId, tab, nDays).subscribe({
       next: incidents => {
         this.incidentReport = incidents;
+        this.checkIncidentsEmpty(incidents);
         console.log(incidents);
         this.chartsData = new DashboardChartsDataTimeLine(this.incidentReport, this.days);
         this.chartsDataDonut = new DashboardChartsDataDonut(this.incidentReport);
@@ -205,6 +207,14 @@ export class DashboardDetailsComponent implements OnInit {
   selectTab(index: number) {
     this.activeTab = index;
     this.requestIncidents();
+  }
+
+  checkIncidentsEmpty(incidentReport: IncidentDataItem): void{
+    if (incidentReport.incidents_by_type.length === 0 && Object.keys(incidentReport.incidents_timeline).length === 0) {
+      this.incidentsEmpty = true; // Set the flag to true if both are empty
+    } else {
+      this.incidentsEmpty = false; // Otherwise, it's false
+    }
   }
 
 
