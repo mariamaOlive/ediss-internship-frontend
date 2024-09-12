@@ -169,7 +169,8 @@ export class DashboardDetailsComponent implements OnInit {
     this.incidentService.fetchIncidentsByPlant(plantId, tab, nDays).subscribe({
       next: incidents => {
         this.incidentReport = incidents;
-        this.chartsData = new DashboardChartsDataTimeLine(this.incidentReport);
+        console.log(incidents);
+        this.chartsData = new DashboardChartsDataTimeLine(this.incidentReport, this.days);
         // this.chartsDataDonut = new DashboardChartsDataDonut(this.incidentsList);
         // this.loadMoreIncidents(); // Initial load of paginated data
       },

@@ -19,16 +19,16 @@ import { IncidentDataItem } from 'src/app/core/models/incident-data.model';
 export class DashboardChartsDataTimeLine {
   type: any;
   options: any;
-  data : any; 
+  data: any;
   elements: any;
   highestScaleY: number = 100
 
-  constructor(private incident: IncidentDataItem) {
-    this.initMainChart();
+  constructor(private incident: IncidentDataItem, private days: number) {
+    this.initMainChart(this.days);
   }
 
 
-  initMainChart(period: string = 'Week') {
+  initMainChart(days: number) {
     const brandSuccess = getStyle('--cui-success') ?? '#4dbd74';
     const brandInfo = getStyle('--cui-info') ?? '#20a8d8';
     const brandInfoBg = hexToRgba(getStyle('--cui-info') ?? '#20a8d8', 10);
@@ -63,31 +63,49 @@ export class DashboardChartsDataTimeLine {
     let datasets: any[] = [];
 
     const incidentTypesArray = this.incident.incidents_by_type.map(entry => entry.type);
-    
+
 
     // // Loop through each incident type and prepare its dataset
     incidentTypesArray.forEach((type, index) => {
-      const numberIncidentsArray = Object.values(this.incident.incidents_timeline).map(entry => (entry as { [key: string]: number })[type]);
+
+      // Helper function to generate last N days including today
+      function getLastNDays(days: number): string[] {
+        const today = new Date();
+        return Array.from({ length: days }, (_, i) => {
+          const date = new Date(today);
+          date.setDate(today.getDate() - i);
+          return date.toISOString().split('T')[0]; // Format date as 'yyyy-mm-dd'
+        });
+      }
+
+      // Number of days to check, including today
+      const daysToCheck = this.days;
+
+      // Generate the last N days dynamically
+      const expectedDates = getLastNDays(daysToCheck);
+
+      debugger
+
+      // Extract and ensure missing dates have a value of 0
+      const numberIncidentsArray = expectedDates.map(date => {
+        const entry = this.incident.incidents_timeline[date];
+        return entry ? (entry[type] || 0) : 0;
+      });
+
+      // Reverse the array to maintain your original logic
       numberIncidentsArray.reverse();
 
       // Add to the datasets
       datasets.push({
         data: numberIncidentsArray,
         label: type,
-        ...colors[0] 
+        ...colors[0]
       });
     });
 
     this.highestScaleY = this.getHighestValue(...datasets.map(dataset => dataset.data));
 
-    const labels = this.generateXLabels();
-
-
-
-
-    
-
-
+    const labels = this.generateXLabels(this.days);
 
     const plugins: DeepPartial<PluginOptionsByType<any>> = {
       legend: {
@@ -203,20 +221,22 @@ export class DashboardChartsDataTimeLine {
     return highestValue;
   }
 
-  generateXLabels(): string[] {
-    const week = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',];
-
+  generateXLabels(days: number): string[] {
+    const week = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  
     // Get today's date
     const today = new Date();
     const todayIndex = today.getDay(); // Sunday - Saturday : 0 - 6
-
-    // Generate labels for today and the last 6 days
+  
+    // Generate labels for today and the last 'n' days
     const labels = [];
-    for (let i = 0; i < 7; i++) {
-      const dayIndex = (todayIndex - i + 7) % 7;
+    for (let i = 0; i < days; i++) {
+      const dayIndex = (todayIndex - i + 7 * Math.ceil(i / 7)) % 7;
       labels.unshift(week[dayIndex]);
     }
+  
     return labels;
   }
+
 
 }
