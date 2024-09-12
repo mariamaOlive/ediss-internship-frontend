@@ -24,14 +24,15 @@ export class IncidentService {
     return of(this.incident.filter(item => item.plantId === plantId));
   }
 
-  fetchIncidentsByPlant(plantId: number, incidentType: number, days: number): Observable<IncidentDataItem> {
-    const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.reports}?plant_id=${plantId}&days=${days}&detection_type_id=${incidentType}`;
-    return this.http.get<IncidentDataItem>(apiUrl);
-  }
+  fetchIncidents(plantId: number, incidentType: number, days: number, zoneId?:number): Observable<IncidentDataItem> {
 
-  fetchIncidentsByPlantAndZone(plantId: number, zoneId: number, incidentType: number, days: number): Observable<IncidentDataItem> {
-    const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.reports}?plant_id=${plantId}&zone_id=${zoneId}&days=${days}&detection_type_id=${incidentType}`;
-    return this.http.get<IncidentDataItem>(apiUrl);
+    if(!zoneId){
+      const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.reports}?plant_id=${plantId}&days=${days}&detection_type_id=${incidentType}`;
+      return this.http.get<IncidentDataItem>(apiUrl);
+    }else{
+      const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.reports}?plant_id=${plantId}&zone_id=${zoneId}&days=${days}&detection_type_id=${incidentType}`;
+      return this.http.get<IncidentDataItem>(apiUrl);
+    }
   }
 
   //TODO: Remove incident generator

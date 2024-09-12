@@ -56,7 +56,7 @@ export class DashboardDetailsComponent implements OnInit {
   zoneList: ZoneItem[] = [];
   plant: PlantItem | null = null;
   plantId?: number;
-  selectedZone: number = 0;
+  selectedZone: number | undefined = undefined;
   selectedInstanceId: string = "";
   paginatedIncidents: any = [];
   itemsPerPage = 10; // Number of items to load each time
@@ -165,7 +165,7 @@ export class DashboardDetailsComponent implements OnInit {
 
     const tab = this.activeTab + 1;
     const nDays = this.days-1;
-    this.incidentService.fetchIncidentsByPlant(plantId, tab, nDays).subscribe({
+    this.incidentService.fetchIncidents(plantId, tab, nDays, this.selectedZone).subscribe({
       next: incidents => {
         this.incidentReport = incidents;
         this.checkIncidentsEmpty(incidents);
