@@ -171,19 +171,11 @@ export class DashboardDetailsComponent implements OnInit {
         this.incidentReport = incidents;
         console.log(incidents);
         this.chartsData = new DashboardChartsDataTimeLine(this.incidentReport, this.days);
-        // this.chartsDataDonut = new DashboardChartsDataDonut(this.incidentsList);
-        // this.loadMoreIncidents(); // Initial load of paginated data
+        this.chartsDataDonut = new DashboardChartsDataDonut(this.incidentReport);
       },
       error: err => console.error('Error fetching incidents:', err)
     });
   }
-
-  // private loadPlantData(plantId: number): void {
-  //   this.plantService.getPlantByIdWithZone(plantId).subscribe({
-  //     next: plant => this.plant = plant,
-  //     error: err => console.error('Error fetching plant information:', err)
-  //   });
-  // }
 
   private loadPlantZones(plantId: number): void {
     this.zoneService.fetchZonesByPlantId(plantId).subscribe({
@@ -223,4 +215,236 @@ export class DashboardDetailsComponent implements OnInit {
   navigateBack(): void {
     this.location.back();
   }
+
+
+  mockdata = {
+    "incidents_by_type": [
+        {
+            "type": "helmet",
+            "count": 24
+        },
+        {
+            "type": "earplug",
+            "count": 28
+        },
+        {
+            "type": "goggles",
+            "count": 20
+        },
+        {
+            "type": "vest",
+            "count": 18
+        },
+        {
+            "type": "hairnet",
+            "count": 16
+        }
+    ],
+    "incidents_timeline": {
+        "2024-09-11": {
+            "helmet": 3,
+            "earplug": 5,
+            "goggles": 2,
+            "vest": 4,
+            "hairnet": 1
+        },
+        "2024-09-10": {
+            "helmet": 4,
+            "earplug": 0,
+            "goggles": 2,
+            "vest": 3,
+            "hairnet": 1
+        },
+        "2024-09-09": {
+            "helmet": 5,
+            "earplug": 2,
+            "goggles": 1,
+            "vest": 4,
+            "hairnet": 3
+        },
+        "2024-09-08": {
+            "helmet": 1,
+            "earplug": 3,
+            "goggles": 6,
+            "vest": 0,
+            "hairnet": 2
+        },
+        "2024-09-07": {
+            "helmet": 2,
+            "earplug": 1,
+            "goggles": 0,
+            "vest": 5,
+            "hairnet": 3
+        },
+        "2024-09-06": {
+            "helmet": 6,
+            "earplug": 4,
+            "goggles": 3,
+            "vest": 2,
+            "hairnet": 0
+        },
+        "2024-09-05": {
+            "helmet": 0,
+            "earplug": 5,
+            "goggles": 4,
+            "vest": 1,
+            "hairnet": 3
+        },
+        "2024-09-04": {
+            "helmet": 3,
+            "earplug": 2,
+            "goggles": 1,
+            "vest": 6,
+            "hairnet": 0
+        },
+        "2024-09-03": {
+            "helmet": 1,
+            "earplug": 0,
+            "goggles": 2,
+            "vest": 3,
+            "hairnet": 4
+        },
+        "2024-09-02": {
+            "helmet": 4,
+            "earplug": 3,
+            "goggles": 0,
+            "vest": 2,
+            "hairnet": 5
+        },
+        "2024-09-01": {
+            "helmet": 6,
+            "earplug": 1,
+            "goggles": 4,
+            "vest": 5,
+            "hairnet": 3
+        },
+        "2024-08-31": {
+            "helmet": 2,
+            "earplug": 4,
+            "goggles": 5,
+            "vest": 0,
+            "hairnet": 1
+        },
+        "2024-08-30": {
+            "helmet": 3,
+            "earplug": 5,
+            "goggles": 2,
+            "vest": 1,
+            "hairnet": 6
+        },
+        "2024-08-29": {
+            "helmet": 1,
+            "earplug": 2,
+            "goggles": 6,
+            "vest": 0,
+            "hairnet": 3
+        },
+        "2024-08-28": {
+            "helmet": 4,
+            "earplug": 0,
+            "goggles": 3,
+            "vest": 5,
+            "hairnet": 2
+        },
+        "2024-08-27": {
+            "helmet": 5,
+            "earplug": 3,
+            "goggles": 2,
+            "vest": 6,
+            "hairnet": 1
+        },
+        "2024-08-26": {
+            "helmet": 6,
+            "earplug": 4,
+            "goggles": 0,
+            "vest": 2,
+            "hairnet": 5
+        },
+        "2024-08-25": {
+            "helmet": 1,
+            "earplug": 2,
+            "goggles": 4,
+            "vest": 5,
+            "hairnet": 0
+        },
+        "2024-08-24": {
+            "helmet": 2,
+            "earplug": 3,
+            "goggles": 6,
+            "vest": 1,
+            "hairnet": 4
+        },
+        "2024-08-23": {
+            "helmet": 3,
+            "earplug": 1,
+            "goggles": 5,
+            "vest": 2,
+            "hairnet": 6
+        },
+        "2024-08-22": {
+            "helmet": 4,
+            "earplug": 2,
+            "goggles": 0,
+            "vest": 6,
+            "hairnet": 1
+        },
+        "2024-08-21": {
+            "helmet": 0,
+            "earplug": 3,
+            "goggles": 1,
+            "vest": 5,
+            "hairnet": 4
+        },
+        "2024-08-20": {
+            "helmet": 2,
+            "earplug": 4,
+            "goggles": 3,
+            "vest": 6,
+            "hairnet": 0
+        },
+        "2024-08-19": {
+            "helmet": 1,
+            "earplug": 6,
+            "goggles": 4,
+            "vest": 0,
+            "hairnet": 2
+        },
+        "2024-08-18": {
+            "helmet": 5,
+            "earplug": 2,
+            "goggles": 3,
+            "vest": 1,
+            "hairnet": 4
+        },
+        "2024-08-17": {
+            "helmet": 4,
+            "earplug": 5,
+            "goggles": 0,
+            "vest": 2,
+            "hairnet": 6
+        },
+        "2024-08-16": {
+            "helmet": 3,
+            "earplug": 1,
+            "goggles": 6,
+            "vest": 4,
+            "hairnet": 5
+        },
+        "2024-08-15": {
+            "helmet": 6,
+            "earplug": 0,
+            "goggles": 3,
+            "vest": 2,
+            "hairnet": 4
+        },
+        "2024-08-14": {
+            "helmet": 1,
+            "earplug": 4,
+            "goggles": 5,
+            "vest": 0,
+            "hairnet": 6
+        }
+    }
+}
+
 }

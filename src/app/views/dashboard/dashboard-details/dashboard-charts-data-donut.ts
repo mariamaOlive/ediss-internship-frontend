@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import {
   ChartData,
   ChartDataset,
@@ -11,23 +10,17 @@ import {
 import { DeepPartial } from 'chart.js/dist/types/utils';
 import { getStyle, hexToRgba } from '@coreui/utils';
 import { IncidentItem } from 'src/app/core/models/incident.model';
-import { IncidentService } from 'src/app/core/services/incident/incident.service';
-import { differenceInDays } from 'date-fns';
+import { IncidentDataItem } from 'src/app/core/models/incident-data.model';
 
 
 export class DashboardChartsDataDonut {
-  incidentList: IncidentItem[];
   type:any;
   options:any;
   data : any; 
-  data1: any;
-  data2: any;
-  data3: any;
   elements : any;
   highestScaleY:number = 100
 
-  constructor(incidentList: IncidentItem[]) {
-    this.incidentList = incidentList;
+  constructor(private incidentReport: IncidentDataItem) {
     this.initMainChart();
   }
 
@@ -37,56 +30,33 @@ export class DashboardChartsDataDonut {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
-  initMainChart(period: string = 'Week') {
-    const brandSuccess = getStyle('--cui-success') ?? '#4dbd74';
-    const brandInfo = getStyle('--cui-info') ?? '#20a8d8';
-    const brandInfoBg = hexToRgba(getStyle('--cui-info') ?? '#20a8d8', 10);
-    const brandDanger = getStyle('--cui-danger') ?? '#f86c6b';
-
+  initMainChart() {
+   
     // mainChart
-    this.elements = period === 'Month' ? 12 : 7;
-    this.data1 = [];
-    this.data2 = [];
-    this.data3 = [];
-
-    // Treat data of time series
-    this.data1 = this.filterIncidentsByTypeAndTimestamp(this.incidentList, "Helmet", 7).length;
-    this.data2 = this.filterIncidentsByTypeAndTimestamp(this.incidentList, "Vest", 7).length;
-    this.data3 = this.filterIncidentsByTypeAndTimestamp(this.incidentList, "Hairnet", 7).length;
+    // this.elements = period === 'Month' ? 12 : 7;
+    const valuesDatasets = this.incidentReport.incidents_by_type.map(entry => entry.count);
+    const incidentTypesArray = this.incidentReport.incidents_by_type.map(entry => entry.type);
 
 
     let labels: string[] = [];
-    labels = ["Helmet", "Vest", "Hainet"]
+    labels = incidentTypesArray;
 
-    const colors = [
-      {
-        // brandInfo
-        backgroundColor: brandInfoBg,
-        borderColor: brandInfo,
-        pointHoverBackgroundColor: brandInfo,
-        // borderWidth: 2,
-        // fill: true
-      },
-      {
-        // brandSuccess
-        backgroundColor: 'transparent',
-        borderColor: brandSuccess || '#4dbd74',
-        pointHoverBackgroundColor: '#fff'
-      },
-      {
-        // brandDanger
-        backgroundColor: 'transparent',
-        borderColor: brandDanger || '#f86c6b',
-        pointHoverBackgroundColor: brandDanger,
-        // borderWidth: 2,
-        // borderDash: [8, 5]
-      }
+    const colorPalette =[
+      "#27aeef", 
+      "#b33dc6", 
+      "#87bc45", 
+      "#f46a9b", 
+      "#bdcf32", 
+      "#ea5545", 
+      "#ef9b20", 
+      "#ede15b", 
+      "#edbf33"
     ];
 
     const datasets: ChartDataset[] = [
       {
-        data: [this.data1, this.data2, this.data3],
-        backgroundColor: ['#41B883', '#E46651', '#00D8FF']
+        data: valuesDatasets,
+        backgroundColor: colorPalette.slice(0, valuesDatasets.length)
       }
     ];
 

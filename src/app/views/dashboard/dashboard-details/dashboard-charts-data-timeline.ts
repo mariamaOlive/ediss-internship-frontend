@@ -24,39 +24,22 @@ export class DashboardChartsDataTimeLine {
   highestScaleY: number = 100
 
   constructor(private incident: IncidentDataItem, private days: number) {
-    this.initMainChart(this.days);
+    this.initMainChart();
   }
 
 
-  initMainChart(days: number) {
-    const brandSuccess = getStyle('--cui-success') ?? '#4dbd74';
-    const brandInfo = getStyle('--cui-info') ?? '#20a8d8';
-    const brandInfoBg = hexToRgba(getStyle('--cui-info') ?? '#20a8d8', 10);
-    const brandDanger = getStyle('--cui-danger') ?? '#f86c6b';
+  initMainChart() {
 
-    const colors = [
-      {
-        // brandInfo
-        backgroundColor: brandInfoBg,
-        borderColor: brandInfo,
-        pointHoverBackgroundColor: brandInfo,
-        // borderWidth: 2,
-        // fill: true
-      },
-      {
-        // brandSuccess
-        backgroundColor: 'transparent',
-        borderColor: brandSuccess || '#4dbd74',
-        pointHoverBackgroundColor: '#fff'
-      },
-      {
-        // brandDanger
-        backgroundColor: 'transparent',
-        borderColor: brandDanger || '#f86c6b',
-        pointHoverBackgroundColor: brandDanger,
-        // borderWidth: 2,
-        // borderDash: [8, 5]
-      }
+    const colorPalette =[
+      "#27aeef", 
+      "#b33dc6", 
+      "#87bc45", 
+      "#f46a9b", 
+      "#bdcf32", 
+      "#ea5545", 
+      "#ef9b20", 
+      "#ede15b", 
+      "#edbf33"
     ];
 
     // Empty datasets to start fresh
@@ -83,9 +66,7 @@ export class DashboardChartsDataTimeLine {
 
       // Generate the last N days dynamically
       const expectedDates = getLastNDays(daysToCheck);
-
-      debugger
-
+      
       // Extract and ensure missing dates have a value of 0
       const numberIncidentsArray = expectedDates.map(date => {
         const entry = this.incident.incidents_timeline[date];
@@ -94,12 +75,20 @@ export class DashboardChartsDataTimeLine {
 
       // Reverse the array to maintain your original logic
       numberIncidentsArray.reverse();
-
+      const chosenColor = {
+        // brandInfo
+        backgroundColor: colorPalette[index],
+        borderColor: colorPalette[index],
+        pointHoverBackgroundColor: colorPalette[index],
+        // borderWidth: 2,
+        // fill: true
+      }
+   
       // Add to the datasets
       datasets.push({
         data: numberIncidentsArray,
         label: type,
-        ...colors[0]
+        ...chosenColor
       });
     });
 
