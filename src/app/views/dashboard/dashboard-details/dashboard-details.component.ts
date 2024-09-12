@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, WritableSignal, signal, effect, HostListener } from '@angular/core';
+import { Component, OnInit, WritableSignal, signal, effect } from '@angular/core';
 import { ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, FormsModule } from '@angular/forms';
@@ -12,7 +12,6 @@ import { ChartOptions } from 'chart.js';
 import { DashboardChartsDataTimeLine } from './dashboard-charts-data-timeline';
 import { DashboardChartsDataDonut } from './dashboard-charts-data-donut';
 
-import { IncidentItem } from 'src/app/core/models/incident.model';
 import { IncidentService } from 'src/app/core/services/incident/incident.service';
 import { PlantItem } from 'src/app/core/models/plant.model';
 import { PlantService } from 'src/app/core/services/plant/plant.service';
@@ -74,7 +73,6 @@ export class DashboardDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private incidentService: IncidentService,
-    private plantService: PlantService,
     private zoneService: ZoneService,
     private location: Location,
     public iconSet: IconSetService,
@@ -211,9 +209,9 @@ export class DashboardDetailsComponent implements OnInit {
 
   checkIncidentsEmpty(incidentReport: IncidentDataItem): void{
     if (incidentReport.incidents_by_type.length === 0 && Object.keys(incidentReport.incidents_timeline).length === 0) {
-      this.incidentsEmpty = true; // Set the flag to true if both are empty
+      this.incidentsEmpty = true; 
     } else {
-      this.incidentsEmpty = false; // Otherwise, it's false
+      this.incidentsEmpty = false; 
     }
   }
 

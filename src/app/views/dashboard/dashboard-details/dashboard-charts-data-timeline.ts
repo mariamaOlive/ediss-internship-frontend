@@ -73,10 +73,9 @@ export class DashboardChartsDataTimeLine {
         return entry ? (entry[type] || 0) : 0;
       });
 
-      // Reverse the array to maintain your original logic
       numberIncidentsArray.reverse();
+
       const chosenColor = {
-        // brandInfo
         backgroundColor: colorPalette[index],
         borderColor: colorPalette[index],
         pointHoverBackgroundColor: colorPalette[index],

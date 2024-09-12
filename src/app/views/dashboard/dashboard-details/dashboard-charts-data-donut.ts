@@ -8,7 +8,7 @@ import {
   TooltipLabelStyle
 } from 'chart.js';
 import { DeepPartial } from 'chart.js/dist/types/utils';
-import { getStyle, hexToRgba } from '@coreui/utils';
+import { getStyle } from '@coreui/utils';
 import { IncidentItem } from 'src/app/core/models/incident.model';
 import { IncidentDataItem } from 'src/app/core/models/incident-data.model';
 
@@ -24,7 +24,6 @@ export class DashboardChartsDataDonut {
     this.initMainChart();
   }
 
-  // public mainChart: IChartProps = { type: 'line' };
 
   public random(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -32,8 +31,6 @@ export class DashboardChartsDataDonut {
 
   initMainChart() {
    
-    // mainChart
-    // this.elements = period === 'Month' ? 12 : 7;
     const valuesDatasets = this.incidentReport.incidents_by_type.map(entry => entry.count);
     const incidentTypesArray = this.incidentReport.incidents_by_type.map(entry => entry.type);
 
