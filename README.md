@@ -36,6 +36,14 @@ Aptar Hazard Detection is the front-end application for a system designed to det
   - [Basic usage](#basic-usage)
     - [Build](#build)
 - [What's included](#whats-included)
+- [Running the app with Docker](#running-the-app-with-docker)
+- [Prerequisites](#prerequisites-1)
+- [Instructions](#instructions)
+  - [1. Clone the Repository](#1-clone-the-repository)
+  - [2. Build the Angular Application](#2-build-the-angular-application)
+  - [3. Run the Docker Container](#3-run-the-docker-container)
+  - [4. Access the Application](#4-access-the-application)
+- [Troubleshooting](#troubleshooting)
 
 
 ## Quick Start
@@ -123,3 +131,67 @@ ediss-internship-frontend
 └── package.json                 # npm package file
 
 ```
+
+
+## Running the app with Docker
+
+This repository contains an Angular application that can be run inside a Docker container using Nginx. Follow the steps below to run and serve the app.
+
+## Prerequisites
+
+Before getting started, ensure you have the following installed:
+
+- [Node.js](https://nodejs.org/) (for building the Angular app)
+- [Angular CLI](https://angular.io/cli) (optional, if not installed globally)
+- [Docker](https://www.docker.com/products/docker-desktop) (for containerization)
+
+## Instructions
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/mariamaOlive/ediss-internship-frontend
+cd ediss-internship-frontend
+```
+
+### 2. Build the Angular Application
+
+Before creating a docker image, it is necessary to build the Angular application for production:
+
+```bash
+ng build --configuration production
+```
+
+This will create the production-ready build files in the `dist/aptar-hazard-detection` folder.
+
+### 3. Run the Docker Container
+
+To run the container, map the container's port to your host machine's port. In this example, we'll map port `8080`:
+
+```bash
+docker run -d -p 8080:8000 angular-app
+```
+
+### 4. Access the Application
+
+Once the container is running, you can access the Angular app in your browser at:
+
+```
+http://localhost:8080
+```
+
+If you're running Docker on a remote server, replace `localhost` with your server's IP address:
+
+```
+http://<your-server-ip>:8080
+```
+
+## Troubleshooting
+
+- **Port Conflicts**: If port `8080` is already in use, change the port mapping in the `docker run` command. For example, to use port `9090`:
+
+  ```bash
+  docker run -d -p 9090:8080 angular-app
+  ```
+
+- **Nginx Configuration Issues**: If you see the default Nginx page, make sure that the `dist/aptar-hazard-detection` folder exists and was copied correctly during the build process.
