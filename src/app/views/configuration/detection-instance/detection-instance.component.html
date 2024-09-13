@@ -76,7 +76,7 @@
                         <p>Detection Type: {{ detectionInstance?.detectionType?.id === 1 ? 'PPE Detection' : 'Pallet Detection'}} </p>
                     </c-row>
                     <c-row class="mt-4 mb-2">
-                       <p>Confidence Level: {{detectionInstance?.confidenceTheshold}} </p>
+                       <p>Confidence Level: {{detectionInstance?.confidenceTheshold}}%</p>
                     </c-row>
                     <c-row class="mb-2" *ngIf="detectionInstance?.detectionType?.id === 1">
                         <p class="mb-1">PPE Detected</p>

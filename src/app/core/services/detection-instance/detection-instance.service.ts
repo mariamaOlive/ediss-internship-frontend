@@ -148,7 +148,7 @@ export class DetectionInstanceService {
       id: item.recording.id,
       name: item.recording.name,
       isRunning: item.recording.status,
-      confidenceTheshold: item.recording.confidence * 100,
+      confidenceTheshold: item.recording.confidence,
       detectionType: detectionType,
       classesDetection: item.scenarios ?? undefined,
       starttime: item.recording.starttime,
