@@ -2,13 +2,15 @@
   <span class="text-secondary fs-3">Configuration</span>
 </div>
 
+<toast-message [message]="toastMessage" [type]="toastType"></toast-message>
+
 <card-list [cardList]="cardList" [emptyCardText]="'Add new plant'" (cardClick)="navigateToZoneList($event)"
   (emptyCardClick)="toggleModal()" [topContainerColor]="'#337059'">
 </card-list>
 
 
 <!-- Modal Add Plant -->
-<c-modal #fullScreenMd fullscreen="md" id="fullScreenMd" [visible]="visible"
+<c-modal #fullScreenMd fullscreen="md" id="fullScreenMd" [visible]="visibleModal"
   (visibleChange)="handleModalChange($event)">
   <c-modal-header>
     <h5 cModalTitle>Add new plant</h5>
@@ -22,12 +24,16 @@
             <h6>Available Plants</h6>
           </c-row>
           <c-row class="mt-3 small-card__text">
-            <select aria-label="Select a plant" cSelect [(ngModel)]="selectedPlant">
+            <select aria-label="Select a plant" cSelect [(ngModel)]="selectedPlant" required>
               <option value="" disabled>Select a plant</option>
               <option *ngFor="let plant of plantsListInactive" [value]="plant.id">
                 {{ plant.name }}
               </option>
             </select>
+            <!-- Validation message for plant selection -->
+            <small *ngIf="selectedPlant === ''" class="text-danger">
+              Please select a plant.
+            </small>
           </c-row>
         </c-container>
       </c-card-body>
@@ -44,10 +50,8 @@
               <form #numberForm="ngForm">
                 <div class="mb-3">
                   <div class="input-group confidence-input">
-                    <input id="numberInput" type="number" min="0" max="100" 
-                      [(ngModel)]="confidenceThreshold"
-                      name="numberInput" required
-                      class="form-control form-control-sm">
+                    <input id="numberInput" type="number" min="0" max="100" [(ngModel)]="confidenceThreshold"
+                      name="numberInput" required class="form-control form-control-sm">
                     <span class="input-group-text">%</span>
                   </div>
                   <div
@@ -67,6 +71,8 @@
     <button [cModalToggle]="fullScreenMd.id" cButton color="secondary" variant="ghost">
       Close
     </button>
-    <button cButton class="btn-add" (click)="updatePlant()">Add</button>
+    <button cButton class="btn-add"
+      [disabled]="selectedPlant === '' || numberForm.invalid || confidenceThreshold < 0 || confidenceThreshold > 100"
+      (click)="updatePlant()">Add</button>
   </c-modal-footer>
 </c-modal>
