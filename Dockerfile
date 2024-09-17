@@ -9,6 +9,12 @@ COPY package*.json ./
 RUN npm install --legacy-peer-deps
 
 
+ARG API_URL=http://schiapp61:8000
+
+RUN sed -i "s|apiUrl: '.*'|apiUrl: '$API_URL'|g" src/environments/environment.prod.ts
+
+
+
 COPY . .
 RUN npm run build -- --configuration production
 
