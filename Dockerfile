@@ -10,11 +10,8 @@ RUN npm install --legacy-peer-deps
 
 COPY . .
 
-ARG API_URL=http://127.0.0.1:8000
-
-RUN sed -i "s|apiUrl: '.*'|apiUrl: '$API_URL'|g" src/app/environments/environment.prod.ts
-
 RUN npm run build -- --configuration production
+
 
 
 RUN ls -la /app/dist
