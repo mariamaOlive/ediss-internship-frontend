@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap, RouterModule, RouterLink } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { IconSetService, IconModule } from '@coreui/icons-angular';
@@ -20,7 +20,8 @@ import {
 import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
 import { DetectionInstanceItem } from 'src/app/core/models/detection-instance.model';
 import { DataTransferService } from 'src/app/core/services/data-transfer/data-transfer.service';
-
+import { ToastService } from 'src/app/core/services/toast/toast.service';
+import { ToastMessageComponent } from 'src/app/shared/components/toast-message/toast-message.component';
 
 
 
@@ -43,7 +44,8 @@ import { DataTransferService } from 'src/app/core/services/data-transfer/data-tr
     RouterLink,
     DropdownDividerDirective,
     TooltipModule,
-    IconModule
+    IconModule,
+    ToastMessageComponent
   ],
   templateUrl: './detection-instance-list.component.html',
   styleUrl: './detection-instance-list.component.scss'
@@ -53,6 +55,12 @@ export class DetectionInstanceListComponent implements OnInit {
   plantId: any = NaN;
   zoneId: any = NaN;
   detectionInstanceList: DetectionInstanceItem[] = [];
+
+  // Toast variables
+  @ViewChild(ToastMessageComponent) toastComponent!: ToastMessageComponent;
+  toastMessage = '';
+  toastType: 'success' | 'error' = 'success';
+
 
   constructor(
     private router: Router,
@@ -100,19 +108,19 @@ export class DetectionInstanceListComponent implements OnInit {
     });
   }
 
-  //TODO: Change logic when connect to server
   /**
-   * Deletes a detection instance by its ID.
-   * @param detectionInstanceId The ID of the detection instance to delete.
+   * Stops a detection instance by its ID.
+   * @param detectionInstanceId The ID of the detection instance to stop.
    */
-  deleteDetectionInstance(detectionInstanceId?: number): void {
-    this.detectionService.deleteDetectionInstance(detectionInstanceId).subscribe({
-      next: () => {
-
-        this.detectionInstanceList = this.detectionInstanceList.filter(instance => instance.id !== detectionInstanceId);
+  stopDetectionInstance(detectionInstanceId?: number) {
+    this.detectionService.stopDetectionInstance(detectionInstanceId).subscribe({
+      next: response => {
+        this.showToast('Instance stopped successfully', 'success')
+        console.log('Instance stopped successfully:', response);
       },
       error: err => {
-        console.error('Error deleting detection instance:', err);
+        this.showToast('Error stopping instance', 'error')
+        console.error('Error stopping instance:', err);
       }
     });
   }
@@ -149,19 +157,16 @@ export class DetectionInstanceListComponent implements OnInit {
   // Utilities Functions
   // ========================
 
+
+
   /**
-   * Stops a detection instance by its ID.
-   * @param detectionInstanceId The ID of the detection instance to stop.
-   */
-  stopDetectionInstance(detectionInstanceId?: number) {
-    this.detectionService.stopDetectionInstance(detectionInstanceId).subscribe({
-      next: response => {
-        console.log('Instance stopped successfully:', response);
-      },
-      error: err => {
-        console.error('Error stopping instance:', err);
-      }
-    });
+  * Triggers toast message
+  */
+  showToast(message: string, toastType: 'success' | 'error') {
+    this.toastMessage = message;
+    this.toastType = toastType;
+    this.toastComponent.toggleToast();
+    // debugger
   }
 
 }

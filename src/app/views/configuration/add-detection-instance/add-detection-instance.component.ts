@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +8,8 @@ import { CardModule, ButtonModule, GridModule, BadgeModule, FormModule } from '@
 import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft } from '@coreui/icons';
 import { IconSetService, IconModule } from '@coreui/icons-angular';
 
+import { ToastMessageComponent } from 'src/app/shared/components/toast-message/toast-message.component';
+
 import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
 import { ScenarioService } from 'src/app/core/services/scenario/scenario.service'
 import { DetectionTypeItem } from 'src/app/core/models/detection-instance.model';
@@ -15,7 +17,7 @@ import { ZoneItem } from 'src/app/core/models/zone.model';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
 import { CreateDetectionInstanceRequest, DetectionInstanceRequest, Recording } from 'src/app/core/models/api-requests.model';
 import { ScenarioItem } from 'src/app/core/models/scenario.model';
-
+import { ToastService } from 'src/app/core/services/toast/toast.service'; 
 
 
 @Component({
@@ -32,7 +34,8 @@ import { ScenarioItem } from 'src/app/core/models/scenario.model';
     FormModule,
     NgMultiSelectDropDownModule,
     FormsModule,
-    IconModule
+    IconModule,
+    ToastMessageComponent
   ],
   templateUrl: './add-detection-instance.component.html',
   styleUrl: './add-detection-instance.component.scss'
@@ -44,7 +47,7 @@ export class AddDetectionInstanceComponent implements OnInit {
   detectionTypesList?: DetectionTypeItem[];
   dropdownListObjects: { item_id: number, item_text: string }[] = [];
   dropdownSettingsObjects = {};
-  
+
   // Input variables
   confidenceThreshold = 0;
   detectionInstanceName = '';
@@ -52,13 +55,18 @@ export class AddDetectionInstanceComponent implements OnInit {
   selectedItemsObjects: any[] = [];
   selectedCameraId?: number;
 
+  // Toast variables
+  @ViewChild(ToastMessageComponent) toastComponent!: ToastMessageComponent;
+  toastMessage = '';
+  toastType: 'success' | 'error' = 'success';
+
   constructor(
     private route: ActivatedRoute,
     private location: Location,
     private detectionService: DetectionInstanceService,
     private zoneService: ZoneService,
     public iconSet: IconSetService,
-    private scenarioService: ScenarioService,
+    private scenarioService: ScenarioService
   ) {
     iconSet.icons = { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft };
   }
@@ -85,7 +93,7 @@ export class AddDetectionInstanceComponent implements OnInit {
   addNewDetectionInstance(): void {
 
     let mappedObjects = this.selectedItemsObjects.map(item => {
-      return {id: item.item_id, name: item.item_text, description: ""};
+      return { id: item.item_id, name: item.item_text, description: "" };
     });
 
     if (!this.zone || !this.zone.assignee_id || !this.selectedCameraId) {
@@ -101,46 +109,26 @@ export class AddDetectionInstanceComponent implements OnInit {
         detection_type: this.selectedDetectionType,
         camera_id: this.selectedCameraId,
         status: true,
-      }, 
+      },
       scenarios: mappedObjects
     };
 
     this.detectionService.addDetectionInstance(newDetectionInstance).subscribe({
       next: () => {
+        this.showToast('Detection added successfully', 'success');
         console.log('Detection added successfully');
         this.location.back();
       },
       error: err => {
-        console.error('Error adding zone:', err);
+        this.showToast('Error adding instance', 'error')
+        console.error('Error adding instance', err);
       }
     });
   }
 
   /**
-   * Loads detection types from the service and assigns them to `detectionTypesList`.
-   */
-  private loadDetectionTypes(): void {
-    this.detectionService.fetchDetectionTypes().subscribe({
-      next: detectionTypes => this.detectionTypesList = detectionTypes,
-      error: err => console.error('Error fetching assignees:', err)
-    })
-  }
-
-  /**
-   * Loads scenarios from the service and sets up the multi-selector.
-   */
-  private loadScenarios(): void {
-    this.scenarioService.fetchScenarios().subscribe({
-      next: scenarios => {
-        const scenariosList = scenarios
-        this.loadMultiSelectorObjectDetection(scenariosList);
-      },
-      error: err => console.error('Error fetching assignees:', err)
-    })
-  }
-
-  /**
    * Loads zone information based on the `zoneId` route parameter.
+   * If an error occurs, navigates back to the previous page.
    */
   private loadZoneInfo(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -151,8 +139,42 @@ export class AddDetectionInstanceComponent implements OnInit {
             this.zone = zone;
             this.confidenceThreshold = this.zone.zoneconfidence;
           },
-          error: err => console.error('Error fetching zones:', err)
+          error: err => {
+            console.error('Error fetching zones:', err);
+            this.showToast('Error loading zone information', "error");
+          }
         });
+      }
+    });
+  }
+
+  /**
+   * Loads detection types from the service and assigns them to `detectionTypesList`.
+   * If an error occurs, navigates back to the previous page.
+   */
+  private loadDetectionTypes(): void {
+    this.detectionService.fetchDetectionTypes().subscribe({
+      next: detectionTypes => this.detectionTypesList = detectionTypes,
+      error: err => {
+        console.error('Error fetching detection types:', err);
+        this.showToast('Error loading detection types', "error");
+      }
+    });
+  }
+
+  /**
+   * Loads scenarios from the service and sets up the multi-selector.
+   * If an error occurs, navigates back to the previous page.
+   */
+  private loadScenarios(): void {
+    this.scenarioService.fetchScenarios().subscribe({
+      next: scenarios => {
+        const scenariosList = scenarios;
+        this.loadMultiSelectorObjectDetection(scenariosList);
+      },
+      error: err => {
+        console.error('Error fetching scenarios:', err);
+        this.showToast('Error fetching scenarios', "error")
       }
     });
   }
@@ -184,7 +206,7 @@ export class AddDetectionInstanceComponent implements OnInit {
    * @returns The settings object for the multi-selector dropdown.
    */
   private loadMultiSelectorObjectDetection(scenarios: ScenarioItem[]): void {
-    
+
     this.dropdownListObjects = scenarios.map(scenario => ({
       item_id: scenario.id,
       item_text: scenario.name
@@ -205,6 +227,21 @@ export class AddDetectionInstanceComponent implements OnInit {
   navigateBack() {
     this.location.back();
   }
+
+
+  // ========================
+  // Utility Functions
+  // ========================
+
+  /**
+  * Triggers toast message
+  */
+  showToast(message: string, toastType: 'success' | 'error') {
+    this.toastMessage = message;
+    this.toastType = toastType;
+    this.toastComponent.toggleToast();
+  }
+
 
 }
 

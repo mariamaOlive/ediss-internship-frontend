@@ -29,7 +29,6 @@ import { DataTransferService } from 'src/app/core/services/data-transfer/data-tr
 import { CameraZoneCreateRequest, ZoneCreateRequest } from 'src/app/core/models/api-requests.model';
 
 
-
 @Component({
   selector: 'app-zones-list',
   standalone: true,
@@ -110,7 +109,7 @@ export class ZonesListComponent {
   addNewZone(): void {
 
     if (!this.plantId) {
-      this.showErrorToast('Plant ID not defined.');
+      this.showToast('Plant ID not defined.', 'error');
       throw new Error('Plant ID not defined.');
     }
 
@@ -129,18 +128,18 @@ export class ZonesListComponent {
         if (success) {
           this.loadZonesByPlantId(); // Refresh the list of zones after successful addition
           console.log('Zone added successfully.');
-          this.showSuccessToast('Zone added successfully.');
+          this.showToast('Zone added successfully.', 'success');
           this.visible = false; // Close modal
           this.resetForm();
           this.loadZonesByPlantId();
 
         } else {
-          this.showErrorToast('Failed to add zone.');
+          this.showToast('Failed to add zone.', 'error');
           console.error('Failed to add zone.');
         }
       },
       error: err => {
-        this.showErrorToast('Error adding zone.');
+        this.showToast('Error adding zone.', 'error');
         console.error('Error adding zone:', err);
       }
     });
@@ -153,7 +152,7 @@ export class ZonesListComponent {
     this.assigneeService.fetchAllAssignees().subscribe({
       next: assignees => this.assignees = assignees,
       error: err => {
-        this.showErrorToast('Error fetching assignees.');
+        this.showToast('Error fetching assignees.', 'error');
         console.error('Error fetching assignees:', err);
       }
     });
@@ -191,7 +190,7 @@ export class ZonesListComponent {
             }));
           },
           error: err => {
-            this.showErrorToast('Error fetching Zones.');
+            this.showToast('Error fetching Zones.', 'error');
             console.error('Error fetching Zones:', err);
           }
         });
@@ -281,22 +280,12 @@ export class ZonesListComponent {
   }
 
   /**
-  * Triggers sucess toast message
+  * Triggers toast message
   */
-  showSuccessToast(message: string) {
+  showToast(message: string, toastType: 'success' | 'error') {
     this.toastMessage = message;
-    this.toastType = 'success';
+    this.toastType = toastType;
     this.toastComponent.toggleToast();
   }
-
-  /**
-  * Triggers error toast message
-  */
-  showErrorToast(message: string) {
-    this.toastMessage = message;
-    this.toastType = 'error';
-    this.toastComponent.toggleToast();
-  }
-
 
 }
