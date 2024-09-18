@@ -158,8 +158,6 @@ export class DetectionInstanceListComponent implements OnInit {
   // Utilities Functions
   // ========================
 
-
-
   /**
   * Triggers toast message
   */
@@ -167,7 +165,6 @@ export class DetectionInstanceListComponent implements OnInit {
     this.toastMessage = message;
     this.toastType = toastType;
     this.toastComponent.toggleToast();
-    // debugger
   }
 
 }
