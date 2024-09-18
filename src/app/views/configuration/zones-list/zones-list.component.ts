@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { Router, ActivatedRoute, ParamMap, RouterModule, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -17,6 +17,7 @@ import {
 } from '@coreui/angular';
 
 import { CardListComponent } from 'src/app/shared/components/card-list/card-list.component';
+import { ToastMessageComponent } from 'src/app/shared/components/toast-message/toast-message.component';
 
 import { AssigneeItem } from 'src/app/core/models/assignee.model';
 import { AssigneeService } from 'src/app/core/services/assignee/assignee.service';
@@ -45,7 +46,8 @@ import { CameraZoneCreateRequest, ZoneCreateRequest } from 'src/app/core/models/
     ButtonCloseDirective,
     ButtonDirective,
     FormModule,
-    FormsModule],
+    FormsModule,
+    ToastMessageComponent],
   templateUrl: './zones-list.component.html',
   styleUrl: './zones-list.component.scss'
 })
@@ -67,6 +69,11 @@ export class ZonesListComponent {
   cameraList: CameraZoneCreateRequest[] = []
   cameraName = ""
   cameraIPAdress = ""
+
+  // Toast variables
+  @ViewChild(ToastMessageComponent) toastComponent!: ToastMessageComponent;
+  toastMessage = '';
+  toastType: 'success' | 'error' = 'success';
 
 
   constructor(
@@ -103,6 +110,7 @@ export class ZonesListComponent {
   addNewZone(): void {
 
     if (!this.plantId) {
+      this.showErrorToast('Plant ID not defined.');
       throw new Error('Plant ID not defined.');
     }
 
@@ -121,15 +129,18 @@ export class ZonesListComponent {
         if (success) {
           this.loadZonesByPlantId(); // Refresh the list of zones after successful addition
           console.log('Zone added successfully.');
+          this.showSuccessToast('Zone added successfully.');
           this.visible = false; // Close modal
           this.resetForm();
           this.loadZonesByPlantId();
 
         } else {
+          this.showErrorToast('Failed to add zone.');
           console.error('Failed to add zone.');
         }
       },
       error: err => {
+        this.showErrorToast('Error adding zone.');
         console.error('Error adding zone:', err);
       }
     });
@@ -141,7 +152,10 @@ export class ZonesListComponent {
   loadAssignees(): void {
     this.assigneeService.fetchAllAssignees().subscribe({
       next: assignees => this.assignees = assignees,
-      error: err => console.error('Error fetching assignees:', err)
+      error: err => {
+        this.showErrorToast('Error fetching assignees.');
+        console.error('Error fetching assignees:', err);
+      }
     });
   }
 
@@ -177,6 +191,7 @@ export class ZonesListComponent {
             }));
           },
           error: err => {
+            this.showErrorToast('Error fetching Zones.');
             console.error('Error fetching Zones:', err);
           }
         });
@@ -193,6 +208,7 @@ export class ZonesListComponent {
    * Toggles the visibility of the modal and loads the list of assignees.
    */
   toggleModal() {
+    this.resetForm();
     this.loadAssignees();
     this.loadPlantInfo();
     this.visible = !this.visible;
@@ -262,6 +278,24 @@ export class ZonesListComponent {
     this.selectedAssignee = NaN; // Reset the selected assignee
     this.cameraName = ''; // Reset the camera name input
     this.cameraIPAdress = ''; // Reset the camera IP address input
+  }
+
+  /**
+  * Triggers sucess toast message
+  */
+  showSuccessToast(message: string) {
+    this.toastMessage = message;
+    this.toastType = 'success';
+    this.toastComponent.toggleToast();
+  }
+
+  /**
+  * Triggers error toast message
+  */
+  showErrorToast(message: string) {
+    this.toastMessage = message;
+    this.toastType = 'error';
+    this.toastComponent.toggleToast();
   }
 
 

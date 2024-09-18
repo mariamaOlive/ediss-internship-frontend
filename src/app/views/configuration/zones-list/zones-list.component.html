@@ -5,6 +5,8 @@
   <span class="text-secondary fs-3 ms-3">Zones</span>
 </div>
 
+<toast-message [message]="toastMessage" [type]="toastType"></toast-message>
+
 <card-list [cardList]="cardList" [emptyCardText]="'Add new zone'" (cardClick)="navigateToDetectionInstanceList($event)"
   (emptyCardClick)="toggleModal() " [topContainerColor]="'#669A8C'">
 </card-list>
@@ -24,7 +26,11 @@
     <button [cModalToggle]="fullScreenMd.id" cButton color="secondary" variant="ghost">
       Close
     </button>
-    <button class="btn-add" cButton color="primary" (click)="addNewZone()">Add</button>
+    <button class="btn-add" cButton color="primary" 
+      [disabled]="!zoneName || cameraList.length === 0 || !selectedAssignee" 
+      (click)="addNewZone()">
+      Add
+    </button>
   </c-modal-footer>
 </c-modal>
 
@@ -41,6 +47,9 @@
               <input cFormControl placeholder="Type zone name" id="inputZoneName" type="text" [(ngModel)]="zoneName"
                 name="zoneName">
             </div>
+            <small *ngIf="!zoneName" class="text-danger">
+              Please enter a zone name.
+            </small>
           </form>
         </c-row>
       </c-container>
@@ -60,6 +69,9 @@
               {{ assignee.name }}
             </option>
           </select>
+          <small *ngIf="!selectedAssignee" class="text-danger">
+            Please select an assignee.
+          </small>
         </c-row>
       </c-container>
     </c-card-body>
@@ -121,6 +133,9 @@
               <button cButton color="primary" class="btn-add-camera" variant="ghost" (click)="addCamera()">Add</button>
             </c-col>
           </c-row>
+          <small *ngIf="cameraList.length === 0" class="text-danger">
+            Please add at least one camera.
+          </small>
         </c-container>
       </c-row>
     </c-container>

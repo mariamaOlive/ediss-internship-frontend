@@ -195,7 +195,6 @@ export class PlantsListComponent implements OnInit {
     this.confidenceThreshold = 0; // Reset confidence threshold
   }
 
-
   /**
   * Triggers sucess toast message
   */
