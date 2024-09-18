@@ -112,10 +112,11 @@ export class DetectionInstanceListComponent implements OnInit {
    * Stops a detection instance by its ID.
    * @param detectionInstanceId The ID of the detection instance to stop.
    */
-  stopDetectionInstance(detectionInstanceId?: number) {
-    this.detectionService.stopDetectionInstance(detectionInstanceId).subscribe({
+  stopDetectionInstance(detectionInstance: DetectionInstanceItem) {
+    this.detectionService.stopDetectionInstance(detectionInstance.id).subscribe({
       next: response => {
         this.showToast('Instance stopped successfully', 'success')
+        detectionInstance.isRunning = false;
         console.log('Instance stopped successfully:', response);
       },
       error: err => {
