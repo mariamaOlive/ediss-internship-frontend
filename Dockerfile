@@ -12,6 +12,7 @@ COPY . .
 
 ARG API_URL="http://127.0.0.1:8000"
 RUN sed -i "s|apiUrl: 'http://127.0.0.1:8000'|apiUrl: '${API_URL}'|" src/app/environments/environment.ts
+RUN sed -i "s|apiUrl: 'http://127.0.0.1:8000'|apiUrl: '${API_URL}'|" src/app/environments/environment.prod.ts
 
 RUN npm run build -- --configuration production
 
