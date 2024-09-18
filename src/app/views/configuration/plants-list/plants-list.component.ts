@@ -157,6 +157,18 @@ export class PlantsListComponent implements OnInit {
     this.visibleModal = event;
   }
 
+  /**
+   * Handles changes in the form a plant is selected
+   * @param plantId The id of the plant select.
+   */
+  onPlantSelect(plantId: string) {
+    // Find the selected plant by its ID and set the confidenceThreshold
+    const selectedPlant = this.plantsListInactive.find(plant => plant.id === parseInt(plantId));
+    if (selectedPlant) {
+      this.confidenceThreshold = selectedPlant.plantConfidence;
+    }
+  }
+
 
   // ========================
   // Navigation Functions

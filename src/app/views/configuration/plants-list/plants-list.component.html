@@ -24,7 +24,7 @@
             <h6>Available Plants</h6>
           </c-row>
           <c-row class="mt-3 small-card__text">
-            <select aria-label="Select a plant" cSelect [(ngModel)]="selectedPlant" required>
+            <select aria-label="Select a plant" cSelect [(ngModel)]="selectedPlant"  (ngModelChange)="onPlantSelect($event)" required>
               <option value="" disabled>Select a plant</option>
               <option *ngFor="let plant of plantsListInactive" [value]="plant.id">
                 {{ plant.name }}
