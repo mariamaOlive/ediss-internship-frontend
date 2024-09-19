@@ -190,7 +190,7 @@ export class ZonesListComponent {
             }));
           },
           error: err => {
-            this.showToast('Error fetching Zones.', 'error');
+            //this.showToast('Error fetching Zones.', 'error');
             console.error('Error fetching Zones:', err);
           }
         });

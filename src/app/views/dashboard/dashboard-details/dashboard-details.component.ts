@@ -8,7 +8,6 @@ import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft } from '@coreui/ico
 import { ChartjsComponent } from '@coreui/angular-chartjs';
 import { ChartOptions } from 'chart.js';
 
-
 import { DashboardChartsDataTimeLine } from './dashboard-charts-data-timeline';
 import { DashboardChartsDataDonut } from './dashboard-charts-data-donut';
 
