@@ -1,10 +1,16 @@
 <div class="ms-3 mb-3 d-flex justify-content-start align-items-center view-title">
-    <span class="text-secondary fs-3">Dashboard</span>
-  </div>
-  
+  <span class="text-secondary fs-3">Dashboard</span>
+</div>
+
+<toast-message [message]="toastMessage" [type]="toastType"></toast-message>
+
+<c-alert *ngIf="showNoPlantsMessage" color="dark">
+  No active plants found to be displayed.
+</c-alert>
+
 <card-list 
   [cardList]="cardList" 
-  (cardClick)="navigateToDashboardDetails($event)"
+  (cardClick)="navigateToDashboardDetails($event)" 
   [showEmptyCard]="false"
   [topContainerColor]="'#337059'">
 </card-list>

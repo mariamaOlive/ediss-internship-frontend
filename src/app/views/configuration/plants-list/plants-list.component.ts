@@ -95,7 +95,6 @@ export class PlantsListComponent implements OnInit {
       },
       error => {
         console.error('Error fetching plants:', error);
-        this.showToast('Error fetching plants', 'error')
       }
     );
   }
@@ -117,7 +116,11 @@ export class PlantsListComponent implements OnInit {
     );
   }
 
-
+  /**
+   * Inactivates a plant by its ID.
+   * 
+   * @param plantId - The ID of the plant to inactivate.
+   */
   inactivatePlant(plantId: number): void {
     this.plantsService.inactivatePlant(plantId).subscribe({
       next: respose => {
