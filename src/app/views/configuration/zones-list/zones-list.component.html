@@ -2,14 +2,14 @@
   <a (click)="navigateBack()" class="icon-back">
     <svg cIcon class="my-1 text-secondary" name="cilArrowCircleLeft" width="40"></svg>
   </a>
-  <span class="text-secondary fs-3 ms-3">Zones</span>
+  <span class="text-secondary fs-3 ms-3">Detection Zones</span>
 </div>
 
 <toast-message [message]="toastMessage" [type]="toastType"></toast-message>
 
 <card-list 
   [cardList]="cardList" 
-  [emptyCardText]="'Add new zone'" 
+  [emptyCardText]="'Add new Detection Zone'" 
   [dropdownOptions]="[{label: 'Delete', action: 'delete'}]"  
   (cardClick)="navigateToDetectionInstanceList($event)"
   (emptyCardClick)="toggleModalAdd()"
@@ -37,7 +37,7 @@
 <c-modal #fullScreenMd fullscreen="md" id="fullScreenMd" [visible]="visibleModalAdd" (visibleChange)="handleModalChange($event)"
   size="xl">
   <c-modal-header>
-    <h5 cModalTitle>Add new Zone</h5>
+    <h5 cModalTitle>Add new Detection Zone</h5>
     <button [cModalToggle]="fullScreenMd.id" cButtonClose></button>
   </c-modal-header>
   <c-modal-body>
