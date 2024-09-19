@@ -97,7 +97,7 @@
               required 
             />
             <label cFormCheckLabel>{{ camera.name }} - {{ camera.ipaddress }}</label>
-            <span *ngIf="!camera.status" [ngClass]="{'camera-disabled': !camera.status}"> (in use)</span>
+            <span *ngIf="!camera.status" [ngClass]="{'camera-disabled': !camera.status}"> (busy)</span>
           </c-form-check>
         </div>
         <small *ngIf="!selectedCameraId" class="text-danger">Please select a camera.</small>
