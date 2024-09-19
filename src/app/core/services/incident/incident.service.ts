@@ -24,8 +24,7 @@ export class IncidentService {
     return of(this.incident.filter(item => item.plantId === plantId));
   }
 
-  fetchIncidents(plantId: number, incidentType: number, days: number, zoneId?:number): Observable<IncidentDataItem> {
-
+  fetchIncidents(plantId: number, incidentType: number, days: number, zoneId:number | null): Observable<IncidentDataItem> {
     if(!zoneId){
       const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.reports}?plant_id=${plantId}&days=${days}&detection_type_id=${incidentType}`;
       return this.http.get<IncidentDataItem>(apiUrl);
