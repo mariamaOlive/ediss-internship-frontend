@@ -213,6 +213,8 @@ export class ZonesListComponent {
           },
           error: err => {
             //this.showToast('Error fetching Zones.', 'error');
+            this.zonesList = [];
+            this.cardList = [];
             console.error('Error fetching Zones:', err);
           }
         });

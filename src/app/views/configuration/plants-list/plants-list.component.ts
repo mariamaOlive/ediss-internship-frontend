@@ -84,8 +84,8 @@ export class PlantsListComponent implements OnInit {
    * Loads the list of active plants and populates the card list.
    */
   private loadActivePlants(): void {
-    this.plantsService.fetchPlants().subscribe(
-      plants => {
+    this.plantsService.fetchPlants().subscribe({
+      next: plants => {
         this.plantsListActive = plants;
         this.cardList = this.plantsListActive.map(plant => ({
           name: plant.name,
@@ -93,11 +93,14 @@ export class PlantsListComponent implements OnInit {
           id: plant.id
         }));
       },
-      error => {
+      error: error => {
+        this.plantsListActive = [];
+        this.cardList = [];
         console.error('Error fetching plants:', error);
       }
-    );
+    });
   }
+  
 
   /**
    * Loads the list of inactive plants that are not part of the cards and triggers modal.
