@@ -11,6 +11,7 @@ export interface DetectionInstanceItem {
     confidenceTheshold: number;
     assignee?: AssigneeItem;
     classesDetection?: ScenarioItem[];
+    cameraId?: number;
     camera?: CameraItem;
     isRunning?: boolean;
     starttime: string; 

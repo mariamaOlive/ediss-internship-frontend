@@ -7,6 +7,7 @@ import { IconDirective } from '@coreui/icons-angular';
 import { CardModule, ButtonModule, GridModule, BadgeModule, FormModule } from '@coreui/angular';
 import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft } from '@coreui/icons';
 import { IconSetService, IconModule } from '@coreui/icons-angular';
+import { catchError, forkJoin, of, throwError } from 'rxjs';
 
 import { ToastMessageComponent } from 'src/app/shared/components/toast-message/toast-message.component';
 
@@ -17,7 +18,7 @@ import { ZoneItem } from 'src/app/core/models/zone.model';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
 import { CreateDetectionInstanceRequest, DetectionInstanceRequest, Recording } from 'src/app/core/models/api-requests.model';
 import { ScenarioItem } from 'src/app/core/models/scenario.model';
-import { ToastService } from 'src/app/core/services/toast/toast.service'; 
+import { ToastService } from 'src/app/core/services/toast/toast.service';
 
 
 @Component({
@@ -134,50 +135,77 @@ export class AddDetectionInstanceComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const zoneId = params.get('zoneId');
       if (zoneId) {
-        this.zoneService.fetchZoneById(parseInt(zoneId)).subscribe({
-          next: zone => {
-            this.zone = zone;
+        const parsedZoneId = parseInt(zoneId);
+    
+        // Using forkJoin to make both API calls in parallel
+        forkJoin({
+          zone: this.zoneService.fetchZoneById(parsedZoneId),
+          detectionInstances: this.detectionService.fetchDetectionInstancesByZoneId(parsedZoneId).pipe(
+            catchError(err => {
+              // Handle specific error for detection instances
+              if (err.status === 404) {
+                console.log('Detection instances not found, ignoring error.');
+                return of([]); // Return an empty array if detection instances are not found
+              }
+              // Re-throw other errors to be handled by the error block in the subscribe
+              return throwError(() => err); 
+            })
+          )
+        }).subscribe({
+          next: result => {
+            this.zone = result.zone;
             this.confidenceThreshold = this.zone.zoneconfidence;
+            const detectionInstances = result.detectionInstances;
+            this.zone.cameras.forEach(camera => camera.status = true);
+         
+            for(const instance of detectionInstances){
+              const cameraId = instance.cameraId;    
+              const cameraActive = this.zone.cameras.find(item => item.id === cameraId);
+              if(cameraActive){
+                cameraActive.status = false;
+              }
+            }
           },
           error: err => {
-            console.error('Error fetching zones:', err);
-            this.showToast('Error loading zone information', "error");
+            console.error('Error fetching zone or detection instances:', err);
+            this.showToast('Error loading zone or detection instances information', 'error');
           }
         });
       }
     });
   }
+  
 
   /**
    * Loads detection types from the service and assigns them to `detectionTypesList`.
    * If an error occurs, navigates back to the previous page.
    */
   private loadDetectionTypes(): void {
-    this.detectionService.fetchDetectionTypes().subscribe({
-      next: detectionTypes => this.detectionTypesList = detectionTypes,
-      error: err => {
-        console.error('Error fetching detection types:', err);
-        this.showToast('Error loading detection types', "error");
-      }
-    });
-  }
+  this.detectionService.fetchDetectionTypes().subscribe({
+    next: detectionTypes => this.detectionTypesList = detectionTypes,
+    error: err => {
+      console.error('Error fetching detection types:', err);
+      this.showToast('Error loading detection types', "error");
+    }
+  });
+}
 
   /**
    * Loads scenarios from the service and sets up the multi-selector.
    * If an error occurs, navigates back to the previous page.
    */
   private loadScenarios(): void {
-    this.scenarioService.fetchScenarios().subscribe({
-      next: scenarios => {
-        const scenariosList = scenarios;
-        this.loadMultiSelectorObjectDetection(scenariosList);
-      },
-      error: err => {
-        console.error('Error fetching scenarios:', err);
-        this.showToast('Error fetching scenarios', "error")
-      }
-    });
-  }
+  this.scenarioService.fetchScenarios().subscribe({
+    next: scenarios => {
+      const scenariosList = scenarios;
+      this.loadMultiSelectorObjectDetection(scenariosList);
+    },
+    error: err => {
+      console.error('Error fetching scenarios:', err);
+      this.showToast('Error fetching scenarios', "error")
+    }
+  });
+}
 
 
   // ========================
@@ -189,17 +217,17 @@ export class AddDetectionInstanceComponent implements OnInit {
    * @param scenarios The list of scenarios to populate the dropdown.
    */
   private setupMultiSelector() {
-    return {
-      singleSelection: false,
-      idField: 'item_id',
-      textField: 'item_text',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
-      itemsShowLimit: 5,
-      allowSearchFilter: false
+  return {
+    singleSelection: false,
+    idField: 'item_id',
+    textField: 'item_text',
+    selectAllText: 'Select All',
+    unSelectAllText: 'UnSelect All',
+    itemsShowLimit: 5,
+    allowSearchFilter: false
 
-    };
-  }
+  };
+}
 
   /**
    * Returns the configuration settings for the multi-selector dropdown.
@@ -207,40 +235,40 @@ export class AddDetectionInstanceComponent implements OnInit {
    */
   private loadMultiSelectorObjectDetection(scenarios: ScenarioItem[]): void {
 
-    this.dropdownListObjects = scenarios.map(scenario => ({
-      item_id: scenario.id,
-      item_text: scenario.name
-    }));
+  this.dropdownListObjects = scenarios.map(scenario => ({
+    item_id: scenario.id,
+    item_text: scenario.name
+  }));
 
-    this.selectedItemsObjects = [];
-    this.dropdownSettingsObjects = this.setupMultiSelector();
-  }
-
-
-  // ========================
-  // Navigation Functions
-  // ========================
-
-  /**
-   * Navigates back to the previous page.
-   */
-  navigateBack() {
-    this.location.back();
-  }
+  this.selectedItemsObjects = [];
+  this.dropdownSettingsObjects = this.setupMultiSelector();
+}
 
 
-  // ========================
-  // Utility Functions
-  // ========================
+// ========================
+// Navigation Functions
+// ========================
 
-  /**
-  * Triggers toast message
-  */
-  showToast(message: string, toastType: 'success' | 'error') {
-    this.toastMessage = message;
-    this.toastType = toastType;
-    this.toastComponent.toggleToast();
-  }
+/**
+ * Navigates back to the previous page.
+ */
+navigateBack() {
+  this.location.back();
+}
+
+
+// ========================
+// Utility Functions
+// ========================
+
+/**
+* Triggers toast message
+*/
+showToast(message: string, toastType: 'success' | 'error') {
+  this.toastMessage = message;
+  this.toastType = toastType;
+  this.toastComponent.toggleToast();
+}
 
 
 }

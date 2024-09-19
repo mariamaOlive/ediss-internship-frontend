@@ -129,7 +129,7 @@ export class ZonesListComponent {
         if (success) {
           this.loadZonesByPlantId(); // Refresh the list of zones after successful addition
           console.log('Zone added successfully.');
-          this.showToast('Zone added successfully.', 'success');
+          this.showToast('Detection Zone added successfully.', 'success');
           this.visibleModalAdd = false; // Close modal
           this.resetForm();
           this.loadZonesByPlantId();
@@ -343,5 +343,5 @@ export class ZonesListComponent {
           console.log(`Unknown action: ${action} for card with ID: ${cardId}`);
       }
     }
-    
+
 }

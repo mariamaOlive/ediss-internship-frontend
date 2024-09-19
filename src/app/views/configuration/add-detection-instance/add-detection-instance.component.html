@@ -86,10 +86,18 @@
       </c-row>
       <c-row class="mt-4">
         <div *ngFor="let camera of zone?.cameras" class="d-flex align-items-center mb-2">
-          <c-form-check>
-            <input cFormCheckInput type="radio" [value]="camera.id" name="flexRadioDefaultCamera"
-              [(ngModel)]="selectedCameraId" required />
+          <c-form-check [ngClass]="{'camera-disabled': !camera.status}">
+            <input 
+              cFormCheckInput 
+              type="radio" 
+              [value]="camera.id" 
+              name="flexRadioDefaultCamera" 
+              [(ngModel)]="selectedCameraId" 
+              [disabled]="!camera.status" 
+              required 
+            />
             <label cFormCheckLabel>{{ camera.name }} - {{ camera.ipaddress }}</label>
+            <span *ngIf="!camera.status" [ngClass]="{'camera-disabled': !camera.status}"> (in use)</span>
           </c-form-check>
         </div>
         <small *ngIf="!selectedCameraId" class="text-danger">Please select a camera.</small>
