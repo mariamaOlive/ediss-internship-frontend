@@ -21,6 +21,7 @@ import { ToastMessageComponent } from 'src/app/shared/components/toast-message/t
 
 import { PlantItem } from 'src/app/core/models/plant.model';
 import { PlantService } from 'src/app/core/services/plant/plant.service';
+import { result } from 'lodash-es';
 
 
 
@@ -83,14 +84,20 @@ export class PlantsListComponent implements OnInit {
    * Loads the list of active plants and populates the card list.
    */
   private loadActivePlants(): void {
-    this.plantsService.fetchPlants().subscribe(plants => {
-      this.plantsListActive = plants;
-      this.cardList = this.plantsListActive.map(plant => ({
-        name: plant.name,
-        description: plant.address,
-        id: plant.id
-      }));
-    });
+    this.plantsService.fetchPlants().subscribe(
+      plants => {
+        this.plantsListActive = plants;
+        this.cardList = this.plantsListActive.map(plant => ({
+          name: plant.name,
+          description: plant.address,
+          id: plant.id
+        }));
+      },
+      error => {
+        console.error('Error fetching plants:', error);
+        this.showToast('Error fetching plants', 'error')
+      }
+    );
   }
 
   /**
@@ -100,11 +107,29 @@ export class PlantsListComponent implements OnInit {
   private loadInactivePlants(): void {
     this.plantsService.fetchPlants('inactive').subscribe(
       plants => {
-        this.plantsListInactive = plants
+        this.plantsListInactive = plants;
         this.visibleModal = !this.visibleModal;
-      });
+      },
+      error => {
+        console.error('Error fetching inactive plants:', error); 
+        this.showToast('Error fetching inactive plants', 'error');
+      }
+    );
   }
 
+
+  inactivatePlant(plantId: number): void {
+    this.plantsService.inactivatePlant(plantId).subscribe({
+      next: respose => {
+        this.showToast('Plant inactivated successfuly', 'success');
+        this.loadActivePlants();
+      },
+      error: (error) => {
+        console.error('Error inactivating plant:', error);
+        this.showToast('Error inactivating plant', 'error');
+      }
+    });
+  }
 
   /**
    * Updates the selected plant's confidence threshold and reloads the active plants list.
@@ -126,11 +151,11 @@ export class PlantsListComponent implements OnInit {
     ).subscribe({
       next: (response) => {
         console.log('Plant confidence updated successfully:', response);
-        this.showSuccessToast();
+        this.showToast('Plant added successfully', 'success');
       },
       error: (error) => {
         console.error('Error updating plant confidence:', error);
-        this.showErrorToast();
+        this.showToast('Error updating plant confidence', 'error');
       }
     });
   }
@@ -196,22 +221,31 @@ export class PlantsListComponent implements OnInit {
   }
 
   /**
-  * Triggers sucess toast message
+  * Triggers toast message
   */
-  showSuccessToast() {
-    this.toastMessage = 'Plant was successfully added!';
-    this.toastType = 'success';
+  showToast(message: string, toastType: 'success' | 'error') {
+    this.toastMessage = message;
+    this.toastType = toastType;
     this.toastComponent.toggleToast();
   }
 
   /**
-  * Triggers error toast message
+  * Handles the action emitted by the CardListComponent's dropdown.
+  *
+  * @param {Object} event - The event object containing the selected card's ID and action.
+  * @param {number} event.cardId - The ID of the card that the dropdown action was triggered for.
+  * @param {string} event.action - The action selected from the dropdown menu (e.g., 'inactivate').
   */
-  showErrorToast() {
-    this.toastMessage = 'An error occurred!';
-    this.toastType = 'error';
-    this.toastComponent.toggleToast();
-  }
+  handleDropdownAction(event: { cardId: number, action: string }): void {
+    const { cardId, action } = event;
 
+    switch (action) {
+      case 'inactivate':
+        this.inactivatePlant(cardId);
+        break;
+      default:
+        console.log(`Unknown action: ${action} for card with ID: ${cardId}`);
+    }
+  }
 
 }

@@ -38,25 +38,31 @@ import {
 export class CardListComponent {
 
   @Input() cardList: Array<{ name: string, description: string, id: number }> = [];
-  @Input() dropdownOptions: Array<{ label: string, link: any[] }> = [];
+  @Input() dropdownOptions: Array<{ label: string, action: string }> = [];
   @Input() emptyCardText: string = "";
   @Output() cardClick = new EventEmitter<number>();
   @Output() emptyCardClick = new EventEmitter<void>();
+  @Output() dropdownOptionClick = new EventEmitter<{ cardId: number, action: string }>();
   @Input() topContainerColor: string = '';
-  @Input() showEmptyCard: boolean = true; 
+  @Input() showEmptyCard: boolean = true;
 
   // ========================
   // Interaction Functions
   // ========================
-  
+
   // Trigges on the click of one the cards of the list
   onCardClick(cardId: number): void {
-    this.cardClick.emit(cardId); 
+    this.cardClick.emit(cardId);
   }
 
   // Emits an event on the click of the empty card
   onEmptyCardClick(): void {
     this.emptyCardClick.emit();
+  }
+
+  // Triggers on selecting a dropdown option
+  onDropdownOptionClick(cardId: number, action: string): void {
+    this.dropdownOptionClick.emit({ cardId, action });
   }
 
 }

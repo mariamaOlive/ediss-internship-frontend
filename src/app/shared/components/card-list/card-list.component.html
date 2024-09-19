@@ -10,7 +10,11 @@
                   <svg cIcon name="cilOptions"></svg>
                 </button>
                 <ul cDropdownMenu class="shadow">
-                  <li><a [routerLink]="[]" cDropdownItem>Delete</a></li>
+                  <li *ngFor="let option of dropdownOptions">
+                    <a [routerLink]="" cDropdownItem (click)="onDropdownOptionClick(card.id, option.action); $event.stopPropagation()">
+                      {{option.label}}
+                    </a>
+                  </li>
                 </ul>
               </c-dropdown>
             </div>

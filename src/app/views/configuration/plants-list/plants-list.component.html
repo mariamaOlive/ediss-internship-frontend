@@ -4,8 +4,14 @@
 
 <toast-message [message]="toastMessage" [type]="toastType"></toast-message>
 
-<card-list [cardList]="cardList" [emptyCardText]="'Add new plant'" (cardClick)="navigateToZoneList($event)"
-  (emptyCardClick)="toggleModal()" [topContainerColor]="'#337059'">
+<card-list 
+  [cardList]="cardList"  
+  [dropdownOptions]="[{label: 'Inactivate', action: 'inactivate'}]"  
+  [emptyCardText]="'Add new plant'" 
+  (cardClick)="navigateToZoneList($event)"
+  (emptyCardClick)="toggleModal()"
+  (dropdownOptionClick)="handleDropdownAction($event)" 
+  [topContainerColor]="'#337059'">
 </card-list>
 
 

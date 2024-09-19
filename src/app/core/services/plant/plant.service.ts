@@ -28,6 +28,16 @@ export class PlantService {
   }
 
   /**
+   * Inactivates a specific plant.
+   * @param plantId The ID of the plant to update.
+   * @returns An Observable of the delete response.
+   */
+  inactivatePlant(plantId: number): Observable<any> {
+    const url = `${environment.apiUrl}${API_ENDPOINTS.plants}/${plantId}`;
+    return this.http.delete(url);
+  }
+
+  /**
    * Update the confidence threshold of a specific plant.
    * @param plantId The ID of the plant to update.
    * @param confidenceThreshold The new confidence threshold value.
@@ -38,4 +48,6 @@ export class PlantService {
     const url = `${environment.apiUrl}${API_ENDPOINTS.plants}/${plantId}`;
     return this.http.put(url, updateRequest);
   }
+
+
 }
