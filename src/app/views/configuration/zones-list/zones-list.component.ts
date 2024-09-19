@@ -343,7 +343,5 @@ export class ZonesListComponent {
           console.log(`Unknown action: ${action} for card with ID: ${cardId}`);
       }
     }
-
-
-
+    
 }
