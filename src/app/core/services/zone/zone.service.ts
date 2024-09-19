@@ -25,6 +25,16 @@ export class ZoneService {
   }
 
   /**
+  * Deletes a zone by sending a request to the server.
+  * @param zoneId The data for the new zone to be created.
+  * @returns An Observable of the delete response.
+  */
+  deleteZone(zoneId: number): Observable<any> {
+    const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.zones}/${zoneId}`;
+    return this.http.delete(apiUrl);
+  }
+
+  /**
    * Fetches a zone by its ID.
    * @param zoneId The ID of the zone to fetch.
    * @returns An Observable that emits a ZoneItem object.

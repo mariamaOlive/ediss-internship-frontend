@@ -57,9 +57,10 @@ export class ZonesListComponent {
   cardList: Array<{ name: string, description: string, id: number }> = [];
   plantId?: number;
   plantInfo?: PlantItem;
-  visible = false;
+  visibleModalAdd = false;
+  visibleModalDelete = false;
   zonesList: ZoneItem[] = [];
-
+  zoneToDeleteId: number | null = null;
 
   //Input properties
   confidenceThreshold: number = 0;
@@ -129,7 +130,7 @@ export class ZonesListComponent {
           this.loadZonesByPlantId(); // Refresh the list of zones after successful addition
           console.log('Zone added successfully.');
           this.showToast('Zone added successfully.', 'success');
-          this.visible = false; // Close modal
+          this.visibleModalAdd = false; // Close modal
           this.resetForm();
           this.loadZonesByPlantId();
 
@@ -141,6 +142,27 @@ export class ZonesListComponent {
       error: err => {
         this.showToast('Error adding zone.', 'error');
         console.error('Error adding zone:', err);
+      }
+    });
+  }
+
+  /**
+  * Deletes the zone from the server.
+  */
+  deleteZone(): void {
+    if(this.zoneToDeleteId)
+    this.zoneService.deleteZone(this.zoneToDeleteId).subscribe({
+      next: success =>{
+        this.loadZonesByPlantId();
+        this.showToast("The zone was successfully deleted", 'success');
+      },
+      error: err => {
+        this.showToast('Error deleting zone.', 'error');
+        console.error('Error deleting zone:', err);
+      },
+      complete: () => {
+        this.toggleModalDelete(); 
+        this.zoneToDeleteId = null;
       }
     });
   }
@@ -204,13 +226,13 @@ export class ZonesListComponent {
   // ========================
 
   /**
-   * Toggles the visibility of the modal and loads the list of assignees.
+   * Toggles the visibility of the modal that adds a new zone.
    */
-  toggleModal() {
+  toggleModalAdd() {
     this.resetForm();
     this.loadAssignees();
     this.loadPlantInfo();
-    this.visible = !this.visible;
+    this.visibleModalAdd = !this.visibleModalAdd;
   }
 
   /**
@@ -218,7 +240,21 @@ export class ZonesListComponent {
    * @param event The event emitted when the modal's visibility changes.
    */
   handleModalChange(event: any) {
-    this.visible = event;
+    this.visibleModalAdd = event;
+  }
+
+  /**
+   * Toggles the visibility of the modal that confirms deleting a zone.
+   */
+  toggleModalDelete() {
+    this.visibleModalDelete = !this.visibleModalDelete;
+  }
+
+  /**
+   * Triggers when the button close is activated of the deleting zone.
+   */
+  closeModalDelete(){
+    this.zoneToDeleteId = null;
   }
 
 
@@ -287,5 +323,27 @@ export class ZonesListComponent {
     this.toastType = toastType;
     this.toastComponent.toggleToast();
   }
+
+  /**
+  * Handles the action emitted by the CardListComponent's dropdown.
+  *
+  * @param {Object} event - The event object containing the selected card's ID and action.
+  * @param {number} event.cardId - The ID of the card that the dropdown action was triggered for.
+  * @param {string} event.action - The action selected from the dropdown menu (e.g., 'inactivate').
+  */
+    handleDropdownAction(event: { cardId: number, action: string }): void {
+      const { cardId, action } = event;
+  
+      switch (action) {
+        case 'delete':
+          this.zoneToDeleteId = cardId;
+          this.toggleModalDelete();
+          break;
+        default:
+          console.log(`Unknown action: ${action} for card with ID: ${cardId}`);
+      }
+    }
+
+
 
 }
