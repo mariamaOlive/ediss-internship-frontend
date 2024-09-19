@@ -14,16 +14,21 @@ import { IncidentDataItem } from '../../models/incident-data.model';
   providedIn: 'root'
 })
 export class IncidentService {
-  private incident: IncidentItem[] = [];
 
   constructor(private http: HttpClient) {
-    this.incident = this.generateIncidentItems();
   }
 
-  getIncidentsByPlantId(plantId: number): Observable<IncidentItem[]> {
-    return of(this.incident.filter(item => item.plantId === plantId));
-  }
-
+/**
+ * Fetches a list of incidents based on the plant, type of incident, number of days, and optional zone.
+ * If `zoneId` is provided, it filters incidents by the specific zone.
+ * If `zoneId` is not provided (null), it fetches incidents for all zones in the plant.
+ *
+ * @param {number} plantId - The ID of the plant where incidents are to be fetched.
+ * @param {number} incidentType - The type of incident to filter (e.g., PPE detection, Pallet detection).
+ * @param {number} days - The number of past days to filter incidents.
+ * @param {number | null} zoneId - (Optional) The ID of the zone to filter incidents. If null, incidents from all zones will be fetched.
+ * @returns {Observable<IncidentDataItem>} An observable that emits the incident data.
+ */
   fetchIncidents(plantId: number, incidentType: number, days: number, zoneId:number | null): Observable<IncidentDataItem> {
     if(!zoneId){
       const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.reports}?plant_id=${plantId}&days=${days}&detection_type_id=${incidentType}`;
@@ -33,44 +38,6 @@ export class IncidentService {
       return this.http.get<IncidentDataItem>(apiUrl);
     }
   }
-
-  //TODO: Remove incident generator
-  getRandomInt(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  generateIncidentItems(): IncidentItem[] {
-    const generateRandomDate = (start: Date, end: Date): Date => {
-      return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-    };
-
-    const classNames = ["Helmet", "Hairnet", "Vest"];
-    const incidents: IncidentItem[] = [];
-
-    const now = new Date();
-    const twoWeeksAgo = new Date();
-    twoWeeksAgo.setDate(now.getDate() - 14);
-
-    for (let i = 1; i <= 200; i++) {
-      const randomDate = generateRandomDate(twoWeeksAgo, now);
-      const randomClassName = classNames[Math.floor(Math.random() * classNames.length)];
-      const detectionInstanceId = this.getRandomInt(1, 3);
-      const incident: IncidentItem = {
-        id: i,
-        recordingId: i,
-        detectionInstanceId: detectionInstanceId,
-        plantId: 1,
-        timestamp: randomDate,
-        className: randomClassName
-      };
-
-      incidents.push(incident);
-
-    }
-
-    return incidents;
-  }
-
-
+  
 }
 
