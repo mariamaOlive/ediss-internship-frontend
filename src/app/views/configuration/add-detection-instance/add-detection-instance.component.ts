@@ -155,7 +155,7 @@ export class AddDetectionInstanceComponent implements OnInit {
           next: result => {
             this.zone = result.zone;
             this.confidenceThreshold = this.zone.zoneconfidence;
-            const detectionInstances = result.detectionInstances;
+            let detectionInstances = result.detectionInstances.filter(item => item.isRunning)
             this.zone.cameras.forEach(camera => camera.status = true);
          
             for(const instance of detectionInstances){
