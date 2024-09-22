@@ -13,7 +13,7 @@
             <input cFormControl placeholder="Type detection instance name" id="inputDetectionInstanceName" type="text"
               [(ngModel)]="detectionInstanceName" name="detectionInstanceName" required>
           </div>
-          <small *ngIf="!detectionInstanceName" class="text-danger">Please enter a detection instance name.</small>
+          <small *ngIf="detectionInstanceAttempted && !detectionInstanceName" class="text-danger">Please enter a detection instance name.</small>
         </form>
       </c-row>
     </c-container>
@@ -70,7 +70,7 @@
           </div>
         </div>
       </c-row>
-      <small *ngIf="selectedItemsObjects.length === 0 && selectedDetectionType === 1" class="text-danger">
+      <small *ngIf="ppeAttempted && selectedItemsObjects.length === 0 && selectedDetectionType === 1" class="text-danger">
         Please add at least one object.
       </small>
     </c-container>
@@ -100,7 +100,7 @@
             <span *ngIf="!camera.status" [ngClass]="{'camera-disabled': !camera.status}"> (busy)</span>
           </c-form-check>
         </div>
-        <small *ngIf="!selectedCameraId" class="text-danger">Please select a camera.</small>
+        <small *ngIf="cameraAttempted && !selectedCameraId" class="text-danger">Please select a camera.</small>
       </c-row>
     </c-container>
   </c-card-body>
@@ -111,6 +111,5 @@
   <button cButton color="secondary" variant="ghost" class="btn-cancel me-3" (click)="navigateBack()">Cancel</button>
 
   <button cButton color="primary" class="btn-add"
-    [disabled]="!detectionInstanceName || !confidenceThreshold || confidenceThreshold < 0 || confidenceThreshold > 100 || !selectedDetectionType || !selectedCameraId || (selectedItemsObjects.length === 0 && selectedDetectionType===1)"
     (click)="addNewDetectionInstance()">Start Detection</button>
 </c-container>
