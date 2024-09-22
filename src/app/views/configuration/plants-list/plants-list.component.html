@@ -37,7 +37,7 @@
               </option>
             </select>
             <!-- Validation message for plant selection -->
-            <small *ngIf="selectedPlant === ''" class="text-danger">
+            <small *ngIf="plantSelectionAttempted && selectedPlant === ''" class="text-danger">
               Please select a plant.
             </small>
           </c-row>
@@ -78,7 +78,6 @@
       Close
     </button>
     <button cButton class="btn-add"
-      [disabled]="selectedPlant === '' || numberForm.invalid || confidenceThreshold < 0 || confidenceThreshold > 100"
       (click)="updatePlant()">Add</button>
   </c-modal-footer>
 </c-modal>

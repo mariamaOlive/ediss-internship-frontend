@@ -58,6 +58,7 @@ export class PlantsListComponent implements OnInit {
   selectedPlant: string = "";
   confidenceThreshold: number = 0;
   visibleModal = false;
+  plantSelectionAttempted: boolean = false;
 
   // Toast variables
   @ViewChild(ToastMessageComponent) toastComponent!: ToastMessageComponent;
@@ -142,6 +143,8 @@ export class PlantsListComponent implements OnInit {
    */
   updatePlant(): void {
 
+    this.plantSelectionAttempted = true;
+
     // Validate if a plant is selected and the confidence level is within range
     if (this.selectedPlant === '' || this.confidenceThreshold < 0 || this.confidenceThreshold > 100) {
       console.error('Please select a valid plant and ensure confidence level is between 0 and 100.');
@@ -224,6 +227,7 @@ export class PlantsListComponent implements OnInit {
   private resetForm(): void {
     this.selectedPlant = ''; // Reset the zone name
     this.confidenceThreshold = 0; // Reset confidence threshold
+    this.plantSelectionAttempted = false; //Reset form message
   }
 
   /**
