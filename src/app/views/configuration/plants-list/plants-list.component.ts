@@ -54,7 +54,7 @@ export class PlantsListComponent implements OnInit {
   // View variables
   plantsListActive: PlantItem[] = [];
   plantsListInactive: PlantItem[] = [];
-  cardList: Array<{ name: string, description: string, id: number }> = [];
+  cardList: Array<{ name: string, description: string, id: number, message: string }> = [];
   selectedPlant: string = "";
   confidenceThreshold: number = 0;
   visibleModal = false;
@@ -91,7 +91,8 @@ export class PlantsListComponent implements OnInit {
         this.cardList = this.plantsListActive.map(plant => ({
           name: plant.name,
           description: plant.address,
-          id: plant.id
+          id: plant.id,
+          message: ''
         }));
       },
       error: error => {

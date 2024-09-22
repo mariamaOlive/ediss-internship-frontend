@@ -34,6 +34,16 @@ export class DetectionInstanceService {
   }
 
   /**
+   * Fetches all detection instances for a given zone by its ID without extra info related
+   * @param zoneId The ID of the zone to fetch detection instances for.
+   * @returns An Observable that emits an array of DetectionInstanceRequest.
+   */
+    fetchDetectionInstancesByZoneIdSimple(zoneId: number): Observable<DetectionInstanceRequest[]> {
+      const detectionInstancesUrl = `${environment.apiUrl}${API_ENDPOINTS.zones}${API_ENDPOINTS.detectionInstances}/${zoneId}`;
+      return this.http.get<DetectionInstanceRequest[]>(detectionInstancesUrl);
+    }
+
+  /**
    * Fetches all detection instances for a given zone by its ID.
    * @param zoneId The ID of the zone to fetch detection instances for.
    * @returns An Observable that emits an array of DetectionInstanceItem objects sorted by startTime.

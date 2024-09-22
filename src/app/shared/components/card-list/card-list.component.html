@@ -4,9 +4,9 @@
         <!-- <a [routerLink]="[routeParameter, card.id]" class="card-link"> -->
           <c-card class="mb-3 p-0 shadow-sm card-container" (click)="onCardClick(card.id)">
             <div class="card-container-top position-relative"  [ngStyle]="{ 'background-color': topContainerColor }">
-              <div class="ms-2 mb-2 d-flex align-items-center position-absolute bottom-0 start-0" *ngIf="messageTop!==''">
+              <div class="ms-2 mb-2 d-flex align-items-center position-absolute bottom-0 start-0" *ngIf="card.message !== ''">
                 <span class="ms-2 text-white">
-                  {{ messageTop }}
+                  {{ card.message }}
                 </span>
               </div>
 

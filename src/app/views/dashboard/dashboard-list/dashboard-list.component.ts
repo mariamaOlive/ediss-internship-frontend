@@ -50,7 +50,7 @@ import { PlantItem } from 'src/app/core/models/plant.model';
 export class DashboardListComponent implements OnInit {
   showNoPlantsMessage = true;
   plantsList: PlantItem[] = [];
-  cardList: Array<{ name: string, description: string, id: number }> = [];
+  cardList: Array<{ name: string, description: string, id: number, message: string }> = [];
 
   // Toast variables
   @ViewChild(ToastMessageComponent) toastComponent!: ToastMessageComponent;
@@ -86,7 +86,8 @@ export class DashboardListComponent implements OnInit {
           this.cardList = this.plantsList.map(plant => ({
             name: plant.name,
             description: plant.address,
-            id: plant.id
+            id: plant.id,
+            message: ''
           }));
         }
       },

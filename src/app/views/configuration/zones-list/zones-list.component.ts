@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { CommonModule, Location } from '@angular/common';
 import { Router, ActivatedRoute, ParamMap, RouterModule, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -26,7 +27,8 @@ import { PlantService } from 'src/app/core/services/plant/plant.service';
 import { ZoneItem } from 'src/app/core/models/zone.model';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
 import { DataTransferService } from 'src/app/core/services/data-transfer/data-transfer.service';
-import { CameraZoneCreateRequest, ZoneCreateRequest } from 'src/app/core/models/api-requests.model';
+import { CameraZoneCreateRequest, DetectionInstanceRequest, ZoneCreateRequest } from 'src/app/core/models/api-requests.model';
+import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
 
 
 @Component({
@@ -54,7 +56,7 @@ export class ZonesListComponent {
 
   //Template properties
   assignees: AssigneeItem[] = [];
-  cardList: Array<{ name: string, description: string, id: number }> = [];
+  cardList: Array<{ name: string, description: string, id: number, message: string }> = [];
   plantId?: number;
   plantInfo?: PlantItem;
   visibleModalAdd = false;
@@ -85,6 +87,7 @@ export class ZonesListComponent {
     private assigneeService: AssigneeService,
     private plantService: PlantService,
     private zoneService: ZoneService,
+    private detectionInstanceService: DetectionInstanceService,
     private location: Location,
     private dataTransferService: DataTransferService,
     public iconSet: IconSetService) {
@@ -207,6 +210,7 @@ export class ZonesListComponent {
   /**
   * Loads the list of zones by the plant ID from the route parameters.
   */
+
   loadZonesByPlantId(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const id = params.get('id');
@@ -218,21 +222,71 @@ export class ZonesListComponent {
             this.cardList = this.zonesList.map(zone => ({
               name: zone.title,
               description: "",
-              id: zone.id
+              id: zone.id,
+              message: ""
             }));
           },
           error: err => {
             //this.showToast('Error fetching Zones.', 'error');
             this.zonesList = [];
-            this.cardList = [];
-            console.error('Error fetching Zones:', err);
+            this.cardList = [];            console.error('Error fetching Zones:', err);
           }
         });
       }
     });
   }
 
+  // loadZonesByPlantId(): void {
+  //   this.route.paramMap.subscribe((params: ParamMap) => {
+  //     const id = params.get('id');
+  //     if (id) {
+  //       this.plantId = parseInt(id, 10);
+  //       this.zoneService.fetchZonesByPlantId(this.plantId).subscribe({
+  //         next: zones => {
+  //           this.zonesList = zones;
+  //           this.cardList = this.zonesList.map(zone => ({
+  //             name: zone.title,
+  //             description: "",
+  //             id: zone.id,
+  //             message: ""  // This will later hold the detection instance information if needed
+  //           }));
   
+  //           // Fetch detection instances for each zone
+  //           const detectionInstancesRequests = this.zonesList.map(zone =>
+  //             this.detectionInstanceService.fetchDetectionInstancesByZoneIdSimple(zone.id)
+  //           );
+  
+  //           forkJoin(detectionInstancesRequests).subscribe({
+  //             next: (detectionInstancesList: DetectionInstanceRequest[][]) => {
+  //               this.zonesList = this.zonesList.map((zone, index) => ({
+  //                 ...zone,
+  //                 detectionInstances: detectionInstancesList[index] || [] // Add detection instances to each zone
+  //               }));
+  
+
+  //               // Optionally, update the card list with detection instance information
+  //               this.cardList = this.cardList.map((card, index) => ({
+  //                 ...card,
+  //                 message: `Detections: ${this.zonesList[index].detectionInstances?.length || 0}`
+  //               }));
+  //             },
+  //             error: err => {
+  //               console.error('Error fetching detection instances:', err);
+  //             }
+  //           });
+  //         },
+  //         error: err => {
+  //           console.error('Error fetching Zones:', err);
+  //           this.zonesList = [];
+  //           this.cardList = [];
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
+  
+
+
   // ========================
   // Modal Functions
   // ========================

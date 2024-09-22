@@ -37,7 +37,7 @@ import {
 })
 export class CardListComponent {
 
-  @Input() cardList: Array<{ name: string, description: string, id: number }> = [];
+  @Input() cardList: Array<{ name: string, description: string, id: number, message: string }> = [];
   @Input() dropdownOptions: Array<{ label: string, action: string }> = [];
   @Input() emptyCardText: string = "";
   @Output() cardClick = new EventEmitter<number>();
@@ -45,7 +45,6 @@ export class CardListComponent {
   @Output() dropdownOptionClick = new EventEmitter<{ cardId: number, action: string }>();
   @Input() topContainerColor: string = '';
   @Input() showEmptyCard: boolean = true;
-  @Input() messageTop: string = "";
 
   // ========================
   // Interaction Functions
