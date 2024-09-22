@@ -18,7 +18,7 @@
 </card-list>
 
 <!-- Modal delete Zone -->
-<c-modal id="liveDemoModal" [visible]="visibleModalDelete">
+<c-modal id="deleteModal" [visible]="visibleModalDelete">
   <c-modal-header>
     <h5 cModalTitle>Delete zone</h5>
     <button (click)="toggleModalDelete()" cButtonClose></button>
@@ -48,7 +48,6 @@
       Close
     </button>
     <button class="btn-add" cButton color="primary" 
-      [disabled]="!zoneName || cameraList.length === 0 || !selectedAssignee" 
       (click)="addNewZone()">
       Add
     </button>
@@ -68,7 +67,7 @@
               <input cFormControl placeholder="Type zone name" id="inputZoneName" type="text" [(ngModel)]="zoneName"
                 name="zoneName">
             </div>
-            <small *ngIf="!zoneName" class="text-danger">
+            <small *ngIf="zoneNameAttempted && !zoneName" class="text-danger">
               Please enter a zone name.
             </small>
           </form>
@@ -90,7 +89,7 @@
               {{ assignee.name }}
             </option>
           </select>
-          <small *ngIf="!selectedAssignee" class="text-danger">
+          <small *ngIf="assigneeAttempted && !selectedAssignee" class="text-danger">
             Please select an assignee.
           </small>
         </c-row>
@@ -154,7 +153,7 @@
               <button cButton color="primary" class="btn-add-camera" variant="ghost" (click)="addCamera()">Add</button>
             </c-col>
           </c-row>
-          <small *ngIf="cameraList.length === 0" class="text-danger">
+          <small *ngIf="cameraListAttempted && cameraList.length === 0" class="text-danger">
             Please add at least one camera.
           </small>
         </c-container>

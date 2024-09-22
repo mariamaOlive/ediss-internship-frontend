@@ -69,6 +69,9 @@ export class ZonesListComponent {
   cameraList: CameraZoneCreateRequest[] = []
   cameraName = ""
   cameraIPAdress = ""
+  zoneNameAttempted: boolean = false;
+  assigneeAttempted: boolean = false;
+  cameraListAttempted: boolean = false;
 
   // Toast variables
   @ViewChild(ToastMessageComponent) toastComponent!: ToastMessageComponent;
@@ -111,59 +114,67 @@ export class ZonesListComponent {
 
     if (!this.plantId) {
       this.showToast('Plant ID not defined.', 'error');
-      throw new Error('Plant ID not defined.');
+      console.log('Plant ID not defined.');
+      return;
     }
 
-    const newZone: ZoneCreateRequest = {
-      title: this.zoneName,
-      plant_id: this.plantId,
-      cameras: this.cameraList,
-      assignee_id: this.selectedAssignee,
-      zoneconfidence: this.confidenceThreshold,
-      status: 'active',
-      description: ""
-    };
+    this.zoneNameAttempted = true;
+    this.assigneeAttempted = true;
+    this.cameraListAttempted = true;
 
-    this.zoneService.addZone(newZone).subscribe({
-      next: newZone => {
-        if (newZone) {
-          console.log('Zone added successfully.');
-          this.showToast('Detection Zone added successfully.', 'success');
-          this.navigateToDetectionInstanceList(newZone.id);
-          // this.loadZonesByPlantId(); // Refresh the list of zones after successful addition
-          // this.visibleModalAdd = false; // Close modal
-          // this.resetForm();
-        } else {
-          this.showToast('Failed to add zone.', 'error');
-          console.error('Failed to add zone.');
+    if (this.zoneName && this.selectedAssignee && this.cameraList.length > 0) {
+
+      const newZone: ZoneCreateRequest = {
+        title: this.zoneName,
+        plant_id: this.plantId,
+        cameras: this.cameraList,
+        assignee_id: this.selectedAssignee,
+        zoneconfidence: this.confidenceThreshold,
+        status: 'active',
+        description: ""
+      };
+
+      this.zoneService.addZone(newZone).subscribe({
+        next: newZone => {
+          if (newZone) {
+            console.log('Zone added successfully.');
+            this.showToast('Detection Zone added successfully.', 'success');
+            this.navigateToDetectionInstanceList(newZone.id);
+            // this.loadZonesByPlantId(); // Refresh the list of zones after successful addition
+            // this.visibleModalAdd = false; // Close modal
+            // this.resetForm();
+          } else {
+            this.showToast('Failed to add zone.', 'error');
+            console.error('Failed to add zone.');
+          }
+        },
+        error: err => {
+          this.showToast('Error adding zone.', 'error');
+          console.error('Error adding zone:', err);
         }
-      },
-      error: err => {
-        this.showToast('Error adding zone.', 'error');
-        console.error('Error adding zone:', err);
-      }
-    });
+      });
+    }
   }
 
   /**
   * Deletes the zone from the server.
   */
   deleteZone(): void {
-    if(this.zoneToDeleteId)
-    this.zoneService.deleteZone(this.zoneToDeleteId).subscribe({
-      next: success =>{
-        this.loadZonesByPlantId();
-        this.showToast("The zone was successfully deleted", 'success');
-      },
-      error: err => {
-        this.showToast('Error deleting zone.', 'error');
-        console.error('Error deleting zone:', err);
-      },
-      complete: () => {
-        this.toggleModalDelete(); 
-        this.zoneToDeleteId = null;
-      }
-    });
+    if (this.zoneToDeleteId)
+      this.zoneService.deleteZone(this.zoneToDeleteId).subscribe({
+        next: success => {
+          this.loadZonesByPlantId();
+          this.showToast("The zone was successfully deleted", 'success');
+        },
+        error: err => {
+          this.showToast('Error deleting zone.', 'error');
+          console.error('Error deleting zone:', err);
+        },
+        complete: () => {
+          this.toggleModalDelete();
+          this.zoneToDeleteId = null;
+        }
+      });
   }
 
   /**
@@ -254,7 +265,7 @@ export class ZonesListComponent {
   /**
    * Triggers when the button close is activated of the deleting zone.
    */
-  closeModalDelete(){
+  closeModalDelete() {
     this.zoneToDeleteId = null;
   }
 
@@ -314,6 +325,9 @@ export class ZonesListComponent {
     this.selectedAssignee = NaN; // Reset the selected assignee
     this.cameraName = ''; // Reset the camera name input
     this.cameraIPAdress = ''; // Reset the camera IP address input
+    this.zoneNameAttempted = false;
+    this.assigneeAttempted = false;
+    this.cameraListAttempted = false;
   }
 
   /**
@@ -332,17 +346,17 @@ export class ZonesListComponent {
   * @param {number} event.cardId - The ID of the card that the dropdown action was triggered for.
   * @param {string} event.action - The action selected from the dropdown menu (e.g., 'inactivate').
   */
-    handleDropdownAction(event: { cardId: number, action: string }): void {
-      const { cardId, action } = event;
-  
-      switch (action) {
-        case 'delete':
-          this.zoneToDeleteId = cardId;
-          this.toggleModalDelete();
-          break;
-        default:
-          console.log(`Unknown action: ${action} for card with ID: ${cardId}`);
-      }
+  handleDropdownAction(event: { cardId: number, action: string }): void {
+    const { cardId, action } = event;
+
+    switch (action) {
+      case 'delete':
+        this.zoneToDeleteId = cardId;
+        this.toggleModalDelete();
+        break;
+      default:
+        console.log(`Unknown action: ${action} for card with ID: ${cardId}`);
     }
+  }
 
 }
