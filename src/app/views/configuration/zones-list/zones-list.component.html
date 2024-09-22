@@ -10,6 +10,7 @@
 <card-list 
   [cardList]="cardList" 
   [emptyCardText]="'Define new detection zone'" 
+  [messageTop] = "''"
   [dropdownOptions]="[{label: 'Delete', action: 'delete'}]"  
   (cardClick)="navigateToDetectionInstanceList($event)"
   (emptyCardClick)="toggleModalAdd()"

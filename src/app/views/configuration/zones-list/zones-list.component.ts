@@ -232,7 +232,7 @@ export class ZonesListComponent {
     });
   }
 
-
+  
   // ========================
   // Modal Functions
   // ========================

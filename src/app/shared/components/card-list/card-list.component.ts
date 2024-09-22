@@ -45,6 +45,7 @@ export class CardListComponent {
   @Output() dropdownOptionClick = new EventEmitter<{ cardId: number, action: string }>();
   @Input() topContainerColor: string = '';
   @Input() showEmptyCard: boolean = true;
+  @Input() messageTop: string = "";
 
   // ========================
   // Interaction Functions
