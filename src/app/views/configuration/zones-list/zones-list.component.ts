@@ -125,15 +125,14 @@ export class ZonesListComponent {
     };
 
     this.zoneService.addZone(newZone).subscribe({
-      next: success => {
-        if (success) {
-          this.loadZonesByPlantId(); // Refresh the list of zones after successful addition
+      next: newZone => {
+        if (newZone) {
           console.log('Zone added successfully.');
           this.showToast('Detection Zone added successfully.', 'success');
-          this.visibleModalAdd = false; // Close modal
-          this.resetForm();
-          this.loadZonesByPlantId();
-
+          this.navigateToDetectionInstanceList(newZone.id);
+          // this.loadZonesByPlantId(); // Refresh the list of zones after successful addition
+          // this.visibleModalAdd = false; // Close modal
+          // this.resetForm();
         } else {
           this.showToast('Failed to add zone.', 'error');
           console.error('Failed to add zone.');

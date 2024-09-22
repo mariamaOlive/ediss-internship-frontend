@@ -19,7 +19,7 @@ export class ZoneService {
    * @param newZone The data for the new zone to be created.
    * @returns An Observable that emits the server's response.
    */
-  addZone(newZone: ZoneCreateRequest): Observable<any> {
+  addZone(newZone: ZoneCreateRequest): Observable<ZoneItem> {
     const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.zones}`;
     return this.http.post<any>(apiUrl, newZone);
   }
