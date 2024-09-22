@@ -217,7 +217,7 @@ export class DashboardDetailsComponent implements OnInit {
       this.days = 7;
     } else if (value === 'Radio2') {
       this.days = 30;
-    }else if (value === 'Radio3') {
+    } else if (value === 'Radio3') {
       this.days = 2;
     }
     this.requestIncidents();
@@ -251,6 +251,13 @@ export class DashboardDetailsComponent implements OnInit {
    */
   onZoneChange(): void {
     this.requestIncidents();
+  }
+
+  /**
+   * Open a modal that shows the details of the incidents.
+   */
+  checkDetailsIncidents(): void {
+    //TODO: Open modal and show incidents
   }
 
 

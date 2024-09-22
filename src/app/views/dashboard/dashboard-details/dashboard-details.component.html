@@ -20,8 +20,9 @@
 
   <!-- Card body -->
   <c-card-body>
-    <div class="d-flex justify-content-end">
-      <div class="d-flex align-items-center me-3">
+    <div class="row justify-content-md-end justify-content-center">
+      <!-- Zone Filter -->
+      <div class="col-md-auto col-12 d-flex align-items-center justify-content-center justify-content-md-start me-md-3">
         <select class="select-filter-zone" aria-label="Filter by zone" cSelect [(ngModel)]="selectedZone" (ngModelChange)="onZoneChange()">
           <option [ngValue]="null">All zones</option>
           <option *ngFor="let zone of zoneList" [value]="zone.id">
@@ -29,17 +30,19 @@
           </option>
         </select>
       </div>     
-      <div class="d-flex align-items-center me-4">
+    
+      <!-- Radio Buttons -->
+      <div class="col-md-auto col-12 d-flex align-items-center justify-content-center mt-3 mt-md-0 me-md-4">
         <form [formGroup]="formRadio1">
           <c-button-group aria-label="Basic radio toggle button group" role="group">
             <!-- Last Day option -->
             <input class="btn-check" formControlName="radio1" type="radio" value="Radio3" />
             <label (click)="setRadioValue('Radio3')" cButton cFormCheckLabel variant="outline">Last days</label>
-      
+    
             <!-- 7 Days option -->
             <input class="btn-check" formControlName="radio1" type="radio" value="Radio1" />
             <label (click)="setRadioValue('Radio1')" cButton cFormCheckLabel variant="outline">7 days</label>
-      
+    
             <!-- 30 Days option -->
             <input class="btn-check" formControlName="radio1" type="radio" value="Radio2" />
             <label (click)="setRadioValue('Radio2')" cButton cFormCheckLabel variant="outline">30 days</label>
@@ -47,6 +50,8 @@
         </form>
       </div>      
     </div>
+    
+    
 
     <c-nav variant="pills" class="m-4">
       <a [active]="true" [cTabContent]="tabContent" (click)="selectTab(0)" [routerLink] [tabPaneIdx]="0" cNavLink>PPE
@@ -91,6 +96,11 @@
               </c-container>
             </c-card-body>
           </c-card>
+          <div class="d-flex justify-content-center mt-4 mb-3">
+            <button cButton color="primary" class="btn-details"
+              [disabled]="false"
+              (click)="checkDetailsIncidents()">See Details</button>
+          </div>          
         </div>
         <div *ngIf="incidentsEmpty">
           <p>No data available for PPE incidents.</p>
@@ -129,6 +139,11 @@
               </c-container>
             </c-card-body>
           </c-card>
+          <div class="d-flex justify-content-center mt-4 mb-3">
+            <button cButton color="primary" class="btn-details"
+              [disabled]="false"
+              (click)="checkDetailsIncidents()">See Details</button>
+          </div>   
         </div>
         <div *ngIf="incidentsEmpty">
           <p>No data available for Pallet incidents.</p>
@@ -165,6 +180,11 @@
               </c-container>
             </c-card-body>
           </c-card>
+          <div class="d-flex justify-content-center mt-4 mb-3">
+            <button cButton color="primary" class="btn-details"
+              [disabled]="false"
+              (click)="checkDetailsIncidents()">See Details</button>
+          </div>   
 
         </div>
         <div *ngIf="incidentsEmpty">
