@@ -32,14 +32,20 @@
       <div class="d-flex align-items-center me-4">
         <form [formGroup]="formRadio1">
           <c-button-group aria-label="Basic radio toggle button group" role="group">
+            <!-- Last Day option -->
+            <input class="btn-check" formControlName="radio1" type="radio" value="Radio3" />
+            <label (click)="setRadioValue('Radio3')" cButton cFormCheckLabel variant="outline">Last days</label>
+      
+            <!-- 7 Days option -->
             <input class="btn-check" formControlName="radio1" type="radio" value="Radio1" />
             <label (click)="setRadioValue('Radio1')" cButton cFormCheckLabel variant="outline">7 days</label>
-
+      
+            <!-- 30 Days option -->
             <input class="btn-check" formControlName="radio1" type="radio" value="Radio2" />
             <label (click)="setRadioValue('Radio2')" cButton cFormCheckLabel variant="outline">30 days</label>
           </c-button-group>
         </form>
-      </div>
+      </div>      
     </div>
 
     <c-nav variant="pills" class="m-4">

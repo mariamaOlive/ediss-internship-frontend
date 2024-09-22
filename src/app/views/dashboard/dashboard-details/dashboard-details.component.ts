@@ -60,9 +60,6 @@ export class DashboardDetailsComponent implements OnInit {
   plantId?: number;
   selectedZone: number | null = null;
   selectedInstanceId: string = "";
-  paginatedIncidents: any = [];
-  itemsPerPage = 10; // Number of items to load each time
-  currentPage = 1;
   days: number = 7;
   activeTab: number = 0;
   incidentsEmpty = false;
@@ -220,6 +217,8 @@ export class DashboardDetailsComponent implements OnInit {
       this.days = 7;
     } else if (value === 'Radio2') {
       this.days = 30;
+    }else if (value === 'Radio3') {
+      this.days = 2;
     }
     this.requestIncidents();
   }
