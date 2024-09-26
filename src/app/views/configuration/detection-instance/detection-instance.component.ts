@@ -1,11 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { CardModule, ButtonModule, GridModule, BadgeModule } from '@coreui/angular';
 import { IconSetService, IconModule } from '@coreui/icons-angular';
 import { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft } from '@coreui/icons';
 
-import { DetectionInstanceItem } from 'src/app/core/models/detection-instance.model';
+import { DetectionInstanceItem, DetectionTypeItem } from 'src/app/core/models/detection-instance.model';
 import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
 import { ZoneItem } from 'src/app/core/models/zone.model';
 import { ToastMessageComponent } from 'src/app/shared/components/toast-message/toast-message.component';
@@ -24,6 +25,7 @@ import { ToastMessageComponent } from 'src/app/shared/components/toast-message/t
 export class DetectionInstanceComponent {
 
   detectionInstance: DetectionInstanceItem | null = null;
+  detectionTypes: DetectionTypeItem[] = [];
   zone: ZoneItem | null = null;
 
   // Toast variables
@@ -64,11 +66,21 @@ export class DetectionInstanceComponent {
       let id = params.get('detectionId');
 
       if (id) {
-        this.detectionService.fetchDetectionInstanceInfo(parseInt(id, 10)).subscribe(detectionInstance => {
-          this.detectionInstance = detectionInstance;
+        // Use forkJoin to fetch both detection instance and detection types in parallel
+        forkJoin({
+          detectionInstance: this.detectionService.fetchDetectionInstanceInfo(parseInt(id, 10)),
+          detectionTypes: this.detectionService.fetchDetectionTypes() // Assuming this is the method to get detection types
+        }).subscribe({
+          next: ({ detectionInstance, detectionTypes }) => {
+            this.detectionInstance = detectionInstance;
+            this.detectionTypes = detectionTypes; // Assuming detectionTypes is an array or object stored in your component
+          },
+          error: err => {
+            console.error('Error fetching detection instance or types:', err);
+          }
         });
       }
-    })
+    });
   }
 
   /**
@@ -78,7 +90,7 @@ export class DetectionInstanceComponent {
   stopInstance(): void {
     this.detectionService.stopDetectionInstance(this.detectionInstance?.id).subscribe({
       next: response => {
-        if(this.detectionInstance){
+        if (this.detectionInstance) {
           this.detectionInstance.isRunning = false;
           this.showToast('Instance Completed successfully', 'success');
           console.log('Instance Completed successfully:', response);
@@ -114,6 +126,19 @@ export class DetectionInstanceComponent {
     this.toastMessage = message;
     this.toastType = toastType;
     this.toastComponent.toggleToast();
+  }
+
+  /**
+   * Returns the name of the detection type for a given detection instance.
+   * @param detectionInstance - The detection instance with the detection type to check.
+   * @returns The name of the detection type or 'Unknown Detection' if no match is found.
+   */
+  getDetectionTypeName(detectionInstance: any): string {
+    if (!detectionInstance || !detectionInstance.detectionType) {
+      return 'Unknown Detection';
+    }
+    const matchingType = this.detectionTypes.find(type => type.id === detectionInstance.detectionType.id);
+    return matchingType ? matchingType.name : 'Unknown Detection';
   }
 
 }

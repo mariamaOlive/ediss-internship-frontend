@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { Router, ActivatedRoute, ParamMap, RouterModule, RouterLink } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { IconSetService, IconModule } from '@coreui/icons-angular';
@@ -18,7 +19,7 @@ import {
 } from '@coreui/angular';
 
 import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
-import { DetectionInstanceItem } from 'src/app/core/models/detection-instance.model';
+import { DetectionInstanceItem, DetectionTypeItem } from 'src/app/core/models/detection-instance.model';
 import { DataTransferService } from 'src/app/core/services/data-transfer/data-transfer.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { ToastMessageComponent } from 'src/app/shared/components/toast-message/toast-message.component';
@@ -55,6 +56,7 @@ export class DetectionInstanceListComponent implements OnInit {
   plantId: any = NaN;
   zoneId: any = NaN;
   detectionInstanceList: DetectionInstanceItem[] = [];
+  detectionTypes: DetectionTypeItem[] = [];
 
   // Toast variables
   @ViewChild(ToastMessageComponent) toastComponent!: ToastMessageComponent;
@@ -96,12 +98,19 @@ export class DetectionInstanceListComponent implements OnInit {
       if (plantId && zoneId) {
         this.zoneId = zoneId;
         this.plantId = plantId;
-        this.detectionService.fetchDetectionInstancesByZoneId(parseInt(zoneId, 10)).subscribe({
-          next: detectionInstances => {
+
+        // Call fetchDetectionInstancesByZoneId and fetchDetectionInstanceById in parallel
+        const zoneIdNum = parseInt(zoneId, 10);
+        forkJoin({
+          detectionInstances: this.detectionService.fetchDetectionInstancesByZoneId(zoneIdNum),
+          detectionInstanceTypes: this.detectionService.fetchDetectionTypes() // replace with actual id if dynamic
+        }).subscribe({
+          next: ({ detectionInstances, detectionInstanceTypes }) => {
             this.detectionInstanceList = detectionInstances;
+            this.detectionTypes = detectionInstanceTypes;
           },
           error: err => {
-            console.error('Error fetching detections instance:', err);
+            console.error('Error fetching detection instances:', err);
           }
         });
       }
@@ -165,6 +174,19 @@ export class DetectionInstanceListComponent implements OnInit {
     this.toastMessage = message;
     this.toastType = toastType;
     this.toastComponent.toggleToast();
+  }
+
+  /**
+   * Returns the name of the detection type for a given detection instance.
+   * @param detectionInstance - The detection instance with the detection type to check.
+   * @returns The name of the detection type or 'Unknown Detection' if no match is found.
+   */
+  getDetectionTypeName(detectionInstance: any): string {
+    if (!detectionInstance || !detectionInstance.detectionType) {
+      return 'Unknown Detection';
+    }
+    const matchingType = this.detectionTypes.find(type => type.id === detectionInstance.detectionType.id);
+    return matchingType ? matchingType.name : 'Unknown Detection';
   }
 
 }
