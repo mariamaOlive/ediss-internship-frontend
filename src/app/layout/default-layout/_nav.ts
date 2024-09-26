@@ -7,7 +7,7 @@ export const navItems: INavData[] = [
     url: '/dashboard',
     iconComponent: { name: 'cil-speedometer' },
   },{
-    name: 'Configuration',
+    name: 'New Detection',
     url: '/configuration',
     iconComponent: { name: 'cil-pencil' }
   }
