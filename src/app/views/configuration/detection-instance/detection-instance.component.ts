@@ -49,7 +49,7 @@ export class DetectionInstanceComponent {
   // ========================
 
   ngOnInit(): void {
-    this.loadDetectionInstanceById();
+    this.loadDetectionInstanceByIdFirstTime();
   }
 
 
@@ -58,27 +58,35 @@ export class DetectionInstanceComponent {
   // ========================
 
   /**
-   * Loads the detection instance information by its ID.
-   * The ID is retrieved from the route parameters.
-   */
-  private loadDetectionInstanceById(): void {
+  * Retrieves the detection ID from the route parameters and calls the function to load the detection instance by ID.
+  * @returns void
+  */
+  private loadDetectionInstanceByIdFirstTime(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
-      let id = params.get('detectionId');
+      let idString = params.get('detectionId');
+      if (idString) {
+        let id = parseInt(idString, 10);
+        this.loadDetectionInstanceById(id);
+      }
+    });
+  }
 
-      if (id) {
-        // Use forkJoin to fetch both detection instance and detection types in parallel
-        forkJoin({
-          detectionInstance: this.detectionService.fetchDetectionInstanceInfo(parseInt(id, 10)),
-          detectionTypes: this.detectionService.fetchDetectionTypes() // Assuming this is the method to get detection types
-        }).subscribe({
-          next: ({ detectionInstance, detectionTypes }) => {
-            this.detectionInstance = detectionInstance;
-            this.detectionTypes = detectionTypes; // Assuming detectionTypes is an array or object stored in your component
-          },
-          error: err => {
-            console.error('Error fetching detection instance or types:', err);
-          }
-        });
+  /**
+   * Fetches the detection instance and detection types from the service based on the provided detection ID.
+   * @returns void
+   */
+  private loadDetectionInstanceById(id: number) {
+    // Use forkJoin to fetch both detection instance and detection types in parallel
+    forkJoin({
+      detectionInstance: this.detectionService.fetchDetectionInstanceInfo(id),
+      detectionTypes: this.detectionService.fetchDetectionTypes()
+    }).subscribe({
+      next: ({ detectionInstance, detectionTypes }) => {
+        this.detectionInstance = detectionInstance;
+        this.detectionTypes = detectionTypes;
+      },
+      error: err => {
+        console.error('Error fetching detection instance or types:', err);
       }
     });
   }
@@ -90,8 +98,10 @@ export class DetectionInstanceComponent {
   stopInstance(): void {
     this.detectionService.stopDetectionInstance(this.detectionInstance?.id).subscribe({
       next: response => {
-        if (this.detectionInstance) {
-          this.detectionInstance.isRunning = false;
+        if (response) {
+          if (this.detectionInstance?.id) {
+            this.loadDetectionInstanceById(this.detectionInstance.id)
+          }
           this.showToast('Instance Completed successfully', 'success');
           console.log('Instance Completed successfully:', response);
         }

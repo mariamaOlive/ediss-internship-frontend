@@ -15,6 +15,7 @@ export interface DetectionInstanceItem {
     camera?: CameraItem;
     isRunning?: boolean;
     starttime: string; 
+    endtime?: string; 
     timeElapsed?: number;
 }
 

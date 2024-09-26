@@ -162,6 +162,7 @@ export class DetectionInstanceService {
       detectionType: detectionType,
       classesDetection: item.scenarios ?? undefined,
       starttime: item.recording.starttime,
+      endtime: item.recording.endtime,
       cameraId: item.recording.camera_id,
       zone: zone ?? undefined,  // Default to undefined if not provided
       camera: camera ?? undefined,  // Default to undefined if not provided

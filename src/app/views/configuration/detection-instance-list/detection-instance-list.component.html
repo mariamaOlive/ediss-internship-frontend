@@ -24,6 +24,12 @@
               <button *ngIf="detectionInstance?.isRunning" cButton variant="outline"  color="light" class="position-absolute bottom-0 end-0 m-2" (click)="stopDetectionInstance(detectionInstance); $event.stopPropagation()">
                 stop
               </button>
+
+              <div class="position-absolute bottom-0 start-0 ms-3 mb-1 d-flex">
+                <small class="text-white">{{ detectionInstance.starttime | date:'dd/MM/yyyy' }}</small>
+                <small class="text-white ms-1 me-1" *ngIf="!detectionInstance.isRunning"> - </small>
+                <small class="text-white" *ngIf="!detectionInstance.isRunning">{{ detectionInstance.endtime | date:'dd/MM/yyyy' }}</small>
+              </div>              
             </div>
   
             <!-- Card body -->

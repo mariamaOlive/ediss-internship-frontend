@@ -103,7 +103,7 @@ export class DetectionInstanceListComponent implements OnInit {
         const zoneIdNum = parseInt(zoneId, 10);
         forkJoin({
           detectionInstances: this.detectionService.fetchDetectionInstancesByZoneId(zoneIdNum),
-          detectionInstanceTypes: this.detectionService.fetchDetectionTypes() // replace with actual id if dynamic
+          detectionInstanceTypes: this.detectionService.fetchDetectionTypes() 
         }).subscribe({
           next: ({ detectionInstances, detectionInstanceTypes }) => {
             this.detectionInstanceList = detectionInstances;
