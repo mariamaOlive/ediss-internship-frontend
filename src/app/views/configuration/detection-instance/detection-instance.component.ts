@@ -80,8 +80,8 @@ export class DetectionInstanceComponent {
       next: response => {
         if(this.detectionInstance){
           this.detectionInstance.isRunning = false;
-          this.showToast('Instance stopped successfully', 'success');
-          console.log('Instance stopped successfully:', response);
+          this.showToast('Instance Completed successfully', 'success');
+          console.log('Instance Completed successfully:', response);
         }
       },
       error: err => {

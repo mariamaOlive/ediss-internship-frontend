@@ -115,9 +115,9 @@ export class DetectionInstanceListComponent implements OnInit {
   stopDetectionInstance(detectionInstance: DetectionInstanceItem) {
     this.detectionService.stopDetectionInstance(detectionInstance.id).subscribe({
       next: response => {
-        this.showToast('Instance stopped successfully', 'success')
+        this.showToast('Instance Completed successfully', 'success')
         detectionInstance.isRunning = false;
-        console.log('Instance stopped successfully:', response);
+        console.log('Instance Completed successfully:', response);
       },
       error: err => {
         this.showToast('Error stopping instance', 'error')
