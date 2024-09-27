@@ -5,9 +5,9 @@
           <c-card class="mb-3 p-0 shadow-sm card-container" (click)="onCardClick(card.id)">
             <div class="card-container-top position-relative"  [ngStyle]="{ 'background-color': topContainerColor }">
               <div class="ms-2 mb-2 d-flex align-items-center position-absolute bottom-0 start-0" *ngIf="card.message !== ''">
-                <span class="ms-2 text-white">
+                <small class="ms-2 text-white">
                   {{ card.message }}
-                </span>
+                </small>
               </div>
 
               <c-dropdown alignment="end" variant="btn-group" class="position-absolute top-0 end-0 m-2"  *ngIf="dropdownOptions && dropdownOptions.length > 0">
