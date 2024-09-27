@@ -210,80 +210,53 @@ export class ZonesListComponent {
   /**
   * Loads the list of zones by the plant ID from the route parameters.
   */
-
   loadZonesByPlantId(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const id = params.get('id');
       if (id) {
         this.plantId = parseInt(id, 10);
-        this.zoneService.fetchZonesByPlantId(parseInt(id, 10)).subscribe({
+        this.zoneService.fetchZonesByPlantId(this.plantId).subscribe({
           next: zones => {
             this.zonesList = zones;
             this.cardList = this.zonesList.map(zone => ({
               name: zone.title,
               description: "",
               id: zone.id,
-              message: ""
+              message: ""  // This will later hold the detection instance information if needed
             }));
+  
+            // Fetch detection instances for each zone
+            const detectionInstancesRequests = this.zonesList.map(zone =>
+              this.detectionInstanceService.fetchDetectionInstancesByZoneIdSimple(zone.id)
+            );
+  
+            forkJoin(detectionInstancesRequests).subscribe({
+              next: (detectionInstancesList: DetectionInstanceRequest[][]) => {
+                this.zonesList = this.zonesList.map((zone, index) => ({
+                  ...zone,
+                  detectionInstances: (detectionInstancesList[index] || []).filter(instance => instance.recording.status === true) // Add only if status is true
+                }));
+                
+                // Optionally, update the card list with detection instance information
+                this.cardList = this.cardList.map((card, index) => ({
+                  ...card,
+                  message: `Active detections: ${this.zonesList[index].detectionInstances?.length || 0}`
+                }));
+              },
+              error: err => {
+                console.error('Error fetching detection instances:', err);
+              }
+            });
           },
           error: err => {
-            //this.showToast('Error fetching Zones.', 'error');
+            console.error('Error fetching Zones:', err);
             this.zonesList = [];
-            this.cardList = [];            console.error('Error fetching Zones:', err);
+            this.cardList = [];
           }
         });
       }
     });
   }
-
-  // loadZonesByPlantId(): void {
-  //   this.route.paramMap.subscribe((params: ParamMap) => {
-  //     const id = params.get('id');
-  //     if (id) {
-  //       this.plantId = parseInt(id, 10);
-  //       this.zoneService.fetchZonesByPlantId(this.plantId).subscribe({
-  //         next: zones => {
-  //           this.zonesList = zones;
-  //           this.cardList = this.zonesList.map(zone => ({
-  //             name: zone.title,
-  //             description: "",
-  //             id: zone.id,
-  //             message: ""  // This will later hold the detection instance information if needed
-  //           }));
-  
-  //           // Fetch detection instances for each zone
-  //           const detectionInstancesRequests = this.zonesList.map(zone =>
-  //             this.detectionInstanceService.fetchDetectionInstancesByZoneIdSimple(zone.id)
-  //           );
-  
-  //           forkJoin(detectionInstancesRequests).subscribe({
-  //             next: (detectionInstancesList: DetectionInstanceRequest[][]) => {
-  //               this.zonesList = this.zonesList.map((zone, index) => ({
-  //                 ...zone,
-  //                 detectionInstances: detectionInstancesList[index] || [] // Add detection instances to each zone
-  //               }));
-  
-
-  //               // Optionally, update the card list with detection instance information
-  //               this.cardList = this.cardList.map((card, index) => ({
-  //                 ...card,
-  //                 message: `Detections: ${this.zonesList[index].detectionInstances?.length || 0}`
-  //               }));
-  //             },
-  //             error: err => {
-  //               console.error('Error fetching detection instances:', err);
-  //             }
-  //           });
-  //         },
-  //         error: err => {
-  //           console.error('Error fetching Zones:', err);
-  //           this.zonesList = [];
-  //           this.cardList = [];
-  //         }
-  //       });
-  //     }
-  //   });
-  // }
   
 
 

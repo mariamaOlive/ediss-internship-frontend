@@ -125,7 +125,7 @@ export class DetectionInstanceListComponent implements OnInit {
     this.detectionService.stopDetectionInstance(detectionInstance.id).subscribe({
       next: response => {
         this.showToast('Instance Completed successfully', 'success')
-        detectionInstance.isRunning = false;
+        this.loadDetectionInstancesByZoneId();
         console.log('Instance Completed successfully:', response);
       },
       error: err => {
