@@ -26,9 +26,7 @@
               </button>
 
               <div class="position-absolute bottom-0 start-0 ms-3 mb-1 d-flex">
-                <small class="text-white">{{ detectionInstance.starttime | date:'dd/MM/yyyy' }}</small>
-                <small class="text-white ms-1 me-1" *ngIf="!detectionInstance.isRunning"> - </small>
-                <small class="text-white" *ngIf="!detectionInstance.isRunning">{{ detectionInstance.endtime | date:'dd/MM/yyyy' }}</small>
+                <small class="text-white" *ngIf="!detectionInstance.isRunning">{{ detectionInstance.endtime | date:'dd/MM/yyyy - HH:mm:ss' }}</small>
               </div>              
             </div>
   
