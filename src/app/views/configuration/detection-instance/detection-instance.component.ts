@@ -10,6 +10,7 @@ import { DetectionInstanceItem, DetectionTypeItem } from 'src/app/core/models/de
 import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
 import { ZoneItem } from 'src/app/core/models/zone.model';
 import { ToastMessageComponent } from 'src/app/shared/components/toast-message/toast-message.component';
+import { IncidentsDetailsComponent } from 'src/app/shared/components/incidents-details/incidents-details.component'
 
 
 
@@ -18,7 +19,7 @@ import { ToastMessageComponent } from 'src/app/shared/components/toast-message/t
   selector: 'app-detection-instance',
   standalone: true,
   providers: [IconSetService],
-  imports: [CardModule, ButtonModule, GridModule, CommonModule, BadgeModule, IconModule, ToastMessageComponent],
+  imports: [CardModule, ButtonModule, GridModule, CommonModule, BadgeModule, IconModule, ToastMessageComponent, IncidentsDetailsComponent],
   templateUrl: './detection-instance.component.html',
   styleUrl: './detection-instance.component.scss'
 })

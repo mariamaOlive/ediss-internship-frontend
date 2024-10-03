@@ -141,3 +141,7 @@
         </div>
     </c-card-body>
 </c-card>
+
+<incidents-details [visibleModal]="visibleModalDetails" [incidentsList]="detectionInstance?.incidents"
+  (visibleModalChange)="visibleModalDetails = $event">
+</incidents-details>

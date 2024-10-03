@@ -60,6 +60,7 @@ export interface CreateRecording {
 export interface DetectionInstanceRequest {
   recording: Recording;
   scenarios: ScenarioItem[];
+  instances: any[];
 }
 export interface CreateDetectionInstanceRequest {
   recording: CreateRecording;

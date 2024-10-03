@@ -5,7 +5,7 @@
     <button [cModalToggle]="fullScreenMd.id" cButtonClose></button>
   </c-modal-header>
   <c-modal-body>
-    <c-card>
+    <c-card *ngIf="incidentsList && incidentsList.length > 0">
       <c-card-body>
         <c-container>
 
@@ -23,6 +23,8 @@
         </c-container>
       </c-card-body>
     </c-card>
+
+    <p *ngIf="!incidentsList || incidentsList.length === 0" class="text-center mt-4">No Incidents to Report</p>
 
   </c-modal-body>
   <c-modal-footer>

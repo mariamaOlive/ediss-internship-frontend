@@ -164,6 +164,7 @@ export class DetectionInstanceService {
       starttime: item.recording.starttime,
       endtime: item.recording.endtime,
       cameraId: item.recording.camera_id,
+      incidents: item.instances,
       zone: zone ?? undefined,  // Default to undefined if not provided
       camera: camera ?? undefined,  // Default to undefined if not provided
       assignee: assignee ?? undefined  // Default to undefined if not provided

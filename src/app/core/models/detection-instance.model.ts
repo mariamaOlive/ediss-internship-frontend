@@ -17,6 +17,7 @@ export interface DetectionInstanceItem {
     starttime: string; 
     endtime?: string; 
     timeElapsed?: number;
+    incidents: any[];
 }
 
 export interface DetectionTypeItem {
