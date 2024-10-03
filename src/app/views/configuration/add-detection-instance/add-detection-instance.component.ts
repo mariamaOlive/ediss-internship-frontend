@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -59,6 +59,13 @@ export class AddDetectionInstanceComponent implements OnInit {
   ppeAttempted: boolean = false;
   cameraAttempted: boolean = false;
 
+  //Camera variable
+  selectedCamera: any = null;
+  selectedCameraAvailable: boolean = false;
+  websocket: WebSocket | null = null;
+
+  @ViewChild('cameraCanvas', { static: false }) cameraCanvas!: ElementRef;
+
   // Toast variables
   @ViewChild(ToastMessageComponent) toastComponent!: ToastMessageComponent;
   toastMessage = '';
@@ -75,6 +82,73 @@ export class AddDetectionInstanceComponent implements OnInit {
     iconSet.icons = { cilArrowCircleLeft, cilArrowThickLeft, cilArrowLeft };
   }
 
+  onCameraSelect(camera: any) {
+    this.selectedCamera = camera;
+    this.cameraAttempted = true;
+
+    // Always attempt to connect via WebSocket to determine actual availability
+    this.selectedCameraAvailable = false; // Set as unavailable initially
+    this.connectToCameraStream(camera.id);
+  }
+
+  connectToCameraStream(cameraId: number) {
+    // Close any existing WebSocket connection
+    this.disconnectFromCameraStream();
+
+    // Connect to the new WebSocket endpoint
+    const wsUrl = `ws://localhost:8000/ws/camera/${cameraId}`;
+    this.websocket = new WebSocket(wsUrl);
+
+    this.websocket.onopen = () => {
+      // WebSocket opened successfully, marking camera as available
+      this.selectedCameraAvailable = true;
+    };
+
+    this.websocket.onmessage = (event) => {
+      // Handle the incoming data (e.g., camera feed frames)
+      this.drawCameraFrame(event.data);
+    };
+
+    this.websocket.onerror = (error) => {
+      console.error('WebSocket error:', error);
+      this.selectedCameraAvailable = false; // Set to unavailable if there's an error
+    };
+
+    this.websocket.onclose = () => {
+      // If the WebSocket connection closes unexpectedly, set the camera to unavailable
+      this.selectedCameraAvailable = false;
+    };
+  }
+
+  disconnectFromCameraStream() {
+    if (this.websocket) {
+      this.websocket.close();
+      this.websocket = null;
+    }
+  }
+
+  drawCameraFrame(data: Blob) {
+    if (!this.cameraCanvas) {
+      return;
+    }
+
+    const canvas = this.cameraCanvas.nativeElement as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d');
+
+    if (ctx) {
+      const image = new Image();
+      image.src = URL.createObjectURL(data);
+      image.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      };
+    }
+  }
+
+  ngOnDestroy() {
+    // Close the WebSocket connection when the component is destroyed
+    this.disconnectFromCameraStream();
+  }
 
   // ========================
   // Life Cycle Hooks

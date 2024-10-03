@@ -93,6 +93,7 @@
               [value]="camera.id" 
               name="flexRadioDefaultCamera" 
               [(ngModel)]="selectedCameraId" 
+              (change)="onCameraSelect(camera)" 
               [disabled]="!camera.status" 
               required 
             />
@@ -102,6 +103,18 @@
         </div>
         <small *ngIf="cameraAttempted && !selectedCameraId" class="text-danger">Please select a camera.</small>
       </c-row>
+
+      <!-- Camera Stream -->
+      <c-row class="mt-4" *ngIf="selectedCamera && selectedCameraAvailable">
+        <div class="camera-stream">
+          <h6>Video Stream: {{ selectedCamera.name }}</h6>
+          <canvas #cameraCanvas width="320" height="240"></canvas>
+        </div>
+      </c-row>
+
+      <small *ngIf="selectedCamera && !selectedCameraAvailable" class="text-danger">
+        The selected camera is currently unavailable. Please try another camera.
+      </small>
     </c-container>
   </c-card-body>
 </c-card>
