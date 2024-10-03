@@ -27,6 +27,7 @@ export class DetectionInstanceComponent {
   detectionInstance: DetectionInstanceItem | null = null;
   detectionTypes: DetectionTypeItem[] = [];
   zone: ZoneItem | null = null;
+  visibleModalDetails: boolean = false;
 
   // Toast variables
   @ViewChild(ToastMessageComponent) toastComponent!: ToastMessageComponent;
@@ -128,6 +129,13 @@ export class DetectionInstanceComponent {
   // ========================
   // Utilities Functions
   // ========================
+
+  /**
+  * Open a modal that shows the details of the incidents.
+  */
+  checkDetailsIncidents(): void {
+    this.visibleModalDetails = true;
+  }
 
   /**
   * Triggers toast message
