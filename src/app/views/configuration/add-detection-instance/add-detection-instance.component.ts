@@ -99,11 +99,21 @@ export class AddDetectionInstanceComponent implements OnInit {
     this.ppeAttempted = true;
     this.cameraAttempted = true;
 
+    // Validate the form fields
+    const isDetectionNameValid = !!this.detectionInstanceName;
+    const isPPEValid = this.selectedDetectionType !== 1 || (this.selectedItemsObjects && this.selectedItemsObjects.length > 0);
+    const isCameraSelected = !!this.selectedCameraId;
+
+    // If any of the fields are invalid, stop the function here
+    if (!isDetectionNameValid || !isPPEValid || !isCameraSelected) {
+      return;
+    }
+
     let mappedObjects = this.selectedItemsObjects.map(item => {
       return { id: item.item_id, name: item.item_text, description: "" };
     });
 
-    if (!this.zone || !this.zone.assignee_id || !this.selectedCameraId || 
+    if (!this.zone || !this.zone.assignee_id || !this.selectedCameraId ||
       (this.selectedDetectionType === 1 && this.selectedItemsObjects.length === 0)) {
       console.log('Zone, Assignee ID, and Camera ID must all be defined.')
       return;
