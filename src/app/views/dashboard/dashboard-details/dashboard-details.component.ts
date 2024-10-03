@@ -1,4 +1,5 @@
 import { Component, OnInit, WritableSignal, signal, effect } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, FormsModule } from '@angular/forms';
@@ -12,11 +13,13 @@ import { DashboardChartsDataTimeLine } from './dashboard-charts-data-timeline';
 import { DashboardChartsDataDonut } from './dashboard-charts-data-donut';
 import { IncidentsDetailsComponent } from 'src/app/shared/components/incidents-details/incidents-details.component'
 
+import { DetectionInstanceService } from 'src/app/core/services/detection-instance/detection-instance.service';
+import { IncidentDataItem } from 'src/app/core/models/incident-data.model';
 import { IncidentService } from 'src/app/core/services/incident/incident.service';
 import { PlantItem } from 'src/app/core/models/plant.model';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
 import { ZoneItem } from 'src/app/core/models/zone.model';
-import { IncidentDataItem } from 'src/app/core/models/incident-data.model';
+import { DetectionTypeItem } from 'src/app/core/models/detection-instance.model';
 
 /**
  * The DashboardDetailsComponent is responsible for rendering the dashboard details of a specific plant.
@@ -65,6 +68,7 @@ export class DashboardDetailsComponent implements OnInit {
   activeTab: number = 0;
   incidentsEmpty = false;
   visibleModalDetails: boolean = false;
+  detectionTypes : DetectionTypeItem[] = [];
 
   formRadio1 = new UntypedFormGroup({
     radio1: new UntypedFormControl('Radio1')
@@ -74,6 +78,7 @@ export class DashboardDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private incidentService: IncidentService,
+    private detectionInstanceService: DetectionInstanceService,
     private zoneService: ZoneService,
     private location: Location,
     public iconSet: IconSetService,
@@ -151,6 +156,7 @@ export class DashboardDetailsComponent implements OnInit {
     if (id) {
       this.plantId = parseInt(id, 10);
       this.loadPlantZones(this.plantId);
+      this.requestIncidentsTypes();
       this.requestIncidents();
     } else {
       console.error('Invalid plantId:', id);
@@ -167,6 +173,20 @@ export class DashboardDetailsComponent implements OnInit {
       console.error('Invalid plantId:', this.plantId);
     }
   }
+
+    /**
+   * Requests detection types available on the DB.
+   */
+    private requestIncidentsTypes(): void {
+      this.detectionInstanceService.fetchDetectionTypes().subscribe({
+        next: (types) => {
+          this.detectionTypes = types;
+        },
+        error: (error) => {
+          console.error('Error fetching detection types:', error);
+        },
+      });
+    }
 
   /**
    * Fetches incident data from the IncidentService for the specified plant and zone.
