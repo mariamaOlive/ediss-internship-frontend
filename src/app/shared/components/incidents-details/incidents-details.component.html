@@ -1,0 +1,33 @@
+<c-modal #fullScreenMd fullscreen="md" id="fullScreenMd" [visible]="visibleModal"
+  (visibleChange)="handleModalChange($event)">
+  <c-modal-header>
+    <h5 cModalTitle>Incident Details</h5>
+    <button [cModalToggle]="fullScreenMd.id" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <c-card>
+      <c-card-body>
+        <c-container>
+
+          <c-row class="mt-3 pb-2 small-card__subtitle small-card__title">
+            <c-col class="d-flex justify-content-center align-items-center">Incident Type</c-col>
+            <c-col class="d-flex justify-content-center align-items-center">Date and Time</c-col>
+          </c-row>
+
+        <c-container class="pt-3 scrollable-container">
+          <c-row class="align-items-center" *ngFor="let incident of incidentsList">
+            <c-col class="d-flex justify-content-center align-items-center">{{incident.class_name}}</c-col>
+            <c-col class="d-flex justify-content-center align-items-center">{{incident.timestamp | date:'dd/MM/yyyy - HH:mm:ss'}}</c-col>
+          </c-row>
+        </c-container>
+        </c-container>
+      </c-card-body>
+    </c-card>
+
+  </c-modal-body>
+  <c-modal-footer>
+    <button [cModalToggle]="fullScreenMd.id" cButton color="secondary" variant="ghost">
+      Close
+    </button>
+  </c-modal-footer>
+</c-modal>

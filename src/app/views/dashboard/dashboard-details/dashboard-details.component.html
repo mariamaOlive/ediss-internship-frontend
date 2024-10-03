@@ -37,7 +37,7 @@
           <c-button-group aria-label="Basic radio toggle button group" role="group">
             <!-- Last Day option -->
             <input class="btn-check" formControlName="radio1" type="radio" value="Radio3" />
-            <label (click)="setRadioValue('Radio3')" cButton cFormCheckLabel variant="outline">Last days</label>
+            <label (click)="setRadioValue('Radio3')" cButton cFormCheckLabel variant="outline">2 days</label>
     
             <!-- 7 Days option -->
             <input class="btn-check" formControlName="radio1" type="radio" value="Radio1" />
@@ -196,3 +196,9 @@
 
   </c-card-body>
 </c-card>
+
+<incidents-details 
+[visibleModal]="visibleModalDetails"
+[incidentsList]= "incidentReport?.incidents_details"
+(visibleModalChange)="visibleModalDetails = $event">
+</incidents-details>

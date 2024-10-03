@@ -1,0 +1,13 @@
+.small-card__title {
+    border-bottom: 1px solid #d8d9d9;
+}
+
+.small-card__subtitle {
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.scrollable-container {
+    max-height: 300px;
+    overflow-y: auto;
+}

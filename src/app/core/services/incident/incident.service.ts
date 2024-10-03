@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from 'src/app/environments/environment';
@@ -30,13 +30,23 @@ export class IncidentService {
  * @returns {Observable<IncidentDataItem>} An observable that emits the incident data.
  */
   fetchIncidents(plantId: number, incidentType: number, days: number, zoneId:number | null): Observable<IncidentDataItem> {
-    if(!zoneId){
-      const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.reports}?plant_id=${plantId}&days=${days}&detection_type_id=${incidentType}`;
-      return this.http.get<IncidentDataItem>(apiUrl);
-    }else{
-      const apiUrl = `${environment.apiUrl}${API_ENDPOINTS.reports}?plant_id=${plantId}&zone_id=${zoneId}&days=${days}&detection_type_id=${incidentType}`;
-      return this.http.get<IncidentDataItem>(apiUrl);
+    let apiUrl: string;
+  
+    if (!zoneId) {
+      apiUrl = `${environment.apiUrl}${API_ENDPOINTS.reports}?plant_id=${plantId}&days=${days}&detection_type_id=${incidentType}`;
+    } else {
+      apiUrl = `${environment.apiUrl}${API_ENDPOINTS.reports}?plant_id=${plantId}&zone_id=${zoneId}&days=${days}&detection_type_id=${incidentType}`;
     }
+  
+    return this.http.get<IncidentDataItem>(apiUrl).pipe(
+      map((incidentDataItem: IncidentDataItem) => {
+        // Sort incidents_details in descending order
+        incidentDataItem.incidents_details = incidentDataItem.incidents_details.sort((a, b) => {
+          return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+        });
+        return incidentDataItem;
+      })
+    );
   }
   
 }

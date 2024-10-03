@@ -10,10 +10,10 @@ import { ChartOptions } from 'chart.js';
 
 import { DashboardChartsDataTimeLine } from './dashboard-charts-data-timeline';
 import { DashboardChartsDataDonut } from './dashboard-charts-data-donut';
+import { IncidentsDetailsComponent } from 'src/app/shared/components/incidents-details/incidents-details.component'
 
 import { IncidentService } from 'src/app/core/services/incident/incident.service';
 import { PlantItem } from 'src/app/core/models/plant.model';
-import { PlantService } from 'src/app/core/services/plant/plant.service';
 import { ZoneService } from 'src/app/core/services/zone/zone.service';
 import { ZoneItem } from 'src/app/core/models/zone.model';
 import { IncidentDataItem } from 'src/app/core/models/incident-data.model';
@@ -42,7 +42,8 @@ import { IncidentDataItem } from 'src/app/core/models/incident-data.model';
     ReactiveFormsModule,
     ButtonGroupComponent,
     FormCheckLabelDirective,
-    ButtonDirective
+    ButtonDirective,
+    IncidentsDetailsComponent
   ],
   templateUrl: './dashboard-details.component.html',
   styleUrl: './dashboard-details.component.scss'
@@ -63,6 +64,7 @@ export class DashboardDetailsComponent implements OnInit {
   days: number = 7;
   activeTab: number = 0;
   incidentsEmpty = false;
+  visibleModalDetails: boolean = false;
 
   formRadio1 = new UntypedFormGroup({
     radio1: new UntypedFormControl('Radio1')
@@ -257,7 +259,7 @@ export class DashboardDetailsComponent implements OnInit {
    * Open a modal that shows the details of the incidents.
    */
   checkDetailsIncidents(): void {
-    //TODO: Open modal and show incidents
+    this.visibleModalDetails = true;
   }
 
 
