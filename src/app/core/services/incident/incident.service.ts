@@ -18,36 +18,65 @@ export class IncidentService {
   constructor(private http: HttpClient) {
   }
 
-/**
- * Fetches a list of incidents based on the plant, type of incident, number of days, and optional zone.
- * If `zoneId` is provided, it filters incidents by the specific zone.
- * If `zoneId` is not provided (null), it fetches incidents for all zones in the plant.
- *
- * @param {number} plantId - The ID of the plant where incidents are to be fetched.
- * @param {number} incidentType - The type of incident to filter (e.g., PPE detection, Pallet detection).
- * @param {number} days - The number of past days to filter incidents.
- * @param {number | null} zoneId - (Optional) The ID of the zone to filter incidents. If null, incidents from all zones will be fetched.
- * @returns {Observable<IncidentDataItem>} An observable that emits the incident data.
- */
-  fetchIncidents(plantId: number, incidentType: number, days: number, zoneId:number | null): Observable<IncidentDataItem> {
+  /**
+   * Fetches a list of incidents based on the plant, type of incident, number of days, and optional zone.
+   * If `zoneId` is provided, it filters incidents by the specific zone.
+   * If `zoneId` is not provided (null), it fetches incidents for all zones in the plant.
+   *
+   * @param {number} plantId - The ID of the plant where incidents are to be fetched.
+   * @param {number} incidentType - The type of incident to filter (e.g., PPE detection, Pallet detection).
+   * @param {number} days - The number of past days to filter incidents.
+   * @param {number | null} zoneId - (Optional) The ID of the zone to filter incidents. If null, incidents from all zones will be fetched.
+   * @returns {Observable<IncidentDataItem>} An observable that emits the incident data.
+   */
+  fetchIncidents(plantId: number, incidentType: number, days: number, zoneId: number | null): Observable<IncidentDataItem> {
     let apiUrl: string;
-  
+
     if (!zoneId) {
       apiUrl = `${environment.apiUrl}${API_ENDPOINTS.reports}?plant_id=${plantId}&days=${days}&detection_type_id=${incidentType}`;
     } else {
       apiUrl = `${environment.apiUrl}${API_ENDPOINTS.reports}?plant_id=${plantId}&zone_id=${zoneId}&days=${days}&detection_type_id=${incidentType}`;
     }
-  
+
     return this.http.get<IncidentDataItem>(apiUrl).pipe(
       map((incidentDataItem: IncidentDataItem) => {
         // Sort incidents_details in descending order
         incidentDataItem.incidents_details = incidentDataItem.incidents_details.sort((a, b) => {
           return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
         });
+
+        // Process each input string individually and replace the value
+        incidentDataItem.incidents_details.forEach((incident) => {
+          const result = this.getCounts(incident.class_name);
+          incident.class_name = result;
+        });
+
         return incidentDataItem;
       })
     );
   }
-  
+
+  /**
+   * Processes a comma-separated input string to count the occurrences of each unique item.
+   *
+   * @param inputString - A string containing items separated by commas (e.g., "mask,goggles,vest").
+   * @returns A formatted string where each unique item is listed with its count, in the format "item: count".
+   */
+  getCounts(inputString: string): string {
+    const items = inputString.split(",");
+    const counter: { [key: string]: number } = {};
+
+    items.forEach(item => {
+      counter[item] = (counter[item] || 0) + 1;
+    });
+
+    return Object.entries(counter)
+      .map(([item, count]) => `${item}: ${count}`)
+      .join(", ");
+  }
+
 }
+
+
+
 
