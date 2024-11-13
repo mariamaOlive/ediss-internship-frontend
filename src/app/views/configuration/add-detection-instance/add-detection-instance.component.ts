@@ -99,8 +99,8 @@ export class AddDetectionInstanceComponent implements OnInit {
     this.disconnectFromCameraStream(); // Close any existing WebSocket connection
 
     // Connect to the new WebSocket endpoint
-    // const wsUrl = `ws://schiapp61:8000/ws/camera/${cameraId}`;
-    const wsUrl = `ws://localhost:8000/ws/camera/${cameraId}`;
+    const wsUrl = `ws://schiapp61:8000/ws/camera/${cameraId}`;
+    
     this.websocket = new WebSocket(wsUrl);
 
 
