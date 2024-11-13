@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -58,6 +58,7 @@ export class AddDetectionInstanceComponent implements OnInit {
   detectionInstanceAttempted: boolean = false;
   ppeAttempted: boolean = false;
   cameraAttempted: boolean = false;
+  waitingCameraResponse = false;
 
   //Camera variable
   selectedCamera: any = null;
@@ -72,6 +73,7 @@ export class AddDetectionInstanceComponent implements OnInit {
   toastType: 'success' | 'error' = 'success';
 
   constructor(
+    private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private location: Location,
     private detectionService: DetectionInstanceService,
@@ -84,29 +86,38 @@ export class AddDetectionInstanceComponent implements OnInit {
 
   onCameraSelect(camera: any) {
     this.selectedCamera = camera;
+    console.log(this.selectedCamera);
     this.cameraAttempted = true;
-
-    // Always attempt to connect via WebSocket to determine actual availability
     this.selectedCameraAvailable = false; // Set as unavailable initially
+    this.waitingCameraResponse = true;
+    this.cdr.detectChanges();
     this.connectToCameraStream(camera.id);
   }
 
   connectToCameraStream(cameraId: number) {
-    // Close any existing WebSocket connection
-    this.disconnectFromCameraStream();
+    
+    this.disconnectFromCameraStream(); // Close any existing WebSocket connection
 
     // Connect to the new WebSocket endpoint
-    const wsUrl = `ws://schiapp61:8000/ws/camera/${cameraId}`;
+    // const wsUrl = `ws://schiapp61:8000/ws/camera/${cameraId}`;
+    const wsUrl = `ws://localhost:8000/ws/camera/${cameraId}`;
     this.websocket = new WebSocket(wsUrl);
+
 
     this.websocket.onopen = () => {
       // WebSocket opened successfully, marking camera as available
       this.selectedCameraAvailable = true;
+      this.waitingCameraResponse = false;
     };
 
     this.websocket.onmessage = (event) => {
-      // Handle the incoming data (e.g., camera feed frames)
-      this.drawCameraFrame(event.data);
+      try {
+        this.drawCameraFrame(event.data);
+      } catch (error) {
+        console.error("Error in drawCameraFrame during WebSocket message:", error);
+        this.handleCameraError("Error Camera.");
+        this.disconnectFromCameraStream();
+      }
     };
 
     this.websocket.onerror = (error) => {
@@ -150,6 +161,12 @@ export class AddDetectionInstanceComponent implements OnInit {
     this.disconnectFromCameraStream();
   }
 
+  private handleCameraError(message: string) {
+    this.selectedCameraAvailable = false;
+    this.waitingCameraResponse = false;
+    this.showToast(message, "error");
+  }
+
   // ========================
   // Life Cycle Hooks
   // ========================
@@ -179,7 +196,7 @@ export class AddDetectionInstanceComponent implements OnInit {
     const isCameraSelected = !!this.selectedCameraId;
 
     // If any of the fields are invalid, stop the function here
-    if (!isDetectionNameValid || !isPPEValid || !isCameraSelected) {
+    if (!isDetectionNameValid || !isPPEValid || !isCameraSelected || !this.selectedCameraAvailable) {
       return;
     }
 

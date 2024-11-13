@@ -94,7 +94,7 @@
               name="flexRadioDefaultCamera" 
               [(ngModel)]="selectedCameraId" 
               (change)="onCameraSelect(camera)" 
-              [disabled]="!camera.status" 
+              [disabled]="!camera.status|| waitingCameraResponse" 
               required 
             />
             <label cFormCheckLabel>{{ camera.name }} - {{ camera.ipaddress }}</label>
@@ -105,14 +105,17 @@
       </c-row>
 
       <!-- Camera Stream -->
-      <c-row class="mt-4" *ngIf="selectedCamera && selectedCameraAvailable">
+      <c-row class="mt-4" *ngIf="selectedCamera && selectedCameraAvailable && !waitingCameraResponse">
         <div class="camera-stream">
           <h6>Video Stream: {{ selectedCamera.name }}</h6>
           <canvas #cameraCanvas width="320" height="240"></canvas>
         </div>
       </c-row>
 
-      <small *ngIf="selectedCamera && !selectedCameraAvailable" class="text-danger">
+      <small *ngIf="waitingCameraResponse" class="text-danger">
+        Waiting camera response.
+      </small>
+      <small *ngIf="selectedCamera && !selectedCameraAvailable && !waitingCameraResponse" class="text-danger">
         The selected camera is currently unavailable. Please try another camera.
       </small>
     </c-container>
@@ -124,5 +127,5 @@
   <button cButton color="secondary" variant="ghost" class="btn-cancel me-3" (click)="navigateBack()">Cancel</button>
 
   <button cButton color="primary" class="btn-add"
-    (click)="addNewDetectionInstance()">Start Detection</button>
+    (click)="addNewDetectionInstance()" [disabled]="waitingCameraResponse">Start Detection</button>
 </c-container>
