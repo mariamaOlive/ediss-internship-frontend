@@ -15,7 +15,7 @@
           </c-row>
 
         <c-container class="pt-3 scrollable-container">
-          <c-row class="align-items-center" *ngFor="let incident of incidentsList">
+          <c-row class="align-items-center" *ngFor="let incident of processedIncidentsList">
             <c-col class="d-flex justify-content-center align-items-center">{{incident.class_name}}</c-col>
             <c-col class="d-flex justify-content-center align-items-center">{{incident.timestamp | date:'dd/MM/yyyy - HH:mm:ss'}}</c-col>
           </c-row>

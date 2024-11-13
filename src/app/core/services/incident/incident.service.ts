@@ -45,35 +45,13 @@ export class IncidentService {
           return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
         });
 
-        // Process each input string individually and replace the value
-        incidentDataItem.incidents_details.forEach((incident) => {
-          const result = this.getCounts(incident.class_name);
-          incident.class_name = result;
-        });
-
         return incidentDataItem;
       })
     );
   }
 
-  /**
-   * Processes a comma-separated input string to count the occurrences of each unique item.
-   *
-   * @param inputString - A string containing items separated by commas (e.g., "mask,goggles,vest").
-   * @returns A formatted string where each unique item is listed with its count, in the format "item: count".
-   */
-  getCounts(inputString: string): string {
-    const items = inputString.split(",");
-    const counter: { [key: string]: number } = {};
-
-    items.forEach(item => {
-      counter[item] = (counter[item] || 0) + 1;
-    });
-
-    return Object.entries(counter)
-      .map(([item, count]) => `${item}: ${count}`)
-      .join(", ");
-  }
+ 
+  
 
 }
 

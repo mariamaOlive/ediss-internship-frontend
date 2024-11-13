@@ -171,9 +171,4 @@ export class DetectionInstanceService {
     };
   }
 
-
-  //TODO: There's no API endpoint
-  deleteDetectionInstance(zoneId?: number): Observable<boolean> {
-    return of(true);
-  }
 }
